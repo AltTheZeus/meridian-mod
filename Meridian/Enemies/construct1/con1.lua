@@ -1,0 +1,144 @@
+local path = "Enemies/construct1/"
+local sprites = {
+    idle = Sprite.load("con1Idle", path.."con1Idle", 1, 6, 13),
+    walk = Sprite.load("con1Walk", path.."con1Walk", 12, 8, 14),
+    shoot = Sprite.load("con1Shoot", path.."con1Shoot", 11, 9, 14),
+    spawn = Sprite.load("con1Spawn", path.."con1Spawn", 6, 12, 17),
+    death = Sprite.load("con1Death", path.."con1Death", 12, 13, 19),
+    mask = Sprite.load("con1Mask", path.."con1Mask", 1, 6, 13),
+    palette = Sprite.load("con1Pal", path.."con1Pal", 1, 0, 0),
+    jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 14)
+--    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 199)
+}
+
+local sounds = {
+    attack = Sound.find("CrabDeath"),
+    spawn = Sound.find("GuardSpawn"),
+    death = Sound.find("GuardDeath")
+}
+
+local con1 = Object.base("EnemyClassic", "Beta Construct1")
+con1.sprite = sprites.idle
+
+EliteType.registerPalette(sprites.palette, con1)
+
+con1:addCallback("create", function(actor)
+    local actorAc = actor:getAccessor()
+    local data = actor:getData()
+    actorAc.name = "Beta Construct"
+    actorAc.maxhp = 90 * Difficulty.getScaling("hp")
+    actorAc.hp = actorAc.maxhp
+    actorAc.damage = 9 * Difficulty.getScaling("damage")
+    actorAc.pHmax = 1.2
+	actorAc.walk_speed_coeff = 1.1
+    actor:setAnimations{
+        idle = sprites.idle,
+        jump = sprites.jump,
+        walk = sprites.walk,
+        shoot = sprites.shoot,
+        death = sprites.death,
+	palette = sprites.palette
+    }
+    actorAc.sound_hit = Sound.find("MushHit","vanilla").id
+    actorAc.sound_death = sounds.death.id
+    actor.mask = sprites.mask
+    actorAc.health_tier_threshold = 3
+    actorAc.knockback_cap = 9 * Difficulty.getScaling("hp")
+    actorAc.exp_worth = 5 * Difficulty.getScaling()
+    actorAc.can_drop = 1
+    actorAc.can_jump = 1
+end)
+
+Monster.giveAI(con1)
+
+Monster.setSkill(con1, 1, 200, 1.3 * 60, function(actor)
+	Monster.setActivityState(actor, 1, actor:getAnimation("shoot"), 0.2, true, true)
+	Monster.activateSkillCooldown(actor, 1)
+end)
+Monster.skillCallback(con1, 1, function(actor, relevantFrame)
+	if relevantFrame == 6 then
+		sounds.attack:play(1 + 1)
+		actor:fireBullet(actor.x, actor.y - 4, actor:getFacingDirection(), 170, 1, nil)
+	end
+end)
+
+--[[con1:addCallback("draw", function(self)
+	graphics.color(Color.RED)
+	graphics.line(self.x, self.y - 4, self.x + (210 * self.xscale), self.y - 4, 1)
+end)]]
+
+--------------------------------------
+
+local card = MonsterCard.new("con1", con1)
+card.sprite = sprites.idle
+card.sprite = sprites.spawn
+card.sound = sounds.spawn
+card.canBlight = true
+card.type = "classic"
+card.cost = 8
+for _, elite in ipairs(EliteType.findAll("vanilla")) do
+    card.eliteTypes:add(elite)
+end
+
+local stages
+if modloader.checkMod("Starstorm") then
+stages = {
+	Stage.find("Sky Meadow"),
+	Stage.find("Temple of the Elders")
+	}
+else
+stages = {
+	Stage.find("Sky Meadow"),
+	Stage.find("Temple of the Elders")
+}
+end
+
+for _, stage in ipairs(stages) do
+	stage.enemies:add(card)
+end
+
+local stages2
+if modloader.checkMod("Starstorm") then
+stages2 = {
+	Stage.find("Dried Lake"),
+	Stage.find("Uncharted Mountain")
+	}
+else
+stages2 = {
+	Stage.find("Dried Lake")
+}
+end
+
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.PLstages = false
+end)
+
+registercallback("onStageEntry", function()
+	local dD = misc.director:getData()
+	if misc.director:get("stages_passed") >= 5 and dD.PLstages == false then
+		for _, stage in ipairs(stages2) do
+			stage.enemies:add(card)
+		end
+	end
+end)
+
+registercallback("onGameEnd", function()
+	for _, stage in ipairs(stages) do
+		stage.enemies:remove(card)
+	end
+	for _, stage in ipairs(stages2) do
+		stage.enemies:remove(card)
+	end
+end)
+
+local monsLog = MonsterLog.new("Beta Construct1")
+MonsterLog.map[con1] = monsLog
+
+monsLog.displayName = "Beta Construct"
+monsLog.story = "The ferocity of these things chills my blood. I do not know if they are machine or beast, and I am not willing to inspect them to find out. They seem to sense my presence through some means, and by then it's too late. Scores of them materialise, assembling themselves and instantly sprinting towards me. The noises they emit are unlike all else, unholy screeches and roars of composition unknown.\n\nI hope to never encounter one again. Their extendable necks give me the willies."
+monsLog.statHP = 90
+monsLog.statDamage = 9
+monsLog.statSpeed = 1.2
+monsLog.sprite = sprites.shoot
+--monsLog.portrait = sprites.portrait

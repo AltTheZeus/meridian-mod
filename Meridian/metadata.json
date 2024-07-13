@@ -1,0 +1,34 @@
+{
+    "name": "Meridian",
+	"version": "1.0.0",
+    "description": "An expansion mod.", 
+	"internalname": "meridian",
+    "author": "Winslow, Altzeus, RetroPacifist, AnAwesomeDudette",
+	"mpcompat": false,
+	"dependencies": [
+		{
+			"name": "Starstorm",
+			"version": "1.14.3",
+			"optional": true
+		},
+		{
+			"name": "LivelyWorld",
+			"version": "0.6.2",
+			"optional": true
+		}
+	],
+	"options" : [
+        {
+            "name" : "Disable stages",
+            "flag" : "mn_disable_stages"
+        },
+		{
+            "name" : "Disable enemies",
+            "flag" : "mn_disable_enemies"
+        },
+		{
+            "name" : "Disable elites",
+            "flag" : "mn_disable_elites"
+        }
+	]
+}
