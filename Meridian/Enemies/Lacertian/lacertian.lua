@@ -6,31 +6,38 @@ local sprites = {
     death = Sprite.load("LacertianDeath", path.."death", 8, 85, 71),
 	jump = Sprite.load("LacertianJump", path.."fall", 1, 85, 57),
 	shoot1 = Sprite.load("LacertianShoot1", path.."shoot1", 7, 85, 60),
-	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51)
+	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51),
+	palette = Sprite.load("LacertianPalette", path.."palette", 1, 0, 0)
 }	
+
+local sounds = {
+	spawn = Sound.load("LacertianSpawnSound", path.."sndSpawn")
+}
 
 local lacertian = Object.base("BossClassic", "Lacertian")
 lacertian.sprite = sprites.idle
+
+EliteType.registerPalette(sprites.palette, lacertian)
 
 lacertian:addCallback("create", function(actor)
     local actorAc = actor:getAccessor()
     local data = actor:getData()
 	
 	actor.mask = sprites.mask
-	local ground = obj.BossSpawn:findNearest(actor.x, actor.y)
+	--[[local ground = obj.BossSpawn:findNearest(actor.x, actor.y)
 	if ground then
 		local xx = ground.x + (ground.xscale * 15 * 16 * 0.5)
 		actor.x = xx
 		actor.y = ground.y - actor.mask.height + actor.mask.yorigin - 1
 		actorAc.ghost_x = actor.x
 		actorAc.ghost_y = actor.y
-	end	
+	end	]]
 	
     actorAc.name = "Lacertian"
-	actorAc.name2 = "Da Lizord"
-    actorAc.maxhp = 1200 * Difficulty.getScaling("hp")
+	actorAc.name2 = "Relentless Pursuer"
+    actorAc.maxhp = 900 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
-    actorAc.damage = 30 * Difficulty.getScaling("damage")
+    actorAc.damage = 25 * Difficulty.getScaling("damage")
     actorAc.pHmax = 0.9
 	actorAc.walk_speed_coeff = 1
     actor:setAnimations{
@@ -38,7 +45,8 @@ lacertian:addCallback("create", function(actor)
         jump = sprites.jump,
         walk = sprites.walk,
         death = sprites.death,
-		shoot1 = sprites.shoot1
+		shoot1 = sprites.shoot1,
+		palette = sprites.palette
     }
     --actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
   --  actorAc.sound_death = Sound.find("GolemDeath","vanilla").id
@@ -51,7 +59,7 @@ lacertian:addCallback("create", function(actor)
 end)
 Monster.giveAI(lacertian)
 
-Monster.setSkill(lacertian, 1, 90, 8 * 60, function(actor)
+Monster.setSkill(lacertian, 1, 90, 6 * 60, function(actor)
 	actor:getData().theTarget = obj.POI:findNearest(actor.x, actor.y)
 	Monster.setActivityState(actor, 1, actor:getAnimation("shoot1"), 0.2, true, true)
 	Monster.activateSkillCooldown(actor, 1)
@@ -77,7 +85,8 @@ end)
 lacertian:addCallback("step", function(actor)
 	if actor:get("activity") ~= 30 then
 		local n = 0
-		while actor:collidesMap(actor.x, actor.y) and n < 100 do
+		local m = 0
+		while actor:collidesMap(actor.x, actor.y) and n < 100 and m < 100 do
 			--[[if not actor:collidesMap(actor.x + 5, actor.y) then
 				actor.x = actor.x + 5
 			elseif not actor:collidesMap(actor.x - 5, actor.y) then
@@ -94,6 +103,11 @@ lacertian:addCallback("step", function(actor)
 				actor.x = actor.x - n
 			end
 			n = n + 1
+			
+			if not actor:collidesMap(actor.x, actor.y - m) then 
+				actor.y = actor.y - m
+			end
+			m = m + 1
 		end
 	end	
 end)
@@ -102,8 +116,21 @@ end)
 
 local card = MonsterCard.new("Lacertian", lacertian)
 card.sprite = sprites.spawn
---card.sound = sounds.spawn
+card.sound = sounds.spawn
 --card.canBlight = true
-card.type = "player"
-card.cost = 600
+card.type = "classic"
+card.cost = 750
 card.isBoss = true
+
+for _, elite in ipairs(EliteType.findAll("vanilla")) do
+    card.eliteTypes:add(elite)
+end
+if modloader.checkMod("Starstorm") then 
+	card.eliteTypes:add(EliteType.find("Poisoning", "Starstorm"))
+	card.eliteTypes:add(EliteType.find("Weakening", "Starstorm"))
+end 
+if not modloader.checkFlag("mn_disable_elites") then 
+	card.eliteTypes:add(EliteType.find("bubble", "meridian"))
+	card.eliteTypes:add(EliteType.find("sorrow", "meridian"))
+end
+
