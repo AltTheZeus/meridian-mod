@@ -98,7 +98,7 @@ local DissonantReliquary = require("Stages.resources.DissonantReliquary.stage")
 Stage.progression[5]:add(DissonantReliquary)
 
 DissonantReliquary.music = Sound.load("musicDissonantReliquary", path.."Music/stageDissonantReliquary.ogg")
-
+--[[
 -- Hive Savanna --
 Sprite.load("bTile16Savannah", path.."HiveSavanna/tileset", 1, 0, 0)
 Sprite.load("SavannaSky", path.."HiveSavanna/sky", 1, 0, 0)
@@ -113,7 +113,7 @@ local HiveSavanna = require("Stages.resources.HiveSavanna.stage")
 Stage.progression[1]:add(HiveSavanna)
 
 HiveSavanna.music = Sound.load("musicHiveSavanna", path.."Music/stageHiveSavanna.ogg")
-
+]]
 -- Shallow Rotlands --
 --Sprites
 Sprite.load("Tile16Rotland", path.."ShallowRotlands/tileset", 1, 0, 0)
