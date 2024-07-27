@@ -1,4 +1,4 @@
-local path = "Stages/resources/" 
+local path = "Stages/" 
 
 require("Stages.resources.LivelyWorld.LivelyWorldSupport")
 
