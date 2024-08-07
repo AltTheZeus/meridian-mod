@@ -16,4 +16,6 @@ if not modloader.checkFlag("mn_disable_stages") then
 	require("Stages/stages")
 end
 
+require("Misc.UI.UI")
+
 -- Survivors (none, yet)
