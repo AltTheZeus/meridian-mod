@@ -11,7 +11,7 @@ local STAGE_LAYERS = {
     {
         depth = 12,
         sprite = "Tile16Reliquary",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [184] = {
                 [101] = {1,1}, [96] = {1,1}, [109] = {1,1}, [104] = {1,1}, [112] = {1,1}, [27] = {7,7}, [95] = {1,1}, [103] = {1,1}, [98] = {1,1}, [111] = {1,1}, [106] = {1,1}, [114] = {1,1}, [94] = {3,0}, [100] = {1,1}, [97] = {1,1}, [108] = {1,1}, [105] = {1,1}, [113] = {1,1}, [102] = {1,1}, [99] = {1,1}, 
@@ -929,7 +929,7 @@ local STAGE_LAYERS = {
     {
         depth = 11,
         sprite = "Tile16Reliquary",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [132] = {
                 [33] = {12,2}, [37] = {12,3}, [27] = {12,2}, [32] = {12,3}, [34] = {12,2}, [25] = {12,0}, [30] = {12,2}, [35] = {12,3}, [28] = {12,3}, [31] = {12,2}, [36] = {12,3}, [26] = {12,2}, [29] = {12,2}, 
@@ -973,7 +973,7 @@ local STAGE_LAYERS = {
     {
         depth = 2,
         sprite = "Tile16Reliquary",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [184] = {
                 [25] = {0,6}, 
@@ -1445,7 +1445,7 @@ local STAGE_LAYERS = {
     {
         depth = 13,
         sprite = "Tile16Reliquary",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [138] = {
                 [68] = {10,4}, 
@@ -1756,9 +1756,9 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9800] = {"ReliquaryBG2", "meridian_stages", 1, 0, 0.40, 0.80, 0, 0, 0, 0.60 },
-    [9900] = {"HugePlanet", "meridian_stages", 0, 0, 0.98, 0.98, -631, 0, 0.40, 0 },
-    [10000] = {"Reliquarysky", "meridian_stages", 1, 1, 1, 1, 0, 0, 0, 0 },
+    [9800] = {"ReliquaryBG2", "meridian", 1, 0, 0.40, 0.80, 0, 0, 0, 0.60 },
+    [9900] = {"HugePlanet", "meridian", 0, 0, 0.98, 0.98, -631, 0, 0.40, 0 },
+    [10000] = {"Reliquarysky", "meridian", 1, 1, 1, 1, 0, 0, 0, 0 },
 }
 
 local STAGE_INTERACTABLES = {
