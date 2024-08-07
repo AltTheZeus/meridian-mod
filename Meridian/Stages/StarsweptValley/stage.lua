@@ -11,7 +11,7 @@ local STAGE_LAYERS = {
     {
         depth = 12,
         sprite = "Tile16Star",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [303] = {
                 [151] = {1,1}, [103] = {1,1}, [146] = {1,1}, [105] = {6,1}, [116] = {1,1}, [154] = {1,1}, [99] = {1,0}, [117] = {1,1}, [101] = {1,1}, [115] = {1,1}, [125] = {1,1}, [112] = {0,1}, [123] = {1,1}, [129] = {1,1}, [111] = {0,1}, [127] = {1,1}, [137] = {1,1}, [113] = {0,1}, [133] = {1,1}, [145] = {1,1}, 
@@ -1581,7 +1581,7 @@ local STAGE_LAYERS = {
     {
         depth = 13,
         sprite = "Tile16Star",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [203] = {
                 [137] = {1,7}, [133] = {0,6}, [141] = {1,7}, [136] = {6,4}, [140] = {1,7}, [135] = {0,7}, [139] = {1,7}, [134] = {0,7}, [138] = {1,7}, 
@@ -1819,7 +1819,7 @@ local STAGE_LAYERS = {
     {
         depth = 10,
         sprite = "Tile16Star",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [203] = {
                 [125] = {8,1}, [123] = {8,1}, [129] = {8,1}, [127] = {8,1}, [137] = {8,1}, [133] = {8,1}, [121] = {8,1}, [120] = {8,0}, [136] = {8,1}, [132] = {8,1}, [124] = {8,1}, [122] = {8,1}, [128] = {8,1}, [126] = {8,1}, [135] = {8,1}, [131] = {8,1}, [139] = {8,1}, [134] = {8,1}, [130] = {8,1}, [138] = {8,1}, 
@@ -1906,7 +1906,7 @@ local STAGE_LAYERS = {
     {
         depth = 11,
         sprite = "Tile16Star",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [28] = {
                 [18] = {5,4}, 
@@ -2965,10 +2965,10 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9800] = {"pillarsStar", "meridian_stages", 1, 0, 1, 1, 0, -252, 0, 1 },
-    [10000] = {"skyStar", "meridian_stages", 1, 1, 1, 1, 0, 0, 0, 0 },
-    [9700] = {"valleyStar", "meridian_stages", 1, 0, 1, 1, 0, -153, 0, 1 },
-    [9900] = {"SolarEclipse", "meridian_stages", 0, 0, 0.99, 0.99, -55, -114, 0.2, 0 },
+    [9800] = {"pillarsStar", "meridian", 1, 0, 1, 1, 0, -252, 0, 1 },
+    [10000] = {"skyStar", "meridian", 1, 1, 1, 1, 0, 0, 0, 0 },
+    [9700] = {"valleyStar", "meridian", 1, 0, 1, 1, 0, -153, 0, 1 },
+    [9900] = {"SolarEclipse", "meridian", 0, 0, 0.99, 0.99, -55, -114, 0.2, 0 },
 }
 
 local STAGE_INTERACTABLES = {
