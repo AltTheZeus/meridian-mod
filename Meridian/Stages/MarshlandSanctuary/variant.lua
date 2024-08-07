@@ -9,7 +9,7 @@ local STAGE_LAYERS = {
     {
         depth = 12,
         sprite = "Tile16Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [268] = {
                 [71] = {1,2}, [77] = {1,2}, [246] = {1,2}, [51] = {1,2}, [198] = {1,2}, [65] = {1,2}, [241] = {1,2}, [39] = {0,2}, [45] = {1,2}, [254] = {1,2}, [200] = {1,2}, [211] = {1,2}, [249] = {1,2}, [262] = {1,2}, [194] = {1,2}, [257] = {1,2}, [270] = {1,2}, [196] = {1,2}, [212] = {1,2}, [265] = {1,2}, 
@@ -2459,7 +2459,7 @@ local STAGE_LAYERS = {
     {
         depth = 15,
         sprite = "64Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [168] = {
                 [246] = {27,9}, [241] = {27,4}, [249] = {27,12}, [248] = {27,11}, [243] = {27,6}, [245] = {27,8}, [242] = {27,5}, [250] = {27,13}, [247] = {27,10}, [244] = {27,7}, 
@@ -3310,7 +3310,7 @@ local STAGE_LAYERS = {
     {
         depth = 16,
         sprite = "64Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [120] = {
                 [164] = {27,15}, [156] = {27,7}, [161] = {27,12}, [153] = {27,4}, [162] = {27,13}, [154] = {27,5}, [159] = {27,10}, [157] = {27,8}, [160] = {27,11}, [163] = {27,14}, [155] = {27,6}, [158] = {27,9}, 
@@ -3939,7 +3939,7 @@ local STAGE_LAYERS = {
     {
         depth = 13,
         sprite = "Tile16Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [171] = {
                 [276] = {13,5}, [277] = {13,6}, [278] = {13,7}, 
@@ -4078,7 +4078,7 @@ local STAGE_LAYERS = {
     {
         depth = 10,
         sprite = "Tile16Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [168] = {
                 [265] = {7,4}, [264] = {7,3}, [263] = {7,2}, 
@@ -4261,7 +4261,7 @@ local STAGE_LAYERS = {
     {
         depth = -10,
         sprite = "Tile16Marshland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
         }
     },
@@ -4522,7 +4522,7 @@ local STAGE_OBJECTS = {
         }
     },
     {
-        "RainGreen", "meridian_stages",
+        "RainGreen", "meridian",
         {
             {549,2}, 
         }
@@ -4563,11 +4563,11 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9600] = {"MarshlandBG1", "meridian_stages", 1, 0, 0.95, 0.95, -200, -200, 0.20, 1 },
-    [9700] = {"MarshlandBG2", "meridian_stages", 1, 0, 0.97, 0.97, -200, -200, 0.20, 1 },
-    [9800] = {"MarshlandClouds", "meridian_stages", 1, 0, 0.90, 1, 0, 1, 0, 0.20 },
-    [9900] = {"MarshlandPlanet", "meridian_stages", 0, 0, 1, 1, 0, -15, 0.60, 0.10 },
-    [10000] = {"GreenSky", "meridian_stages", 1, 1, 0.99, 0.99, 0, 0, 0, 0 },
+    [9600] = {"MarshlandBG1", "meridian", 1, 0, 0.95, 0.95, -200, -200, 0.20, 1 },
+    [9700] = {"MarshlandBG2", "meridian", 1, 0, 0.97, 0.97, -200, -200, 0.20, 1 },
+    [9800] = {"MarshlandClouds", "meridian", 1, 0, 0.90, 1, 0, 1, 0, 0.20 },
+    [9900] = {"MarshlandPlanet", "meridian", 0, 0, 1, 1, 0, -15, 0.60, 0.10 },
+    [10000] = {"GreenSky", "meridian", 1, 1, 0.99, 0.99, 0, 0, 0, 0 },
 }
 
 local STAGE_INTERACTABLES = {
