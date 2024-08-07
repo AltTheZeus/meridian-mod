@@ -1,33 +1,9 @@
 local path = "Stages/" 
 
-require("Stages.resources.LivelyWorld.LivelyWorldSupport")
+--require("Stages.LivelyWorld.LivelyWorldSupport")
 
 -- General --
 Sprite.load("statues1", path.."statues1", 1, 0, 0)
-
---[[Desolate Forest
-Sprite.load("resources/DesolateForest/Tile16DeadExpanded", "Stages/resources/DesolateForest/Tile16DeadExpanded", 1, 0, 0)
-
-local DesolateForest = Stage.find("Desolate Forest", "Vanilla")
-
---Dried Lake
-Sprite.load("resources/DriedLake/Tile16DryExpanded", "Stages/resources/DriedLake/Tile16DryExpanded", 1, 0, 0)
-
-local DriedLake = Stage.find("Dried Lake", "Vanilla")
-local r1_2_4 = require("Stages.resources.DriedLake.1_2_4")
-local r1_2_5 = require("Stages.resources.DriedLake.1_2_5")
-DriedLake.rooms:add(r1_2_4)
---DriedLake.rooms:add(r1_2_5)
-
---Sunken Tombs
-Sprite.load("Stages/resources/SunkenTombs/Tile16WaterExpanded", 1, 0, 0)
-Sprite.load("Stages/resources/SunkenTombs/WaterSky", 1, 0, 0)
-
-local SunkenTombs = Stage.find("Sunken Tombs", "Vanilla")
-local SunkenTombs1 = require("Stages.resources.SunkenTombs.sunkenTombs1")
-local SunkenTombs2 = require("Stages.resources.SunkenTombs.sunkenTombs2")
-SunkenTombs.rooms:add(SunkenTombs1)
-SunkenTombs.rooms:add(SunkenTombs2)]]
 
 -- Basalt Quarry --
 Sprite.load("Tile16Basalt", path.."BasaltQuarry/tileset", 1, 0, 0)
@@ -39,12 +15,12 @@ Sprite.load("BasaltClouds1", path.."BasaltQuarry/cloud1", 1, 0, 0)
 Sprite.load("BasaltClouds2", path.."BasaltQuarry/cloud2", 1, 0, 0)
 Sprite.load("BasaltClouds3", path.."BasaltQuarry/cloud3", 1, 0, 0)
 
-local BasaltQuarry = require("Stages.resources.BasaltQuarry.stage")
+local BasaltQuarry = require("Stages.BasaltQuarry.stage")
 Stage.progression[3]:add(BasaltQuarry)
-local BasaltQuarryVar = require("Stages.resources.BasaltQuarry.variant")
+local BasaltQuarryVar = require("Stages.BasaltQuarry.variant")
 BasaltQuarry.rooms:add(BasaltQuarryVar)
 
-BasaltQuarry.music = Sound.load("musicBasaltQuarry", path.."Music/stageBasaltQuarry.ogg")
+BasaltQuarry.music = Sound.load("musicBasaltQuarry", "Misc/Music/stageBasaltQuarry.ogg")
 
 -- Starswept Valley --
 Sprite.load("Tile16Star", path.."StarsweptValley/tileset", 1, 0, 0)
@@ -54,18 +30,18 @@ Sprite.load("skyStar", path.."StarsweptValley/sky", 1, 0, 0)
 Sprite.load("pillarsStar", path.."StarsweptValley/pillars", 1, 0, 0)
 Sprite.load("valleyStar", path.."StarsweptValley/valley", 1, 0, 0)
 
-local StarsweptValley = require("Stages.resources.StarsweptValley.stage")
+local StarsweptValley = require("Stages.StarsweptValley.stage")
 Stage.progression[2]:add(StarsweptValley)
-local StarsweptValleyVar = require("Stages.resources.StarsweptValley.variant")
+local StarsweptValleyVar = require("Stages.StarsweptValley.variant")
 StarsweptValley.rooms:add(StarsweptValleyVar)
 
-StarsweptValley.music = Sound.load("musicStarsweptValley", path.."Music/stageStarsweptValley.ogg")
+StarsweptValley.music = Sound.load("musicStarsweptValley", "Misc/Music/stageStarsweptValley.ogg")
 --[[
 -- Desert Peaks --
 Sprite.load("Tile16Desert", path.."DesertPeaks/tileset", 1, 0, 0)
 Sprite.load("64Desert", path.."DesertPeaks/64Desert", 1, 0, 0)
 
-local DesertPeaks = require("Stages.resources.DesertPeaks.stage")
+local DesertPeaks = require("Stages.DesertPeaks.stage")
 Stage.progression[3]:add(DesertPeaks)
 ]]
 -- Marshland Sanctuary --
@@ -80,12 +56,12 @@ Sprite.load("MarshlandClouds", path.."MarshlandSanctuary/clouds", 1, 0, 0)
 --Objects
 require("Misc.StageObjects.Rain")
 
-local MarshlandSanctuary = require("Stages.resources.MarshlandSanctuary.stage")
-local MarshlandSanctuaryVariant = require("Stages.resources.MarshlandSanctuary.variant")
+local MarshlandSanctuary = require("Stages.MarshlandSanctuary.stage")
+local MarshlandSanctuaryVariant = require("Stages.MarshlandSanctuary.variant")
 Stage.progression[4]:add(MarshlandSanctuary)
 MarshlandSanctuary.rooms:add(MarshlandSanctuaryVariant)
 
-MarshlandSanctuary.music = Sound.load("musicMarshlandSanctuary", path.."Music/stageMarshlandSanctuary.ogg")
+MarshlandSanctuary.music = Sound.load("musicMarshlandSanctuary", "Misc/Music/stageMarshlandSanctuary.ogg")
 
 -- Dissonant Reliquary --
 Sprite.load("Tile16Reliquary", path.."DissonantReliquary/tileset", 1, 0, 0)
@@ -94,27 +70,13 @@ Sprite.load("Reliquarysky", path.."DissonantReliquary/sky", 1, 0, 0)
 Sprite.load("ReliquaryBG1", path.."DissonantReliquary/bg1", 1, 0, 0)
 Sprite.load("ReliquaryBG2", path.."DissonantReliquary/bg2", 1, 0, 0)
 
-local DissonantReliquary = require("Stages.resources.DissonantReliquary.stage")
+local DissonantReliquary = require("Stages.DissonantReliquary.stage")
 Stage.progression[5]:add(DissonantReliquary)
 
-DissonantReliquary.music = Sound.load("musicDissonantReliquary", path.."Music/stageDissonantReliquary.ogg")
---[[
--- Hive Savanna --
-Sprite.load("bTile16Savannah", path.."HiveSavanna/tileset", 1, 0, 0)
-Sprite.load("SavannaSky", path.."HiveSavanna/sky", 1, 0, 0)
-Sprite.load("Planets_C1_2", path.."HiveSavanna/planet", 1, 0, 0)
-Sprite.load("TempleHill", path.."HiveSavanna/bg1", 1, 0, 0)
-Sprite.load("CloudsSavanna", path.."HiveSavanna/clouds", 1, 0, 0)
+DissonantReliquary.music = Sound.load("musicDissonantReliquary", "Misc/Music/stageDissonantReliquary.ogg")
 
---Objects
-require("Stages.resources.Objects.TempleSnow")
-
-local HiveSavanna = require("Stages.resources.HiveSavanna.stage")
-Stage.progression[1]:add(HiveSavanna)
-
-HiveSavanna.music = Sound.load("musicHiveSavanna", path.."Music/stageHiveSavanna.ogg")
-]]
 -- Shallow Rotlands --
+
 --Sprites
 Sprite.load("Tile16Rotland", path.."ShallowRotlands/tileset", 1, 0, 0)
 Sprite.load("RotlandTrees64b", path.."ShallowRotlands/RotlandTrees64b", 1, 0, 0)
@@ -127,28 +89,31 @@ Sprite.load("ShallowValley", path.."ShallowRotlands/mountains", 1, 0, 0)
 Sprite.load("Geysex", path.."ShallowRotlands/Geysex", 6, 13, 62)
 
 --Rooms
-local ShallowRotlands = require("Stages.resources.ShallowRotlands.stage")
-local ShallowRotlandsVariant = require("Stages.resources.ShallowRotlands.variant")
+local ShallowRotlands = require("Stages.ShallowRotlands.stage")
+local ShallowRotlandsVariant = require("Stages.ShallowRotlands.variant")
 ShallowRotlands.rooms:add(ShallowRotlandsVariant)
 
 Stage.progression[3]:add(ShallowRotlands)
 
 --Music
-ShallowRotlands.music = Sound.load("musicShallowRotlands", path.."Music/stageShallowRotlands.ogg")
---[[
--- Poisonous Beach --
-Sprite.load(path.."PoisonousBeach/tile16sulfur", 1, 0, 0)
-Sprite.load(path.."PoisonousBeach/Sulfursky", 1, 0, 0)
-Sprite.load(path.."PoisonousBeach/Sulfurdune", 1, 0, 0)
-Sprite.load(path.."PoisonousBeach/SulfurClouds1", 1, 0, 0)
-Sprite.load(path.."PoisonousBeach/SulfurClouds2", 1, 0, 0)
-Sprite.load(path.."PoisonousBeach/SulfurPlanet", 1, 0, 0)
+ShallowRotlands.music = Sound.load("musicShallowRotlands", "Misc/Music/stageShallowRotlands.ogg")
 
-local PoisonousBeach = require("Stages.resources.PoisonousBeach.var1")
-Stage.progression[3]:add(PoisonousBeach)
-PoisonousBeach.displayName = "Poisonous Beach"
-PoisonousBeach.music = Sound.load(path.."Music/musicPoisonousBeach.ogg")
-]]
+-- Serpentine Rainforest --
+Sprite.load("Tile16Rainforest", path.."SerpentineRainforest/tileset", 1, 0, 0)
+Sprite.load("Tile16RainforestBG", path.."SerpentineRainforest/ruins1", 1, 0, 0)
+Sprite.load("Mountains1_3", path.."SerpentineRainforest/Mountains", 1, 0, 0)
+Sprite.load("Planets1_3", path.."SerpentineRainforest/Planets", 1, 0, 0)
+Sprite.load("Stars1_3", path.."SerpentineRainforest/Stars", 1, 0, 0)
+Sprite.load("Clouds1_3", path.."SerpentineRainforest/clouds1", 1, 0, 0)
+Sprite.load("Clouds2_1_3", path.."SerpentineRainforest/clouds2", 1, 0, 0)
+
+require("Misc.StageObjects.RainSerpentine")
+
+local SerpentineRainforest = require("Stages.SerpentineRainforest.stage")
+local SerpentineRainforestvar1 = require("Stages.SerpentineRainforest.variant1")
+SerpentineRainforest.rooms:add(SerpentineRainforestvar1)
+Stage.progression[1]:add(SerpentineRainforest)
+
 
 --Meridian Enemies
 
