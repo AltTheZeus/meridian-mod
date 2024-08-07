@@ -84,21 +84,12 @@ global.quality = misc.getOption("video.quality")
 global.showDamage = misc.getOption("video.show_damage")
 global.scale = misc.getOption("video.scale")
 global.lastVersion = save.read("lastRanVersion")
-global.version = modloader.getModVersion("Starstorm")
 global.timer = 0
 
 global.rormlflag = {}
 for _, i in ipairs(modloader.getFlags()) do
 	global.rormlflag[i] = true
 end
-
-local versionNoDash = global.version
-local dash = global.version:find("-")
-if dash then
-	versionNoDash = global.version:sub(0, dash - 1)
-end
-
-versionNoDash = tonumber(versionNoDash:gsub(".", "")) -- pfft.
 
 global.version = versionNoDash
 save.write("lastRanVersion", versionNoDash)
