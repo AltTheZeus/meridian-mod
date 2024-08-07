@@ -78,7 +78,7 @@ Sprite.load("MarshlandBG2", path.."MarshlandSanctuary/bg2", 1, 0, 0)
 Sprite.load("MarshlandClouds", path.."MarshlandSanctuary/clouds", 1, 0, 0)
 
 --Objects
-require("Stages.resources.Objects.Rain")
+require("Misc.StageObjects.Rain")
 
 local MarshlandSanctuary = require("Stages.resources.MarshlandSanctuary.stage")
 local MarshlandSanctuaryVariant = require("Stages.resources.MarshlandSanctuary.variant")
@@ -180,5 +180,44 @@ callback.register("postLoad", function()
 		StarsweptValley.enemies:add(con1)
 		StarsweptValley.enemies:add(giant)
 		--print("MERIDIAN ENEMIES DETECTED!")
+	end
+	if modloader.checkMod("starstorm") then
+		local admonitor = MonsterCard.find("Clay Admonitor", "starstorm")
+		local exploder = MonsterCard.find("Exploder", "Starstorm")
+		local follower = MonsterCard.find("Follower", "Starstorm")
+		local elver = MonsterCard.find("Squall Elver", "Starstorm")
+		local eel = MonsterCard.find("SquallEel", "Starstorm")
+		local wayfarer = MonsterCard.find("Wayfarer", "Starstorm")
+		local wyvern = MonsterCard.find("Wyvern", "Starstorm")
+		local bughive = MonsterCard.find("Archer Bug Hive", "Starstorm")
+		local overseer = MonsterCard.find("Overseer", "Starstorm")
+
+		--Shallow Rotlands
+		ShallowRotlands.enemies:add(bughive)
+		ShallowRotlands.enemies:add(exploder)
+		ShallowRotlands.enemies:add(wayfarer)
+		ShallowRotlands.enemies:add(eel)
+
+		--Marshland Sanctuary
+		MarshlandSanctuary.enemies:add(exploder)
+		MarshlandSanctuary.enemies:add(follower)
+		MarshlandSanctuary.enemies:add(admonitor)
+		MarshlandSanctuary.enemies:add(overseer)
+
+		--Basalt Quarry
+		BasaltQuarry.enemies:add(follower)
+		BasaltQuarry.enemies:add(wayfarer)
+		BasaltQuarry.enemies:add(overseer)
+
+		--Dissonant Reliquary
+		DissonantReliquary.enemies:add(overseer)
+		DissonantReliquary.enemies:add(elver)
+		DissonantReliquary.enemies:add(wyvern)
+
+		--Starswept Valley
+		StarsweptValley.enemies:add(overseer)
+		StarsweptValley.enemies:add(wayfarer)
+		StarsweptValley.enemies:add(follower)
+		StarsweptValley.enemies:add(admonitor)
 	end
 end)
