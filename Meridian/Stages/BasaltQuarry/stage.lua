@@ -11,7 +11,7 @@ local STAGE_LAYERS = {
     {
         depth = 12,
         sprite = "Tile16Basalt",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [2] = {
                 [98] = {1,2}, [100] = {1,2}, [94] = {1,2}, [96] = {1,2}, [86] = {1,2}, [90] = {1,2}, [78] = {1,2}, [82] = {1,2}, [72] = {1,2}, [77] = {1,2}, [64] = {1,2}, [69] = {1,2}, [56] = {1,2}, [61] = {1,2}, [48] = {1,2}, [53] = {1,2}, [42] = {1,2}, [41] = {1,2}, [87] = {1,2}, [91] = {1,2}, 
@@ -983,7 +983,7 @@ local STAGE_LAYERS = {
     {
         depth = 15,
         sprite = "Tile16Basalt",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [177] = {
                 [120] = {2,10}, [118] = {2,10}, [124] = {1,8}, [122] = {2,10}, [119] = {2,10}, [117] = {2,10}, [123] = {1,7}, [121] = {2,10}, [130] = {2,10}, 
@@ -1424,7 +1424,7 @@ local STAGE_LAYERS = {
     {
         depth = 14,
         sprite = "Tile16Basalt",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [172] = {
                 [98] = {6,8}, [100] = {6,8}, [99] = {7,10}, [101] = {7,10}, 
@@ -1607,7 +1607,7 @@ local STAGE_LAYERS = {
     {
         depth = 15,
         sprite = "statues1",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [177] = {
                 [124] = {4,1}, [128] = {4,5}, [127] = {4,4}, [123] = {4,0}, [126] = {4,3}, [125] = {4,2}, 
@@ -1635,7 +1635,7 @@ local STAGE_LAYERS = {
     {
         depth = 10,
         sprite = "Tile16Basalt",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [177] = {
                 [72] = {8,1}, [77] = {8,2}, [69] = {8,1}, [70] = {8,1}, [75] = {8,1}, [67] = {8,1}, [73] = {8,1}, [76] = {8,1}, [68] = {8,1}, [71] = {8,1}, [74] = {8,1}, 
@@ -1860,13 +1860,13 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9300] = {"duneBasalt", "meridian_stages", 1, 0, 0.90, 1, 0, 0, 0, 0.70 },
-    [9700] = {"basaltMoon", "meridian_stages", 0, 0, 1, 1, 0, 0, 0.10, 0.20 },
-    [10000] = {"basaltSky", "meridian_stages", 1, 1, 1, 1, 0, 0, 0, 0 },
-    [9400] = {"caveTopBasalt", "meridian_stages", 1, 0, 0.90, 1, 0, -159, 0, 0 },
-    [9800] = {"BasaltClouds1", "meridian_stages", 1, 0, 0.90, 1, 0, 0, 0, 0 },
-    [9600] = {"BasaltClouds2", "meridian_stages", 1, 0, 0.80, 1, 0, 0, 0, 0 },
-    [9500] = {"BasaltClouds3", "meridian_stages", 1, 0, 0.70, 1, 0, 0, 0, 0 },
+    [9300] = {"duneBasalt", "meridian", 1, 0, 0.90, 1, 0, 0, 0, 0.70 },
+    [9700] = {"basaltMoon", "meridian", 0, 0, 1, 1, 0, 0, 0.10, 0.20 },
+    [10000] = {"basaltSky", "meridian", 1, 1, 1, 1, 0, 0, 0, 0 },
+    [9400] = {"caveTopBasalt", "meridian", 1, 0, 0.90, 1, 0, -159, 0, 0 },
+    [9800] = {"BasaltClouds1", "meridian", 1, 0, 0.90, 1, 0, 0, 0, 0 },
+    [9600] = {"BasaltClouds2", "meridian", 1, 0, 0.80, 1, 0, 0, 0, 0 },
+    [9500] = {"BasaltClouds3", "meridian", 1, 0, 0.70, 1, 0, 0, 0, 0 },
 }
 
 local STAGE_INTERACTABLES = {
