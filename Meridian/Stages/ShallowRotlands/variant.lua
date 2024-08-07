@@ -9,7 +9,7 @@ local STAGE_LAYERS = {
     {
         depth = 12,
         sprite = "Tile16Rotland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [89] = {
                 [104] = {1,2}, [99] = {1,2}, [107] = {1,2}, [90] = {3,0}, [98] = {1,2}, [94] = {1,2}, [106] = {1,2}, [101] = {1,2}, [109] = {1,2}, [97] = {1,2}, [93] = {1,2}, [103] = {1,2}, [100] = {1,2}, [108] = {1,2}, [96] = {1,2}, [92] = {1,2}, [105] = {1,2}, [102] = {1,2}, [110] = {1,2}, [95] = {1,2}, 
@@ -2174,7 +2174,7 @@ local STAGE_LAYERS = {
     {
         depth = 13,
         sprite = "Tile16Rotland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [264] = {
                 [82] = {3,0}, 
@@ -2580,7 +2580,7 @@ local STAGE_LAYERS = {
     {
         depth = 10,
         sprite = "Tile16Rotland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [283] = {
                 [90] = {9,2}, [86] = {9,1}, [89] = {9,2}, [85] = {9,2}, [88] = {9,1}, [84] = {9,1}, [87] = {9,2}, [83] = {9,0}, [91] = {9,3}, 
@@ -2746,7 +2746,7 @@ local STAGE_LAYERS = {
     {
         depth = 16,
         sprite = "RotlandTrees64b",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [264] = {
                 [78] = {4,22}, [76] = {4,22}, [82] = {4,22}, [80] = {4,22}, [86] = {4,22}, [85] = {4,22}, [77] = {4,22}, [81] = {4,22}, [79] = {4,22}, [84] = {4,22}, [83] = {4,22}, 
@@ -3343,7 +3343,7 @@ local STAGE_LAYERS = {
     {
         depth = 15,
         sprite = "RotlandTrees64b",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [364] = {
                 [78] = {14,21}, [76] = {14,19}, [74] = {14,17}, [73] = {14,16}, [77] = {14,20}, [75] = {14,18}, [79] = {14,22}, 
@@ -3750,7 +3750,7 @@ local STAGE_LAYERS = {
     {
         depth = 15,
         sprite = "Tile16Rotland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [216] = {
                 [90] = {14,4}, [72] = {15,2}, [92] = {14,6}, [91] = {14,5}, 
@@ -3841,7 +3841,7 @@ local STAGE_LAYERS = {
     {
         depth = 11,
         sprite = "Tile16Rotland",
-        origin = "meridian_stages",
+        origin = "meridian",
         tiles = {
             [362] = {
                 [80] = {1,0}, 
@@ -4025,10 +4025,10 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9800] = {"DeepForest1", "meridian_stages", 1, 1, 0.80, 0.80, 0, 0, 0, 0 },
-    [9700] = {"DeepForest2", "meridian_stages", 1, 1, 0.70, 0.70, 0, 0, 0, 0 },
-    [9900] = {"DeepForest3", "meridian_stages", 1, 0, 1, 1, -150, -250, 0, 1 },
-    [10000] = {"SRFill", "meridian_stages", 1, 1, 1, 1, 0, 0, 0, 0 },
+    [9800] = {"DeepForest1", "meridian", 1, 1, 0.80, 0.80, 0, 0, 0, 0 },
+    [9700] = {"DeepForest2", "meridian", 1, 1, 0.70, 0.70, 0, 0, 0, 0 },
+    [9900] = {"DeepForest3", "meridian", 1, 0, 1, 1, -150, -250, 0, 1 },
+    [10000] = {"SRFill", "meridian", 1, 1, 1, 1, 0, 0, 0, 0 },
 }
 
 local STAGE_INTERACTABLES = {
