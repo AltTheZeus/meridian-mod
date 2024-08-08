@@ -17,5 +17,5 @@ if not modloader.checkFlag("mn_disable_stages") then
 end
 
 require("Misc.UI.UI")
-
+require("qols")
 -- Survivors (none, yet)
