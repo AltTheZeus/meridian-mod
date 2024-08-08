@@ -188,3 +188,35 @@ callback.register("postLoad", function()
 		StarsweptValley.enemies:add(admonitor)
 	end
 end)
+
+--Teleporter Fake replacer 3000
+local specificStages = {
+    "Serpentine Rainforest",
+    "Hive Savanna",
+}
+
+local telefake = Object.find("TeleporterFake", "vanilla")
+local base = Object.find("Base", "vanilla")
+
+local function isSpecificStage(stageName)
+    for _, specificStage in ipairs(specificStages) do
+        if stageName == specificStage then
+            return true
+        end
+    end
+    return false
+end
+
+callback.register("onStageEntry", function()
+    local currentStageName = Stage.getCurrentStage():getName()
+
+    if isSpecificStage(currentStageName) then
+        for _, telefakeinst in ipairs(telefake:findAll()) do
+            local x, y = telefakeinst.x, telefakeinst.y
+
+            base:create(x - 64, y)
+
+            telefakeinst:destroy()
+        end
+    end
+end)
