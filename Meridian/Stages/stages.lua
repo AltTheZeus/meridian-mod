@@ -110,8 +110,10 @@ Sprite.load("Clouds2_1_3", path.."SerpentineRainforest/clouds2", 1, 0, 0)
 require("Misc.StageObjects.RainSerpentine")
 
 local SerpentineRainforest = require("Stages.SerpentineRainforest.stage")
-local SerpentineRainforestvar1 = require("Stages.SerpentineRainforest.variant1")
-SerpentineRainforest.rooms:add(SerpentineRainforestvar1)
+local Rainforest1 = require("Stages.SerpentineRainforest.variant1")
+local Rainforest2 = require("Stages.SerpentineRainforest.variant2")
+SerpentineRainforest.rooms:add(Rainforest1)
+SerpentineRainforest.rooms:add(Rainforest2)
 Stage.progression[1]:add(SerpentineRainforest)
 
 
