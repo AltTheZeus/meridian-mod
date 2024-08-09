@@ -116,6 +116,22 @@ SerpentineRainforest.rooms:add(Rainforest1)
 SerpentineRainforest.rooms:add(Rainforest2)
 Stage.progression[1]:add(SerpentineRainforest)
 
+-- Desert Peaks --
+Sprite.load("Tile16Desert", path.."DesertPeaks/tileset", 1, 0, 0)
+Sprite.load("64Desert", path.."DesertPeaks/64Desert", 1, 0, 0)
+Sprite.load("sandhill", path.."DesertPeaks/sandhill", 1, 0, 0)
+Sprite.load("sandmountains", path.."DesertPeaks/sandmountains", 1, 0, 0)
+Sprite.load("sandsky", path.."DesertPeaks/sandsky", 1, 0, 0)
+Sprite.load("sandplanet", path.."DesertPeaks/sandplanet", 1, 0, 0)
+
+
+local DesertPeaks = require("Stages.DesertPeaks.stage")
+local desert1 = require("Stages.DesertPeaks.variant")
+DesertPeaks.rooms:add(desert1)
+Stage.progression[4]:add(DesertPeaks)
+
+--Music
+DesertPeaks.music = Sound.load("musicDesertPeaks", "Misc/Music/stageDesertPeaks.ogg")
 
 --Meridian Enemies
 
@@ -138,6 +154,9 @@ callback.register("postLoad", function()
 		--Basalt Quarry
 		BasaltQuarry.enemies:add(BC)
 		BasaltQuarry.enemies:add(giant)
+
+		--Desert Peaks
+		DesertPeaks.enemies:add(giant)
 
 		--Dissonant Reliquary
 		DissonantReliquary.enemies:add(giant)
@@ -164,6 +183,11 @@ callback.register("postLoad", function()
 		ShallowRotlands.enemies:add(exploder)
 		ShallowRotlands.enemies:add(wayfarer)
 		ShallowRotlands.enemies:add(eel)
+
+		--Desert Peaks
+		DesertPeaks.enemies:add(admonitor)
+		DesertPeaks.enemies:add(eel)
+		DesertPeaks.enemies:add(overseer)
 
 		--Marshland Sanctuary
 		MarshlandSanctuary.enemies:add(exploder)
