@@ -1,4 +1,4 @@
-local RainP = ParticleType.find("Rain")
+local RainP = ParticleType.find("Rain2")
 local RotColor = Color.fromHex(0x6C754d)
 
 local RainGreen = Object.new("RainGreen")
