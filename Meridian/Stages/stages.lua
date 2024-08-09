@@ -216,7 +216,6 @@ end)
 --Teleporter Fake replacer 3000
 local specificStages = {
     "Serpentine Rainforest",
-    "Hive Savanna",
 }
 
 local telefake = Object.find("TeleporterFake", "vanilla")
