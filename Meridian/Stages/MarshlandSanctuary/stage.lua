@@ -4785,7 +4785,7 @@ for _, v in ipairs(STAGE_LAYERS) do
 end
 local function mrgcol(o)
     for _, v in ipairs(o:findAll()) do
-        v.xscale = 1 / 16
+        v.xscale = 1 / 15
     end
     local c
     repeat
