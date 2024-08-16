@@ -18,4 +18,8 @@ end
 
 require("Misc.UI.UI")
 require("qols")
+
+if modloader.checkMod("LivelyWorld") then
+	require("LivelyWorldSupport")
+end
 -- Survivors (none, yet)
