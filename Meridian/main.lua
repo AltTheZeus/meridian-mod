@@ -9,6 +9,7 @@ end
 -- Enemies 
 if not modloader.checkFlag("mn_disable_enemies") then 
 	require("Enemies/enemies")
+	require("monsterLib")
 end
 
 -- Stages 
