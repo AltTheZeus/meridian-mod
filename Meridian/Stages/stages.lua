@@ -116,6 +116,8 @@ SerpentineRainforest.rooms:add(Rainforest1)
 SerpentineRainforest.rooms:add(Rainforest2)
 Stage.progression[1]:add(SerpentineRainforest)
 
+DesertPeaks.music = Sound.load("musicSerpentineRainforest", "Misc/Music/stageSerpentineRainforest.ogg")
+
 -- Desert Peaks --
 Sprite.load("Tile16Desert", path.."DesertPeaks/tileset", 1, 0, 0)
 Sprite.load("64Desert", path.."DesertPeaks/64Desert", 1, 0, 0)
@@ -221,6 +223,8 @@ local specificStages = {
 local telefake = Object.find("TeleporterFake", "vanilla")
 local base = Object.find("Base", "vanilla")
 
+enteredStage = false
+
 local function isSpecificStage(stageName)
     for _, specificStage in ipairs(specificStages) do
         if stageName == specificStage then
@@ -231,15 +235,17 @@ local function isSpecificStage(stageName)
 end
 
 callback.register("onStageEntry", function()
+
     local currentStageName = Stage.getCurrentStage():getName()
 
-    if isSpecificStage(currentStageName) then
+    if isSpecificStage(currentStageName) and enteredStage == false then
         for _, telefakeinst in ipairs(telefake:findAll()) do
             local x, y = telefakeinst.x, telefakeinst.y
 
             base:create(x - 64, y)
 
             telefakeinst:destroy()
+		enteredStage = true
         end
     end
 end)
