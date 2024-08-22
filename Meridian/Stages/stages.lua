@@ -116,7 +116,7 @@ SerpentineRainforest.rooms:add(Rainforest1)
 SerpentineRainforest.rooms:add(Rainforest2)
 Stage.progression[1]:add(SerpentineRainforest)
 
-DesertPeaks.music = Sound.load("musicSerpentineRainforest", "Misc/Music/stageSerpentineRainforest.ogg")
+SerpentineRainforest.music = Sound.load("musicSerpentineRainforest", "Misc/Music/stageSerpentineRainforest.ogg")
 
 -- Desert Peaks --
 Sprite.load("Tile16Desert", path.."DesertPeaks/tileset", 1, 0, 0)
