@@ -148,7 +148,7 @@ callback.register("postLoad", function()
 
 		--Shallow Rotlands
 		ShallowRotlands.enemies:add(con1)
-		MarshlandSanctuary.enemies:add(Lizard)
+		ShallowRotlands.enemies:add(Lizard)
 
 		--Marshland Sanctuary
 		MarshlandSanctuary.enemies:add(con2)
