@@ -138,6 +138,19 @@ DesertPeaks.music = Sound.load("musicDesertPeaks", "Misc/Music/stageDesertPeaks.
 --Meridian Enemies
 
 callback.register("postLoad", function()
+	local DF = Stage.find("Desolate Forest")
+	local DL = Stage.find("Dried Lake")
+	local SM = Stage.find("Sky Meadow")
+	local DC = Stage.find("Damp Caverns")
+	local ST = Stage.find("Sunken Tombs")
+	local AV = Stage.find("Ancient Valley")
+	local MB = Stage.find("Magma Barracks")
+	local HC = Stage.find("Hive Cluster")
+	local TOTE = Stage.find("Temple of the Elders")
+	local ROR = Stage.find("Risk of Rain")
+
+
+	
 	if not modloader.checkFlag("mn_disable_enemies") then
 		local con1 = MonsterCard.find("con1", "meridian")
 		local con2 = MonsterCard.find("con2", "meridian")
@@ -146,6 +159,25 @@ callback.register("postLoad", function()
 		local BC = MonsterCard.find("Basalt Crab", "meridian")
 		local Lizard = MonsterCard.find("Lacertian", "meridian")
 
+
+		--Desolate Forest
+		DS.enemies:add(Lizard)
+
+		--Dried Lake
+		DL.enemies:add(Lizard)
+
+		--Sunken Tombs
+		ST.enemies:add(Lizard)
+
+		--Temple of the Elders
+		TOTE.enemies:add(Lizard)
+
+		--Risk of Rain
+		ROR.enemies:add(Lizard)
+
+		--Serpentine Rainforest
+		SerpentineRainforest.enemies:add(Lizard)
+		
 		--Shallow Rotlands
 		ShallowRotlands.enemies:add(con1)
 		ShallowRotlands.enemies:add(Lizard)
