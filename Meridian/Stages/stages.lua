@@ -144,15 +144,18 @@ callback.register("postLoad", function()
 		local dog = MonsterCard.find("dog", "meridian")
 		local giant = MonsterCard.find("giant", "meridian")
 		local BC = MonsterCard.find("Basalt Crab", "meridian")
+		local Lizard = MonsterCard.find("Lacertian", "meridian")
 
 		--Shallow Rotlands
 		ShallowRotlands.enemies:add(con1)
+		MarshlandSanctuary.enemies:add(Lizard)
 
 		--Marshland Sanctuary
 		MarshlandSanctuary.enemies:add(con2)
 		MarshlandSanctuary.enemies:add(con1)
 		MarshlandSanctuary.enemies:add(giant)
-
+		MarshlandSanctuary.enemies:add(Lizard)
+		
 		--Basalt Quarry
 		BasaltQuarry.enemies:add(BC)
 		BasaltQuarry.enemies:add(giant)
