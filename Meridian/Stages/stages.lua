@@ -161,7 +161,7 @@ callback.register("postLoad", function()
 
 
 		--Desolate Forest
-		DS.enemies:add(Lizard)
+		DF.enemies:add(Lizard)
 
 		--Dried Lake
 		DL.enemies:add(Lizard)
