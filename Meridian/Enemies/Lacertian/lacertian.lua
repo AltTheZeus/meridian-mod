@@ -20,7 +20,10 @@ local sprites = {
 }	
 
 local sounds = {
-	spawn = Sound.load("LacertianSpawnSound", path.."sndSpawn")
+	spawn = Sound.load("LacertianSpawnSound", path.."LacertianSpawn"),
+	death = Sound.load("LacertianDeathSound", path.."LacertianDeath"),
+	unburrow = Sound.load("LacertianUnburrowSound", path.."LacertianUnburrow"),
+	shoot = Sound.load("LacertianShootSound", path.."LacertianShoot")
 }
 
 local lacertian = Object.base("Boss", "Lacertian")
@@ -576,13 +579,14 @@ lacertian:addCallback("step", function(actor)
 					actorData.shoot1frame5 = true 
 					actorData.shoot1frame6 = true
 				elseif math.floor(actor.subimage) == actor.sprite.frames then 
-					actorData.burrowCd = actorData.burrowCd + 1 * 60
+					actorData.burrowCd = actorData.burrowCd + 2 * 60
 					actorData.shoot2Cd = actorData.shoot2Cd + 2 * 60
 					actorAc.state = "idle"
 				end
 
 				if math.floor(actor.subimage) == 5 and actorData.shoot1frame5 then 
 					actorData.shoot1frame5 = false
+					sounds.shoot:play(1, 1)
 					actor:fireExplosion(actor.x + actor.xscale * 50, actor.y - 5, 25/19, 15/4, 1)
 					actor.mask = sprites.mask2
 					local dir = actorData.xLacertAccel
@@ -627,6 +631,7 @@ lacertian:addCallback("step", function(actor)
 					if actorData.shoot2Atk then 
 						actor:fireExplosion(actor.x - actor.xscale * 40, actor.y - 30, (actor.sprite.width / 2 - 20)/19, 30/4, 0.5)
 					end
+					sounds.unburrow:play(1, 1)
 				end
 				if math.floor(actor.subimage) == 4 and actorData.shoot2frame4 then 
 					actorData.shoot2frame4 = false
@@ -634,6 +639,7 @@ lacertian:addCallback("step", function(actor)
 					if actorData.shoot2Atk then 
 						actor:fireExplosion(actor.x + actor.xscale * 50, actor.y - 5, 25/19, 15/4, 1)
 						charge = 4
+						sounds.shoot:play(1, 1)
 					end
 					actor.mask = sprites.mask2
 					local checkDown = actor:collidesMap(actor.x + math.sign(actor.xscale) * actor.mask.width, actor.y + 12)
@@ -650,11 +656,30 @@ lacertian:addCallback("step", function(actor)
 						actorData.shoot2Cd = shoot2Cd
 					end
 					actorData.burrowCd = burrowCd
-					actorData.shoot1Cd = actorData.shoot1Cd + 2 * 60
+					actorData.shoot1Cd = actorData.shoot1Cd + 3 * 60
 				end
 			end
 		end
 	end
+end)
+
+local lacertianCorpse = Object.new("LacertianCorpse")
+lacertianCorpse.sprite = sprites.death 
+lacertianCorpse:addCallback("create", function(self)
+	self.spriteSpeed = 0.15
+end)
+lacertianCorpse:addCallback("step", function(self)
+	if math.floor(self.subimage) == self.sprite.frames then 
+		self.spriteSpeed = 0
+	end
+end)
+
+lacertian:addCallback("destroy", function(actor)
+	sounds.death:play(1, 1)
+	local corpse = lacertianCorpse:create(actor.x, actor.y)
+	corpse.blendColor = actor.blendColor
+	corpse.xscale = actor.xscale
+	corpse.yscale = actor.yscale
 end)
 
 -------------------------------------
