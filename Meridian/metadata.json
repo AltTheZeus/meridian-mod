@@ -29,6 +29,10 @@
 		{
             "name" : "Disable elites",
             "flag" : "mn_disable_elites"
+        },
+		{
+            "name" : "Disable items",
+            "flag" : "mn_disable_items"
         }
 	]
 }
