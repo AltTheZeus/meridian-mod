@@ -2,8 +2,32 @@ tree = Object.base("Enemy", "Auric Tree")
 local treeIdle = Sprite.load("Elites/auricIdle", 1, 11, 27)
 local treeSpawn = Sprite.load("Elites/auricSpawn", 3, 11, 27)
 local treeMask = Sprite.load("Elites/auricMask", 1, 11, 27)
+local treeDeath = Sprite.load("Elites/auricDeath", 7, 16, 33)
 local shing = Sound.load("Elites/tree.ogg")
 local gogobalga = Sound.load("Elites/treeDeath.ogg")
+
+treeDead = Object.new("tree but its DEAD")
+treeDead:addCallback("create", function(self)
+	local data = self:getData()
+	data.timer = 0
+	data.timerActive = 0
+	self.sprite = treeDeath
+	self.spriteSpeed = 0.2
+	data.age = 0
+end)
+treeDead:addCallback("step", function(self)
+	local iD = self:getData()
+	print(self.subimage)
+	if iD.timerActive == 0 and self.subimage >= 7 then
+		iD.timerActive = 1
+	end
+	if iD.timerActive == 1 then
+		iD.timer = iD.timer + 1
+		if iD.timer >= 5 then
+			self.spriteSpeed = 0
+		end
+	end
+end)
 
 treeSpawner = Object.new("tree spawner")
 treeSpawner:addCallback("create", function(self)
@@ -14,7 +38,8 @@ treeSpawner:addCallback("step", function(self)
 	local data = self:getData()
 	data.timer = data.timer + 1
 	if data.timer >= 60 then
-		tree:create(self.x, self.y)
+		local ad = tree:create(self.x, self.y):getData()
+		ad.isPlayer = 0
 		self:destroy()
 	end
 end)
@@ -53,7 +78,6 @@ tree:addCallback("create", function(self)
 	data.age = 0
 	self.mask = treeMask
 	self:setAnimations{
-		spawn = treeSpawn,
 		idle = treeIdle,
 		jump = treeIdle
 	}
@@ -88,6 +112,7 @@ end)
 tree:addCallback("destroy", function(self)
 	local leafCount = 0
 	gogobalga:play()
+	treeDead:create(self.x, self.y)
 	repeat
 		if math.random(1,2) == 1 then
 			leafEF:scale(1, 1)
@@ -156,11 +181,21 @@ tree:addCallback("step", function(self)
 		eD.radius = 40
 		eehee.blendColor = Color.fromRGB(255, 237, 187)
 		iD.efTimer = 0
-		for _, a in ipairs(enemies:findAllEllipse(self.x - 2 - 61, self.y - 5 - 61, self.x - 2 + 61, self.y - 5 + 61)) do
-			if a:getObject() == tree then
-			else
-				a:applyBuff(treeArmor, 95)
-				a:applyBuff(treegen, 95)
+		if iD.isPlayer == 0 then
+			for _, a in ipairs(ParentObject.find("actors"):findAllEllipse(self.x - 2 - 61, self.y - 5 - 61, self.x - 2 + 61, self.y - 5 + 61)) do
+				if a:getObject() == tree then
+				elseif a:getAccessor().team == "enemy" then
+					a:applyBuff(treeArmor, 95)
+					a:applyBuff(treegen, 95)
+				end
+			end
+		elseif iD.isPlayer == 1 then
+			for _, a in ipairs(ParentObject.find("actors"):findAllEllipse(self.x - 2 - 61, self.y - 5 - 61, self.x - 2 + 61, self.y - 5 + 61)) do
+				if a:getObject() == tree then
+				elseif a:getAccessor().team == "player" then
+					a:applyBuff(treeArmor, 95)
+					a:applyBuff(treegen, 95)
+				end
 			end
 		end
 	end
