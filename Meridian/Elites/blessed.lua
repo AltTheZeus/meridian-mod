@@ -65,9 +65,10 @@ local enemies = ParentObject.find("enemies")
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
 	if actor:get("elite_type") == ID then
-		actor:set("maxhp", actor:get("maxhp") * 2.2)
+		actor:set("maxhp", actor:get("maxhp") * 3)
 		actor:set("hp", actor:get("maxhp"))
-		actor:set("damage", actor:get("damage") * 1.6)
+		actor:set("damage", actor:get("damage") * 1.8)
+		actor:set("exp_worth", actor:get("exp_worth") * 2.5)
 		actor:set("show_boss_health", 1)
 		actor:set("name2", "Divine Creation")
 		local blesseddudes = 0
