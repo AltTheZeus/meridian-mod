@@ -111,32 +111,41 @@ end)
 registercallback("onDraw", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
-		local radius
+		local radiusInner
+		local radiusOuter
 		if i:get("show_boss_health") == 1 then
-			radius = 80
+			radiusInner = 80
+			radiusOuter = 120
 		else
-			radius = 50
+			radiusInner = 50
+			radiusOuter = 75
 		end
 		graphics.color(Color.fromRGB(57, 92, 90))
-		graphics.alpha(0.2)
-		graphics.circle(i.x, i.y, radius, false)
+--		graphics.alpha(0.2)
+--		graphics.circle(i.x, i.y, radius, false)
 		graphics.alpha(1)
-		graphics.circle(i.x, i.y, radius, true)
+		graphics.circle(i.x, i.y, radiusInner, true)
+		graphics.circle(i.x, i.y, radiusOuter, true)
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
-		local radius
+		local radiusInner
+		local radiusOuter
 		if i:get("show_boss_health") == 1 then
-			radius = 80
+			radiusInner = 80
+			radiusOuter = 120
 		else
-			radius = 50
+			radiusInner = 50
+			radiusOuter = 75
 		end
 		graphics.color(Color.fromRGB(255, 237, 187))
-		graphics.alpha(0.2)
-		graphics.circle(i.x, i.y, radius, false)
+--		graphics.alpha(0.2)
+--		graphics.circle(i.x, i.y, radius, false)
 		graphics.alpha(1)
-		graphics.circle(i.x, i.y, radius, true)
+		graphics.circle(i.x, i.y, radiusInner, true)
+		graphics.circle(i.x, i.y, radiusOuter, true)
 	end
+
 end)
 
 local slimed = Buff.find("slow")
@@ -144,16 +153,37 @@ local slimed = Buff.find("slow")
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
-		local radius = 50
-		for _, i in ipairs(Object.find("p"):findAllEllipse(i.x + radius, i.y + radius, i.x - radius, i.y - radius)) do
-			i:applyBuff(slimed, 2)
+		local radiusInner
+		local radiusOuter
+		if i:get("show_boss_health") == 1 then
+			radiusInner = 80
+			radiusOuter = 120
+		else
+			radiusInner = 50
+			radiusOuter = 75
+		end
+		for _, a in ipairs(Object.find("p"):findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
+			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
+				a:applyBuff(slimed, 2)
+			end
 		end
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
-		local radius = 50
-		for _, i in ipairs(Object.find("p"):findAllEllipse(i.x + radius, i.y + radius, i.x - radius, i.y - radius)) do
-			i:applyBuff(slimed, 2)
+		local radiusInner
+		local radiusOuter
+		if i:get("show_boss_health") == 1 then
+			radiusInner = 80
+			radiusOuter = 120
+		else
+			radiusInner = 50
+			radiusOuter = 75
+		end
+		for _, a in ipairs(Object.find("p"):findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
+			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
+				a:applyBuff(slimed, 2)
+			end
 		end
 	end
+
 end)
