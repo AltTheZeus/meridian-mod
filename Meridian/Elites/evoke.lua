@@ -153,9 +153,11 @@ registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
 		local aD = i:getData()
 		if not aD.terezi then
-			local replacement = i:getObject():create(i.x, i.y)
-			replacement:makeElite()
-			i:delete()
+			if i:get("team") == "enemy" then
+				local replacement = i:getObject():create(i.x, i.y)
+				replacement:makeElite()
+				i:delete()
+			end
 		end
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", IDb)) do
