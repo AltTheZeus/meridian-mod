@@ -35,6 +35,8 @@ local shoot1Cd = 6 * 60
 local shoot2Cd = 9 * 60
 local burrowCd = 4 * 60
 
+local stunDur = 4 * 60 --- stun duration
+
 lacertian:addCallback("create", function(actor)
     local actorAc = actor:getAccessor()
     local actorData = actor:getData()
@@ -92,7 +94,10 @@ lacertian:addCallback("create", function(actor)
 		actorData.shoot2Cd = shoot2Cd / 2
 		actorData.burrowCd = burrowCd
 		actorData.animLoop = 0
-		
+		actorData.inStun = 0
+		actorData.poiseDamage = 0
+		actorData.poiseStun = 0
+		actorData.hitTimer = 0		
 	else
 		actor:destroy()
 	end
@@ -365,6 +370,20 @@ lacertian:addCallback("step", function(actor)
 			
 			if actorData.burrowCd > 0 then 
 				actorData.burrowCd = actorData.burrowCd - 1
+			end
+			if actorData.hitTimer > 0 then 
+				actorData.hitTimer = actorData.hitTimer - 1
+			elseif actorData.poiseDamage > 0 then 
+				actorData.poiseDamage = math.max(actorData.poiseDamage - 10/60, 0)
+			end
+			
+			local poise = math.min(actorData.poiseDamage + actorData.poiseStun, 100)
+			if poise == 100 and actorAc.state ~= "burrowAnim" and actorAc.state ~= "burrow" and actorAc.state ~= "unburrow" and actorAc.state ~= "stun" then 
+				actorAc.state = "stun"
+				actorData.poiseDamage = 0
+				actorData.poiseStun = 0
+				actorData.hitTimer = 0
+				actorData.inStun = stunDur
 			end
 			
 			if actorAc.state == "idle" or actorAc.state == "chase" then
@@ -658,8 +677,35 @@ lacertian:addCallback("step", function(actor)
 					actorData.burrowCd = burrowCd
 					actorData.shoot1Cd = actorData.shoot1Cd + 3 * 60
 				end
+			elseif actorAc.state == "stun" then 
+				if actorData.inStun > 0 then 
+					actorData.inStun = actorData.inStun - 1
+					actor.sprite = sprites.death
+					actor.spriteSpeed = 0.15 
+					if actor.subimage >= 4 then 
+						actor.subimage = 4
+					end
+				else 
+					actorAc.state = "idle"
+				end
 			end
 		end
+	end
+end)
+
+callback.register("onHit", function(damager, hit)
+	if hit and hit:isValid() and hit:getObject() == lacertian then 
+		if hit:getAccessor().state ~= "stun" then 
+			local damagePercent = (math.pow(1 + damager:get("damage") / hit:get("maxhp"), 1.1) - 1) * 100    --- poise damage from normal damage 
+			local stunAmount = damager:get("stun") * 7.5 													 --- poise damage from stun
+			hit:getData().poiseDamage = math.min(hit:getData().poiseDamage + damagePercent, 100)
+			hit:getData().poiseStun = math.min(hit:getData().poiseStun + stunAmount, 100)
+			hit:getData().hitTimer = 5 * 60																	 --- timer until poise from normal damage starts to decay
+		else 
+			damager:set("damage", damager:get("damage") * 2) 
+			damager:set("damage_fake", damager:get("damage_fake") * 2) 
+		end
+		print(math.min(hit:getData().poiseDamage + hit:getData().poiseStun, 100))
 	end
 end)
 
