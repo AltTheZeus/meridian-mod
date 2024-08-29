@@ -1,4 +1,4 @@
-local elite = EliteType.new("bubble")
+local elite = EliteType.new("Elites/bubble")
 local sprPal = Sprite.load("Elites/bubblePal", 1, 0, 0)
 local ID = elite.ID
 local bID = EliteType.find("blessed").ID
@@ -31,24 +31,39 @@ end)
 local enemies = ParentObject.find("enemies")
 
 local bubbleObj = Object.new("bubble")
-bubbleObj.sprite = Sprite.load("bubble", "Elites/bubble", 4, 7, 7)
-local bubblePop = Sprite.load("bubblePop", "Elites/bubblePop", 4, 17, 21)
+bubbleObj.sprite = Sprite.load("Elites/bubble", 4, 7, 7)
+local bubblePop = Sprite.load("Elites/bubblePop", 4, 17, 21)
 
 local spawn = Sound.find("Use", "vanilla")
 local pop = Sound.find("JellyHit", "vanilla")
 
 bubbleObj:addCallback("create", function(self)
 	local sD = self:getData()
-	self.spriteSpeed = 0.12
+	self.spriteSpeed = 0.12 + (0.01 * math.random(-1,1))
 	sD.life = 0
 	sD.lifeLim = math.random(180,250)
 end)
 
 bubbleObj:addCallback("step", function(self)
 	local sD = self:getData()
-	
+	sD.life = sD.life + 1
+	if sD.life >= sD.lifeLim then
+--			sD.owner:fireExplosion(self.x, self.y, 25/19, 25/4, 0.6, bubblePop)
+			if sD.friendly then
+				misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "player", bubblePop)
+			else
+				misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
+			end
+			self:destroy()
+			pop:play()
+	end
+	if not sD.owner:isValid() then
+--		misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
+		self:destroy()
+		pop:play()
+	end
 	for _, p in ipairs(misc.players) do
-		if self:collidesWith(p, self.x, self.y) then
+		if self:collidesWith(p, self.x, self.y) and not sD.friendly then
 --			sD.owner:fireExplosion(self.x, self.y, 25/19, 25/4, 1.2, bubblePop)
 --			misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
 --			self:destroy()
@@ -57,19 +72,6 @@ bubbleObj:addCallback("step", function(self)
 			self.x = math.approach(self.x, sD.locX, math.abs(math.round((self.x - sD.locX) * 0.1)))
 			self.y = math.approach(self.y, sD.locY, math.abs(math.round((self.y - sD.locY) * 0.1)))
 		end
-	end
-
-	sD.life = sD.life + 1
-	if sD.life >= sD.lifeLim then
---			sD.owner:fireExplosion(self.x, self.y, 25/19, 25/4, 0.6, bubblePop)
-			misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
-			self:destroy()
-			pop:play()
-	end
-	if not sD.owner:isValid() then
---		misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
-		self:destroy()
-		pop:play()
 	end
 end)
 
