@@ -87,6 +87,7 @@ registercallback("onStep", function()
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
+				nD.terezi = 1
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
 			repeat
 				aD.card = table.random(enemyOptions)
@@ -116,6 +117,7 @@ registercallback("onStep", function()
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
+				nD.terezi = 1
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
 			repeat
@@ -146,6 +148,25 @@ sparkle:speed(0, 0, 0, 0)
 sparkle:direction(0, 0, 0, 0)
 sparkle:gravity(0, 0)
 sparkle:life(60 * 1, 60 * 1)
+
+registercallback("onStep", function()
+	for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
+		local aD = i:getData()
+		if not aD.terezi then
+			local replacement = i:getObject():create(i.x, i.y)
+			replacement:makeElite()
+			i:delete()
+		end
+	end
+	for _, i in ipairs(enemies:findMatching("elite_type", IDb)) do
+		local aD = i:getData()
+		if not aD.terezi then
+			local replacement = i:getObject():create(i.x, i.y)
+			replacement:makeElite()
+			i:delete()
+		end
+	end
+end, 500)
 
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
