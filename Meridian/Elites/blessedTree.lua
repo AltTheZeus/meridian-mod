@@ -3,6 +3,7 @@ local treeIdle = Sprite.load("Elites/auricIdle", 1, 11, 27)
 local treeSpawn = Sprite.load("Elites/auricSpawn", 3, 11, 27)
 local treeMask = Sprite.load("Elites/auricMask", 1, 11, 27)
 local shing = Sound.load("Elites/tree.ogg")
+local gogobalga = Sound.load("Elites/treeDeath.ogg")
 
 treeSpawner = Object.new("tree spawner")
 treeSpawner:addCallback("create", function(self)
@@ -86,6 +87,7 @@ end)
 
 tree:addCallback("destroy", function(self)
 	local leafCount = 0
+	gogobalga:play()
 	repeat
 		if math.random(1,2) == 1 then
 			leafEF:scale(1, 1)
