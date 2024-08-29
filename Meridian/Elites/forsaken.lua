@@ -149,6 +149,7 @@ registercallback("onDraw", function()
 end)
 
 local slimed = Buff.find("slow")
+local everyone = ParentObject.find("actors")
 
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
@@ -162,9 +163,17 @@ registercallback("onStep", function()
 			radiusInner = 50
 			radiusOuter = 75
 		end
-		for _, a in ipairs(Object.find("p"):findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
+		for _, a in ipairs(everyone:findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
 			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
-				a:applyBuff(slimed, 2)
+				if i:getAccessor().team == "enemy" then
+					if a:getAccessor().team == "player" then
+						a:applyBuff(slimed, 2)
+					end
+				elseif i:getAccessor().team == "player" then
+					if a:getAccessor().team == "enemy" then
+						a:applyBuff(slimed, 2)
+					end
+				end
 			end
 		end
 	end
@@ -179,9 +188,17 @@ registercallback("onStep", function()
 			radiusInner = 50
 			radiusOuter = 75
 		end
-		for _, a in ipairs(Object.find("p"):findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
+		for _, a in ipairs(everyone:findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
 			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
-				a:applyBuff(slimed, 2)
+				if i:getAccessor().team == "enemy" then
+					if a:getAccessor().team == "player" then
+						a:applyBuff(slimed, 2)
+					end
+				elseif i:getAccessor().team == "player" then
+					if a:getAccessor().team == "enemy" then
+						a:applyBuff(slimed, 2)
+					end
+				end
 			end
 		end
 	end
