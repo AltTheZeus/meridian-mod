@@ -6,6 +6,12 @@ if not modloader.checkFlag("mn_disable_elites") then
 	require("Elites/elites")
 end
 
+-- Items
+if not modloader.checkFlag("mn_disable_items") then 
+	require("Items/items")
+end
+
+
 -- Enemies 
 if not modloader.checkFlag("mn_disable_enemies") then 
 	require("monsterLib")
