@@ -494,8 +494,6 @@ lacertian:addCallback("step", function(actor)
 							end
 							actorAc.state = "unburrow"
 							actor.subimage = 1
-						else
-							print("burrow unsuccessful")
 						end
 					end
 				end
@@ -738,7 +736,6 @@ callback.register("onHit", function(damager, hit)
 			damager:set("damage", damager:get("damage") * 2) 
 			damager:set("damage_fake", damager:get("damage_fake") * 2) 
 		end
-		print(math.min(hit:getData().poiseDamage + hit:getData().poiseStun, 100))
 	end
 end)
 
