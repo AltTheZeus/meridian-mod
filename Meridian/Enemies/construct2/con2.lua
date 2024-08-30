@@ -7,7 +7,7 @@ local sprites = {
     death = Sprite.load("con2Death", path.."con2Death", 9, 10, 24),
     mask = Sprite.load("con2Mask", path.."con2Mask", 1, 7, 23),
     palette = Sprite.load("con2Pal", path.."con2Pal", 1, 0, 0),
-    jump = Sprite.load("con2Jump", path.."con2Jump", 1, 7, 24)
+    jump = Sprite.load("con2Jump", path.."con2Jump", 1, 7, 24),
 --    portrait = Sprite.load("con2Portrait", path.."con2Portrait", 1, 119, 199)
 }
 
@@ -136,9 +136,9 @@ local monsLog = MonsterLog.new("Beta Construct2")
 MonsterLog.map[con2] = monsLog
 
 monsLog.displayName = "Beta Construct"
-monsLog.story = "The ferocity of these things chills my blood. I do not know if they are machine or beast, and I am not willing to inspect them to find out. They seem to sense my presence through some means, and by then it's too late. Scores of them materialise, assembling themselves and instantly sprinting towards me. The noises they emit are unlike all else, unholy screeches and roars of composition unknown.\n\nI hope to never encounter one again. Their extendable necks give me the willies."
+monsLog.story = "Malformed constructs whizz past me, shaky legs carrying their crumbling bodies at speeds to reckless to be safe, for it or myself. Their shield-like plates are covered in cracks and blemishes, no doubt from running into obstacles. The imperfections in their shield lend themselves to combat; the energy blasts they launch are chaotic and dispersed like light through a prism."
 monsLog.statHP = 70
 monsLog.statDamage = 12
 monsLog.statSpeed = 1.3
 monsLog.sprite = sprites.shoot
---monsLog.portrait = sprites.portrait
+monsLog.portrait = sprites.portrait
