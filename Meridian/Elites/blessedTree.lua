@@ -159,7 +159,7 @@ end)
 treegen:addCallback("end", function(guy)
 	local gA = guy:getAccessor()
 	local gD = guy:getData()
-	gA.hp_regen = gA.hp_regen = gD.treeBuff1
+	gA.hp_regen = gA.hp_regen - gD.treeBuff1
 	gD.treeBuff1 = 0
 end)
 
