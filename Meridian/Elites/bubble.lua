@@ -1,4 +1,4 @@
-local elite = EliteType.new("Elites/bubble")
+local elite = EliteType.new("bubble")
 local sprPal = Sprite.load("Elites/bubblePal", 1, 0, 0)
 local ID = elite.ID
 local bID = EliteType.find("blessed").ID
