@@ -38,6 +38,8 @@ registercallback("onPlayerStep", function(player)
 	end
 end)
 
+local goldBub = sprite.Find("bubbleBlessed")
+
 registercallback("onDamage", function(target, damage, source)
 	if target:isValid() and target:getObject() == playa and target.useItem == item then
 		local tD = target:getData()
@@ -55,6 +57,7 @@ registercallback("onDamage", function(target, damage, source)
 				bD.locX = target.x + math.random(-50, 50)
 				bD.locY = target.y + math.random(-50, 50)
 				bubbleAmount = bubbleAmount - 1
+				baby.sprite = goldBub
 			until bubbleAmount <= 0
 			spawn:play()
 		end
@@ -68,7 +71,7 @@ registercallback("onDraw", function()
 			local iD = i:getData()
 			local radiusInner = 50
 			local radiusOuter = 75
-			graphics.color(Color.fromRGB(57, 92, 90))
+			graphics.color(Color.fromRGB(255, 237, 187))
 			graphics.alpha(1)
 			graphics.circle(i.x, i.y, radiusInner, true)
 			graphics.circle(i.x, i.y, radiusOuter, true)
