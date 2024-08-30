@@ -149,8 +149,18 @@ end)
 treegen:addCallback("step", function(guy)
 	local gA = guy:getAccessor()
 	local gD = guy:getData()
-	gA.hp = gA.hp + gD.treeBuff1
-	if gA.hp > gA.maxhp then gA.hp = gA.maxhp end
+	if guy:getObject() == Object.find("p") then
+	else
+		gA.hp = gA.hp + gD.treeBuff1
+		if gA.hp > gA.maxhp then gA.hp = gA.maxhp end
+	end
+end)
+
+treegen:addCallback("end", function(guy)
+	local gA = guy:getAccessor()
+	local gD = guy:getData()
+	gA.hp_regen = gA.hp_regen = gD.treeBuff1
+	gD.treeBuff1 = 0
 end)
 
 treeArmor:addCallback("start", function(guy)
