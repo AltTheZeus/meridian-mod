@@ -33,6 +33,8 @@ local enemies = ParentObject.find("enemies")
 local bubbleObj = Object.new("bubble")
 bubbleObj.sprite = Sprite.load("Elites/bubble", 4, 7, 7)
 local bubblePop = Sprite.load("Elites/bubblePop", 4, 17, 21)
+local goldBub = Sprite.load("Elites/bubbleBlessed", 4, 7, 7)
+local goldBubPop = Sprite.load("Elites/bubbleBlessedPop", 4, 17, 21)
 
 local spawn = Sound.find("Use", "vanilla")
 local pop = Sound.find("JellyHit", "vanilla")
@@ -48,26 +50,24 @@ bubbleObj:addCallback("step", function(self)
 	local sD = self:getData()
 	sD.life = sD.life + 1
 	if sD.life >= sD.lifeLim then
---			sD.owner:fireExplosion(self.x, self.y, 25/19, 25/4, 0.6, bubblePop)
 			if sD.friendly then
-				misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "player", bubblePop)
+				misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "player", goldBubPop)
 			else
-				misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
+				if sD.swag == "normal" then
+					misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
+				elseif sD.swag == "awesome" then
+					misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", goldBubPop)
+				end
 			end
 			self:destroy()
 			pop:play()
 	end
 	if not sD.owner:isValid() then
---		misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
 		self:destroy()
 		pop:play()
 	end
 	for _, p in ipairs(misc.players) do
 		if self:collidesWith(p, self.x, self.y) and not sD.friendly then
---			sD.owner:fireExplosion(self.x, self.y, 25/19, 25/4, 1.2, bubblePop)
---			misc.fireExplosion(self.x, self.y, 20/19, 20/4, math.round(sD.damage * 0.6), "enemy", bubblePop)
---			self:destroy()
---			pop:play()
 		else
 			self.x = math.approach(self.x, sD.locX, math.abs(math.round((self.x - sD.locX) * 0.1)))
 			self.y = math.approach(self.y, sD.locY, math.abs(math.round((self.y - sD.locY) * 0.1)))
@@ -91,7 +91,6 @@ registercallback("onStep", function()
 end)
 
 registercallback("onDamage", function(target, damage, source)
---if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
 	if not CheckValid(source) then return end
 	if target:isValid() and (target:get("elite_type") == ID or target:get("elite_type") == bID) then
 		local tD = target:getData()
@@ -108,9 +107,14 @@ registercallback("onDamage", function(target, damage, source)
 				bD.locX = target.x + math.random(-50, 50)
 				bD.locY = target.y + math.random(-50, 50)
 				bubbleAmount = bubbleAmount - 1
+				if target:get("elite_type") == ID then
+					bD.swag = "normal"
+				elseif target:get("elite_type") == bID then
+					bD.swag = "awesome"
+					baby.sprite = goldBub
+				end
 			until bubbleAmount <= 0
 			spawn:play()
 		end
 	end
---end
 end)
