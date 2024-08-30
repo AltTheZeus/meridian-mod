@@ -38,7 +38,7 @@ registercallback("onPlayerStep", function(player)
 	end
 end)
 
-local goldBub = sprite.Find("bubbleBlessed")
+local goldBub = Sprite.find("bubbleBlessed")
 
 registercallback("onDamage", function(target, damage, source)
 	if target:isValid() and target:getObject() == playa and target.useItem == item then
