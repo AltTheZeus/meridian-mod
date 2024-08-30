@@ -7,8 +7,8 @@ local sprites = {
     death = Sprite.load("con1Death", path.."con1Death", 12, 13, 19),
     mask = Sprite.load("con1Mask", path.."con1Mask", 1, 6, 13),
     palette = Sprite.load("con1Pal", path.."con1Pal", 1, 0, 0),
-    jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 14)
---    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 199)
+    jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 14),
+    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 199)
 }
 
 local sounds = {
@@ -136,9 +136,9 @@ local monsLog = MonsterLog.new("Beta Construct1")
 MonsterLog.map[con1] = monsLog
 
 monsLog.displayName = "Beta Construct"
-monsLog.story = "The ferocity of these things chills my blood. I do not know if they are machine or beast, and I am not willing to inspect them to find out. They seem to sense my presence through some means, and by then it's too late. Scores of them materialise, assembling themselves and instantly sprinting towards me. The noises they emit are unlike all else, unholy screeches and roars of composition unknown.\n\nI hope to never encounter one again. Their extendable necks give me the willies."
+monsLog.story = "These 'creatures' are many, but weak. I can find no trace of biological components within them, but they act on their own, as if they were individuals. Every instance of the small constructs seems to be damaged and scuffed, abandoned in the environment. My compassion for them ends there, as their ferocity is not dampened by their hindrances."
 monsLog.statHP = 90
 monsLog.statDamage = 9
 monsLog.statSpeed = 1.2
 monsLog.sprite = sprites.shoot
---monsLog.portrait = sprites.portrait
+monsLog.portrait = sprites.portrait
