@@ -493,6 +493,7 @@ lacertian:addCallback("step", function(actor)
 								actorData.shoot2Atk = true
 							end
 							actorAc.state = "unburrow"
+							actor.subimage = 1
 						else
 							print("burrow unsuccessful")
 						end
