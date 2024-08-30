@@ -13,8 +13,8 @@ local sprites = {
 	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51),
 	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31),
 	maskNone = Sprite.load("LacertianMaskNone", path.."maskNone", 1, 0, 50),
-	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 74, 51),
-	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 74, 51),
+	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 90, 51),
+	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 90, 51),
 	palette = Sprite.load("LacertianPalette", path.."palette", 1, 0, 0),
 	portrait = Sprite.load("LacertianPortrait", path.."portrait", 1, 119, 199) --
 }	
@@ -31,9 +31,9 @@ lacertian.sprite = sprites.idle
 
 EliteType.registerPalette(sprites.palette, lacertian)
 
-local shoot1Cd = 6 * 60
-local shoot2Cd = 9 * 60
-local burrowCd = 4 * 60
+local shoot1Cd = 3 * 60
+local shoot2Cd = 7 * 60
+local burrowCd = 3 * 60
 
 local stunDur = 4 * 60 --- stun duration
 
@@ -92,7 +92,7 @@ lacertian:addCallback("create", function(actor)
 		actorData.inIdle = 0
 		actorData.shoot1Cd = shoot1Cd / 2
 		actorData.shoot2Cd = shoot2Cd / 2
-		actorData.burrowCd = burrowCd
+		actorData.burrowCd = 1 * 60
 		actorData.animLoop = 0
 		actorData.inStun = 0
 		actorData.poiseDamage = 0
@@ -219,6 +219,7 @@ findLacertianTarget = function(actor)
 	local trg 
 	local dis  
 	local movement
+	local player
 	local flying = true
 	local r1 = 600
 	local r2 = 600
@@ -241,12 +242,18 @@ findLacertianTarget = function(actor)
 			if onFoot and not movement then 
 				movement = true 
 			end
+			local play = isa(act, "PlayerInstance")
 			flying = flying and not (ground or onFoot) and not actor:getAccessor().state == "burrow"
 			if onFoot or ground or flying then  
 				local ds = distance(actor.x, actor.y, act.x, act.y) 
 				if not dis or dis > ds then 
-					dis = ds 
-					trg = act
+					if play and not player then 
+						player = true
+					end
+					if not player or (player and play) then
+						dis = ds 
+						trg = act
+					end
 				end
 			end
 		end
@@ -441,8 +448,8 @@ lacertian:addCallback("step", function(actor)
 			elseif actorAc.state == "burrowAnim" then 
 				actorAc.moveRight = 0
 				actorAc.moveLeft = 0
-				actor.sprite = sprites.burrow 
 				actor.spriteSpeed = 0.2 
+				actor.sprite = sprites.burrow 
 				if math.floor(actor.subimage) == actor.sprite.frames then 
 					actorAc.state = "burrow"
 				end
@@ -465,7 +472,7 @@ lacertian:addCallback("step", function(actor)
 						actor.xscale = math.sign(trg.x - actor.x)
 						local n
 						local minDis
-						local yy = trg.y + trg.sprite.yorigin
+						local yy = trg.y + trg.mask.yorigin + 1
 						for i = x1, x2 do 
 							local groundCheck = findLacertianGround(actor, i, yy)
 							local dis = distance(i, yy, trg.x, yy) 
@@ -530,7 +537,7 @@ lacertian:addCallback("step", function(actor)
 									x2 = actor.x 
 								end
 								if actor.x > x1 and actor.x < x2 and math.abs(trg.y - actor.y) < 60 then 
-									if actorData.shoot1Cd == 0 and (mv == "walk" and math.abs(n) < 150) or (mv == "observe" and math.abs(n) < 120) then 
+									if actorData.shoot1Cd == 0 and math.abs(n) < 120 then 
 										actorData.shoot1Key = true
 										actorAc.state = "shoot1"
 										actorData.chompCount = 3
@@ -543,6 +550,16 @@ lacertian:addCallback("step", function(actor)
 											actorAc.moveRight = 0
 											actorAc.moveLeft = 0
 											actorAc.state = "burrowAnim"
+											actor.subimage = 1
+										elseif actorData.shoot2Cd == 0 then 
+											if n ~= 0 then 
+												actor.xscale = math.sign(n)
+											end
+											actorAc.moveRight = 0
+											actorAc.moveLeft = 0
+											actorData.burrowCd = 1 * 60
+											actorAc.state = "burrowAnim"
+											actor.subimage = 1
 										else
 											if math.sign(n) == 1 then 
 												actorAc.moveLeft = 0
@@ -552,7 +569,16 @@ lacertian:addCallback("step", function(actor)
 												actorAc.moveLeft = 1
 											end	
 										end
-									else 
+									elseif actorData.shoot2Cd == 0 then 
+											if n ~= 0 then 
+												actor.xscale = math.sign(n)
+											end
+											actorAc.moveRight = 0
+											actorAc.moveLeft = 0
+											actorData.burrowCd = 1 * 60
+											actorAc.state = "burrowAnim"
+											actor.subimage = 1
+									else
 										if n ~= 0 then 
 											actor.xscale = math.sign(n)
 										end
@@ -567,10 +593,12 @@ lacertian:addCallback("step", function(actor)
 									actorAc.moveLeft = 0
 									if actorData.burrowCd == 0 then 
 										actorAc.state = "burrowAnim"
+										actor.subimage = 1
 									end
 								end
 							elseif actorData.burrowCd == 0 then 
 								actorAc.state = "burrowAnim"
+								actor.subimage = 1
 							else 
 								actorAc.state = "idle"
 							end
@@ -598,8 +626,8 @@ lacertian:addCallback("step", function(actor)
 					actorData.shoot1frame5 = true 
 					actorData.shoot1frame6 = true
 				elseif math.floor(actor.subimage) == actor.sprite.frames then 
-					actorData.burrowCd = actorData.burrowCd + 2 * 60
-					actorData.shoot2Cd = actorData.shoot2Cd + 2 * 60
+					actorData.burrowCd = actorData.burrowCd + 1 * 60
+					actorData.shoot2Cd = actorData.shoot2Cd + 1 * 60
 					actorAc.state = "idle"
 				end
 
@@ -631,9 +659,13 @@ lacertian:addCallback("step", function(actor)
 						end
 						local mv = lacertianPathfind(actor, trg)
 						local dis = distance(actor.x, actor.y, trg.x, trg.y)
-						if mv and ((mv == "walk" and dis < 150) or (mv == "observe" and dis < 120)) then 
+						if mv and dis < 120 and (mv == "walk" or mv == "observe") then 
 							actorData.chompCount = actorData.chompCount - 1
 							actorData.shoot1Key = true 
+						else 
+							actorData.burrowCd = 1 * 60
+							actorAc.state = "burrowAnim"
+							actor.subimage = 1
 						end
 					end
 				end
@@ -648,7 +680,7 @@ lacertian:addCallback("step", function(actor)
 				if math.floor(actor.subimage) == 1 and actorData.shoot2frame1 then 
 					actorData.shoot2frame1 = false
 					if actorData.shoot2Atk then 
-						actor:fireExplosion(actor.x - actor.xscale * 40, actor.y - 30, (actor.sprite.width / 2 - 20)/19, 30/4, 0.5)
+						actor:fireExplosion(actor.x - actor.xscale * 30, actor.y - 30, (actor.sprite.width / 2 - 20)/19, 30/4, 2)
 					end
 					sounds.unburrow:play(1, 1)
 				end
@@ -675,7 +707,7 @@ lacertian:addCallback("step", function(actor)
 						actorData.shoot2Cd = shoot2Cd
 					end
 					actorData.burrowCd = burrowCd
-					actorData.shoot1Cd = actorData.shoot1Cd + 3 * 60
+					actorData.shoot1Cd = actorData.shoot1Cd + 1 * 60
 				end
 			elseif actorAc.state == "stun" then 
 				if actorData.inStun > 0 then 
@@ -696,8 +728,8 @@ end)
 callback.register("onHit", function(damager, hit)
 	if hit and hit:isValid() and hit:getObject() == lacertian then 
 		if hit:getAccessor().state ~= "stun" then 
-			local damagePercent = (math.pow(1 + damager:get("damage") / hit:get("maxhp"), 1.1) - 1) * 100    --- poise damage from normal damage 
-			local stunAmount = damager:get("stun") * 7.5 													 --- poise damage from stun
+			local damagePercent = (math.pow(1 + damager:get("damage") / hit:get("maxhp"), 1.5) - 1) * 100    --- poise damage from normal damage 
+			local stunAmount = damager:get("stun") * 10 													 --- poise damage from stun
 			hit:getData().poiseDamage = math.min(hit:getData().poiseDamage + damagePercent, 100)
 			hit:getData().poiseStun = math.min(hit:getData().poiseStun + stunAmount, 100)
 			hit:getData().hitTimer = 5 * 60																	 --- timer until poise from normal damage starts to decay
@@ -713,6 +745,7 @@ local lacertianCorpse = Object.new("LacertianCorpse")
 lacertianCorpse.sprite = sprites.death 
 lacertianCorpse:addCallback("create", function(self)
 	self.spriteSpeed = 0.15
+	self.depth = 13
 end)
 lacertianCorpse:addCallback("step", function(self)
 	if math.floor(self.subimage) == self.sprite.frames then 
