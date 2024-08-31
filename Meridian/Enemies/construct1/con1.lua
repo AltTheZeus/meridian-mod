@@ -51,14 +51,14 @@ end)
 
 Monster.giveAI(con1)
 
-Monster.setSkill(con1, 1, 200, 1.3 * 60, function(actor)
+Monster.setSkill(con1, 1, 30, 1.3 * 60, function(actor)
 	Monster.setActivityState(actor, 1, actor:getAnimation("shoot"), 0.2, true, true)
 	Monster.activateSkillCooldown(actor, 1)
 end)
 Monster.skillCallback(con1, 1, function(actor, relevantFrame)
 	if relevantFrame == 6 then
 		sounds.attack:play(1 + 1)
-		actor:fireBullet(actor.x, actor.y - 4, actor:getFacingDirection(), 170, 1, nil)
+		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
 	end
 end)
 
