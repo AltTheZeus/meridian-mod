@@ -4,7 +4,7 @@ local sprites = {
     walk = Sprite.load("BasaltCrabWalk", path.."basaltWalk", 4, 24, 10),
     spawn = Sprite.load("BasaltCrabSpawn", path.."basaltSpawn", 6, 24, 10),
 	jump = Sprite.load("BasaltCrabFall", path.."basaltIdle", 1, 24, 10),
-        death = Sprite.load("BasaltCrabDeath", path.."basaltDeath", 13, 43, 28),
+    death = Sprite.load("BasaltCrabDeath", path.."basaltDeath", 13, 43, 28),
 	shoot1 = Sprite.load("BasaltCrabShoot1", path.."basaltShoot1", 9, 36, 10),
 	shoot2 = Sprite.load("BasaltCrabShoot2", path.."basaltShoot2", 18, 24, 10),
     mask = Sprite.load("BasaltCrabMask", path.."basaltMask", 1, 24, 10),
@@ -61,6 +61,21 @@ EliteType.registerPalette(sprites.palette, BasaltCrab)
 BasaltCrab:addCallback("create", function(actor)
     local actorAc = actor:getAccessor()
     local data = actor:getData()
+	
+	actor.mask = sprites.mask
+	--[[local x1, y1
+	local player = misc.players[math.random(1, #misc.players)]
+	if player then 
+		x1, y1 = findBasaltSpawn(actor, player.x, player.y)
+	end	
+	
+	if x1 and y1 then 
+		actor.x = x1
+		actor.y = y1
+		actorAc.ghost_x = actor.x
+		actorAc.ghost_y = actor.y	
+	end]]
+	
     actorAc.name = "Basalt Crab"
     actorAc.maxhp = 400 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
@@ -79,7 +94,6 @@ BasaltCrab:addCallback("create", function(actor)
     }
     actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
     actorAc.sound_death = Sound.find("GolemDeath","vanilla").id
-    actor.mask = sprites.mask
     actorAc.health_tier_threshold = 3
     actorAc.knockback_cap = actorAc.maxhp
     actorAc.exp_worth = 30 * Difficulty.getScaling()
@@ -159,9 +173,94 @@ Monster.skillCallback(BasaltCrab, 2, function(actor, relevantFrame)
 	end
 end)
 
+basaltTargetFind = function(actor)
+	local r = 320
+	local target
+	local minDis
+	for _, player in ipairs(misc.players) do 
+		if player and player:isValid() and actor:get("team") ~= player:get("team") then 
+			local dis = distance(actor.x, actor.y, player.x, player.y)
+			if dis < r and (not minDis or dis < minDis) then 
+				minDis = dis 
+				target = player
+			end
+		end
+	end
+	return target
+end
+
+findBasaltSpawn = function(actor, x, y)
+	local xFinal = x
+	local yFinal = y
+	
+	local disMin
+	local grounds = getAllGround()
+	for _, ground in ipairs(grounds) do 
+		local groundY = ground.y - actor.mask.height + actor.mask.yorigin
+		local groundX1 = ground.x 
+		local groundX2 = ground.x + ground.xscale * 16
+			i = (groundX1 + groundX2) / 2
+			local x1, x2 = findBasaltWalk(actor, i, groundY)
+			if x1 and x2 then 
+				local dis = distance(i, groundY, x, y)
+				if not disMin or dis < disMin then 
+					xFinal = math.random(math.floor(x1), math.ceil(x2))
+					yFinal = groundY
+					disMin = dis
+				end
+			end
+	end	
+	return xFinal, yFinal
+end
+
+findBasaltWalk = function(actor, x, y)
+	local disX1 = 0
+	local disX2 = 0 
+	local x1
+	local x2
+	while findBasaltGround(actor, x + disX1, y) do 
+		disX1 = disX1 + 1
+	end
+	while findBasaltGround(actor, x - disX2, y) do 
+		disX2 = disX2 + 1
+	end
+	if disX1 + disX2 > sprites.mask.width then 
+		x1 = x + disX1
+		x2 = x - disX2
+	end
+	return x2, x1
+end
+
+findBasaltGround = function(actor, x, y)
+	local checkDown = actor:collidesMap(x, y + 12)
+	local checkUp = not actor:collidesMap(x, y - 12)
+	return checkDown and checkUp
+end
+
+getAllGround = function()
+	local grounds = {}
+	grounds = obj.B:findAll()
+	for _, i in ipairs(obj.BossSpawn:findAll()) do 
+		table.insert(grounds, i) 
+	end
+	for _, i in ipairs(obj.BossSpawn2:findAll()) do 
+		table.insert(grounds, i) 
+	end
+	return grounds
+end
+
 BasaltCrab:addCallback("step", function(actor)
 	local data = actor:getData()
+	local actorAc = actor:getAccessor()
 	
+	local trg = basaltTargetFind(actor)
+	if trg then 
+		actorAc.target = trg:get("child_poi")
+		if actorAc.state == "idle" then
+			actorAc.state = "chase"
+		end
+	end
+		
 	if data.attackFrames > 0 then 
 		data.attackFrames = data.attackFrames - 1
 	end
