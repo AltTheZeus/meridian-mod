@@ -10,7 +10,7 @@ local sprites = {
     palette = Sprite.load("giantPal", path.."giantPal", 1, 0, 0),
     jump = Sprite.load("giantJump", path.."giantJump", 1, 17, 47),
     hit = Sprite.load("giantBlast", path.."giantBlast", 3, 14, 18),
-    portrait = Sprite.load("giantPortrait", path.."giantPortrait", 1, 119, 199)
+    portrait = Sprite.load("giantPortrait", path.."giantPortrait", 1, 119, 119)
 }
 
 local sounds = {
