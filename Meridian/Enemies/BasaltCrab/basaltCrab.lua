@@ -9,7 +9,7 @@ local sprites = {
 	shoot2 = Sprite.load("BasaltCrabShoot2", path.."basaltShoot2", 18, 24, 10),
     mask = Sprite.load("BasaltCrabMask", path.."basaltMask", 1, 24, 10),
     palette = Sprite.load("BasaltCrabPalette", path.."basaltPal", 1, 0, 0),
-    portrait = Sprite.load("BasaltCrabPortrait", path.."basaltPortrait", 1, 119, 199)
+    portrait = Sprite.load("BasaltCrabPortrait", path.."basaltPortrait", 1, 119, 119)
 }	
 
 
