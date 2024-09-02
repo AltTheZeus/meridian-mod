@@ -16,7 +16,7 @@ local sprites = {
 	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 90, 51),
 	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 90, 51),
 	palette = Sprite.load("LacertianPalette", path.."palette", 1, 0, 0),
-	portrait = Sprite.load("LacertianPortrait", path.."portrait", 1, 119, 199) --
+	portrait = Sprite.load("LacertianPortrait", path.."portrait", 1, 119, 119) --
 }	
 
 local sounds = {
