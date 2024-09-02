@@ -8,7 +8,7 @@ local sprites = {
     mask = Sprite.load("con1Mask", path.."con1Mask", 1, 6, 13),
     palette = Sprite.load("con1Pal", path.."con1Pal", 1, 0, 0),
     jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 14),
-    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 199)
+    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
 }
 
 local sounds = {
