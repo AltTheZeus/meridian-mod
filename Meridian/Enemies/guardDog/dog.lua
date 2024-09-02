@@ -8,7 +8,7 @@ local sprites = {
     mask = Sprite.load("dogMask", path.."dogMask", 1, 18, 24),
     palette = Sprite.load("dogPal", path.."dogPal", 1, 0, 0),
     jump = Sprite.load("dogJump", path.."dogJumpTEMP", 1, 18, 24),
-    portrait = Sprite.load("dogPortrait", path.."dogPortrait", 1, 119, 199)
+    portrait = Sprite.load("dogPortrait", path.."dogPortrait", 1, 119, 119)
 }
 
 local sounds = {
