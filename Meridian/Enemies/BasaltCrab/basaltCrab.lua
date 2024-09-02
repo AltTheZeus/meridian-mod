@@ -9,7 +9,8 @@ local sprites = {
 	shoot2 = Sprite.load("BasaltCrabShoot2", path.."basaltShoot2", 18, 24, 10),
     mask = Sprite.load("BasaltCrabMask", path.."basaltMask", 1, 24, 10),
     palette = Sprite.load("BasaltCrabPalette", path.."basaltPal", 1, 0, 0),
-    portrait = Sprite.load("BasaltCrabPortrait", path.."basaltPortrait", 1, 119, 119)
+    portrait = Sprite.load("BasaltCrabPortrait", path.."basaltPortrait", 1, 119, 119),
+	walk_portrait = Sprite.load("BasaltCrabWalkPortrait", path.."basaltWalkPortrait", 4, 24, 16)
 }	
 
 
@@ -373,5 +374,5 @@ monsLog.story = "//DATA-FAILED-TO-EXPORT//"
 monsLog.statHP = 400
 monsLog.statDamage = 16
 monsLog.statSpeed = 0.8
-monsLog.sprite = sprites.walk
+monsLog.sprite = sprites.walk_portrait
 monsLog.portrait = sprites.portrait
