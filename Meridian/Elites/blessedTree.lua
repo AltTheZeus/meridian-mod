@@ -5,6 +5,9 @@ local treeMask = Sprite.load("Elites/auricMask", 1, 11, 27)
 local treeDeath = Sprite.load("Elites/auricDeath", 7, 16, 33)
 local shing = Sound.load("Elites/tree.ogg")
 local gogobalga = Sound.load("Elites/treeDeath.ogg")
+if not modloader.checkFlag("mn_disable_items") then
+	local aspect = Item.find("Gilded Leaf")
+end
 
 treeDead = Object.new("tree but its DEAD")
 treeDead:addCallback("create", function(self)
@@ -113,6 +116,11 @@ tree:addCallback("destroy", function(self)
 	local leafCount = 0
 	gogobalga:play()
 	treeDead:create(self.x, self.y)
+	if not modloader.checkFlag("mn_disable_items") then
+	if math.random(1,4000) >= 1 then
+		aspect:create(self.x, self.y - 15)
+	end
+	end
 	repeat
 		if math.random(1,2) == 1 then
 			leafEF:scale(1, 1)
