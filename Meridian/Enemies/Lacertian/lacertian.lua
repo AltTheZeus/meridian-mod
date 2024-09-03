@@ -311,7 +311,7 @@ end
 lacertian:addCallback("step", function(actor)
 	local actorAc = actor:getAccessor()
 	local actorData = actor:getData()
-	
+	if misc.getTimeStop() == 0 then
 	if actor and actor:isValid() then 
 		if actorData.spawnAnim then 
 			actor.spriteSpeed = 0.2
@@ -750,6 +750,9 @@ lacertian:addCallback("step", function(actor)
 				end
 			end
 		end
+	end
+	else 
+		actor.spriteSpeed = 0
 	end
 end)
 
