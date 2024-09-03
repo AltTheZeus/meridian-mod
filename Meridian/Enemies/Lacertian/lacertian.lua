@@ -389,7 +389,7 @@ lacertian:addCallback("step", function(actor)
 			end
 			
 			local poise = math.min(actorData.poiseDamage + actorData.poiseStun, 100)
-			if poise == 100 and actorAc.state ~= "burrowAnim" and actorAc.state ~= "burrow" and actorAc.state ~= "unburrow" and actorAc.state ~= "stun" then 
+			if poise == 100 and actorAc.state ~= "burrowAnim" and actorAc.state ~= "burrow" and actorAc.state ~= "unburrow" and actorAc.state ~= "stun" and actorAc.state ~= "shoot2" then 
 				local vfx = lacertianEffect:create(actor.x, actor.y)
 				vfx.xscale = actor.xscale
 				sounds.stun:play(1, 1)
@@ -398,6 +398,7 @@ lacertian:addCallback("step", function(actor)
 				actorData.poiseStun = 0
 				actorData.hitTimer = 0
 				actorData.inStun = stunDur
+				actor.subimage = 1
 			end
 			
 			if actorAc.state == "idle" or actorAc.state == "chase" then
@@ -740,7 +741,7 @@ lacertian:addCallback("step", function(actor)
 						actor.subimage = 3
 					end
 					if actorData.inStun == 0 then 
-						sounds.recover:play(1, 1.5)
+						sounds.recover:play(1, 5)
 					end
 				else 
 					if actor.subimage >= actor.sprite.frames then 
