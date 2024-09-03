@@ -1,7 +1,5 @@
 local path = "Stages/" 
 
---require("Stages.LivelyWorld.LivelyWorldSupport")
-
 -- General --
 Sprite.load("statues1", path.."statues1", 1, 0, 0)
 
@@ -36,14 +34,7 @@ local StarsweptValleyVar = require("Stages.StarsweptValley.variant")
 StarsweptValley.rooms:add(StarsweptValleyVar)
 
 StarsweptValley.music = Sound.load("musicStarsweptValley", "Misc/Music/stageStarsweptValley.ogg")
---[[
--- Desert Peaks --
-Sprite.load("Tile16Desert", path.."DesertPeaks/tileset", 1, 0, 0)
-Sprite.load("64Desert", path.."DesertPeaks/64Desert", 1, 0, 0)
 
-local DesertPeaks = require("Stages.DesertPeaks.stage")
-Stage.progression[3]:add(DesertPeaks)
-]]
 -- Marshland Sanctuary --
 Sprite.load("Tile16Marshland", path.."MarshlandSanctuary/tileset", 1, 0, 0)
 Sprite.load("64Marshland", path.."MarshlandSanctuary/tilesetBG", 1, 0, 0)
@@ -69,9 +60,12 @@ Sprite.load("HugePlanet", path.."DissonantReliquary/planet", 1, 0, 0)
 Sprite.load("Reliquarysky", path.."DissonantReliquary/sky", 1, 0, 0)
 Sprite.load("ReliquaryBG1", path.."DissonantReliquary/bg1", 1, 0, 0)
 Sprite.load("ReliquaryBG2", path.."DissonantReliquary/bg2", 1, 0, 0)
+Sprite.load("Beacon", path.."DissonantReliquary/Beacon", 1, 0, 0)
 
 local DissonantReliquary = require("Stages.DissonantReliquary.stage")
+local DissonantReliquaryVariant = require("Stages.DissonantReliquary.variant")
 Stage.progression[5]:add(DissonantReliquary)
+DissonantReliquary.rooms:add(DissonantReliquaryVariant)
 
 DissonantReliquary.music = Sound.load("musicDissonantReliquary", "Misc/Music/stageDissonantReliquary.ogg")
 
@@ -136,21 +130,40 @@ Stage.progression[4]:add(DesertPeaks)
 DesertPeaks.music = Sound.load("musicDesertPeaks", "Misc/Music/stageDesertPeaks.ogg")
 
 --Meridian Enemies
+local DF = Stage.find("Desolate Forest")
+local DL = Stage.find("Dried Lake")
+local SM = Stage.find("Sky Meadow")
+local DC = Stage.find("Damp Caverns")
+local ST = Stage.find("Sunken Tombs")
+local AV = Stage.find("Ancient Valley")
+local MB = Stage.find("Magma Barracks")
+local HC = Stage.find("Hive Cluster")
+local TOTE = Stage.find("Temple of the Elders")
+local ROR = Stage.find("Risk of Rain")
+
+StageValue = 0
+
+--Stage Counter
+callback.register("onStageEntry", function()
+	StageValue = StageValue + 1
+	print("StageValue" .. StageValue)
+end)
+
+callback.register("globalRoomStart", function(room)
+	if room == Room.find("Start") then
+		StageValue = 0
+		DF.enemies:remove(MonsterCard.find("Scavenger"))
+		DL.enemies:remove(MonsterCard.find("Scavenger"))
+		SerpentineRainforest.enemies:remove(MonsterCard.find("Scavenger"))
+		DF.enemies:remove(MonsterCard.find("Archaic Wisp"))
+		DL.enemies:remove(MonsterCard.find("Archaic Wisp"))
+		SerpentineRainforest.enemies:remove(MonsterCard.find("Archaic Wisp"))
+	end
+end)
 
 callback.register("postLoad", function()
-	local DF = Stage.find("Desolate Forest")
-	local DL = Stage.find("Dried Lake")
-	local SM = Stage.find("Sky Meadow")
-	local DC = Stage.find("Damp Caverns")
-	local ST = Stage.find("Sunken Tombs")
-	local AV = Stage.find("Ancient Valley")
-	local MB = Stage.find("Magma Barracks")
-	local HC = Stage.find("Hive Cluster")
-	local TOTE = Stage.find("Temple of the Elders")
-	local ROR = Stage.find("Risk of Rain")
 
 
-	
 	if not modloader.checkFlag("mn_disable_enemies") then
 		local con1 = MonsterCard.find("con1", "meridian")
 		local con2 = MonsterCard.find("con2", "meridian")
@@ -247,6 +260,17 @@ callback.register("postLoad", function()
 		StarsweptValley.enemies:add(wayfarer)
 		StarsweptValley.enemies:add(follower)
 		StarsweptValley.enemies:add(admonitor)
+	end
+end)
+
+callback.register("onStageEntry", function()
+	if StageValue == 5 then
+		DF.enemies:add(MonsterCard.find("Scavenger"))
+		DL.enemies:add(MonsterCard.find("Scavenger"))
+		SerpentineRainforest.enemies:add(MonsterCard.find("Scavenger"))
+		DF.enemies:add(MonsterCard.find("Archaic Wisp"))
+		DL.enemies:add(MonsterCard.find("Archaic Wisp"))
+		SerpentineRainforest.enemies:add(MonsterCard.find("Archaic Wisp"))
 	end
 end)
 
