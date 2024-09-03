@@ -370,7 +370,7 @@ local monsLog = MonsterLog.new("Basalt Crab")
 MonsterLog.map[BasaltCrab] = monsLog
 
 monsLog.displayName = "Basalt Crab"
-monsLog.story = "//DATA-FAILED-TO-EXPORT//"
+monsLog.story = "On a stony shore, I found a series of shallow waters in which passive aquatic life thrives. Finally, a source of food! I rushed to the water, perhaps too excited for the meal. From the craggy outcroppings surrounding me, four red lights beamed.\n\nI thought at first it was more golems, but to my dismay, this creature is much worse. Not unlike the sand crabs, this great crustacean of stone is gargantuan. Claws six times larger than my body, and shell thicker than my chest.\n\nI had to flee the pools... In the few moments I've been able to observe them from afar, they graze in the water, vacuously devouring the aquatic life I was so desperate to acquire for myself."
 monsLog.statHP = 400
 monsLog.statDamage = 16
 monsLog.statSpeed = 0.8
