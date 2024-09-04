@@ -313,6 +313,11 @@ lacertian:addCallback("step", function(actor)
 	local actorData = actor:getData()
 	if misc.getTimeStop() == 0 then
 	if actor and actor:isValid() then 
+		if not modloader.checkMod("Starstorm") then
+			if actor:get("invincible") and actor:get("invincible") > 0 then
+				actor:set("invincible", actor:get("invincible") - 1)
+			end
+		end				
 		if actorData.spawnAnim then 
 			actor.spriteSpeed = 0.2
 			actor.sprite = sprites.spawn 
