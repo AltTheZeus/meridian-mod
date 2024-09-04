@@ -68,7 +68,7 @@ bubbleObj:addCallback("step", function(self)
 	end
 	for _, p in ipairs(misc.players) do
 		if self:isValid() and self:collidesWith(p, self.x, self.y) and not sD.friendly then
-		else
+		elseif self:isValid() then
 			self.x = math.approach(self.x, sD.locX, math.abs(math.round((self.x - sD.locX) * 0.1)))
 			self.y = math.approach(self.y, sD.locY, math.abs(math.round((self.y - sD.locY) * 0.1)))
 		end
