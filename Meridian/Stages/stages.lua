@@ -184,9 +184,11 @@ callback.register("postLoad", function()
 
 		--Temple of the Elders
 		TOTE.enemies:add(Lizard)
+		TOTE.enemies:add(giant)
 
 		--Risk of Rain
 		ROR.enemies:add(Lizard)
+		ROR.enemies:add(giant)
 
 		--Serpentine Rainforest
 		SerpentineRainforest.enemies:add(Lizard)
@@ -196,17 +198,14 @@ callback.register("postLoad", function()
 		ShallowRotlands.enemies:add(Lizard)
 
 		--Marshland Sanctuary
-		MarshlandSanctuary.enemies:add(con2)
-		MarshlandSanctuary.enemies:add(con1)
 		MarshlandSanctuary.enemies:add(giant)
 		MarshlandSanctuary.enemies:add(Lizard)
 		
 		--Basalt Quarry
+		BasaltQuarry.enemies:add(con2)
+		BasaltQuarry.enemies:add(con1)
 		BasaltQuarry.enemies:add(BC)
 		BasaltQuarry.enemies:add(giant)
-
-		--Desert Peaks
-		DesertPeaks.enemies:add(giant)
 
 		--Dissonant Reliquary
 		DissonantReliquary.enemies:add(giant)
