@@ -2992,7 +2992,6 @@ local STAGE_BACKGROUNDS = {
 }
 
 local STAGE_INTERACTABLES = {
-    {"Barrel1", "Vanilla"},
     {"Barrel2", "Vanilla"},
     {"Chest1", "Vanilla"},
     {"Chest2", "Vanilla"},
@@ -3002,6 +3001,8 @@ local STAGE_INTERACTABLES = {
     {"Drone2", "Vanilla"},
     {"Drone3", "Vanilla"},
     {"Drone4", "Vanilla"},
+    {"Shrine1", "Vanilla"},
+    {"Shrine5", "Vanilla"},
 }
 
 local STAGE_ENEMIES = {
