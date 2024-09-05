@@ -173,10 +173,7 @@ registercallback("onStep", function()
 			i:delete()
 		end
 	end
-end, 500)
-
-registercallback("onStep", function()
-	for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
+			for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
 		local aD = i:getData()
 		if aD.sparkleCD > 0 then aD.sparkleCD = aD.sparkleCD - 1 end
 		if aD.sparkleCD <= 0 then
@@ -196,4 +193,4 @@ registercallback("onStep", function()
 			end
 		end
 	end
-end)
+end, 500)
