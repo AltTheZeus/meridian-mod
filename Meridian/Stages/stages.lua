@@ -234,7 +234,6 @@ callback.register("postLoad", function()
 
 		--Desert Peaks
 		DesertPeaks.enemies:add(admonitor)
-		DesertPeaks.enemies:add(eel)
 		DesertPeaks.enemies:add(overseer)
 
 		--Marshland Sanctuary
