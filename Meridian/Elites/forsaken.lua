@@ -33,36 +33,27 @@ function CheckValid(anInstance)
 end
 
 registercallback("onDamage", function(target, damage, source)
---	print(target, damage, source)
 if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
 	if not CheckValid(source) then return end
---	print("source is valid")
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail")) then return end
+	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
---		print("target is valid")
-		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent"))))) then
---			print("parent is valid/source is elite")
-			if source:get("elite_type") == ID or Object.findInstance(source:get("parent")):get("elite_type") == ID or source:getParent():get("elite_type") == ID then
---				print("source or damager's parent is elite! woohoo!")
-				local tD = target:getData()
-				if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
-					local lockedSkill = math.random(2,5)
-					target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
-					tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
-				end
+		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) then
+			local tD = target:getData()
+			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
+				local lockedSkill = math.random(2,5)
+				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
+				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
 			end
 		end
 	end
 	if not CheckValid(source) then return end
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail")) then return end
+	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
-		if source:get("elite_type") == bID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent"))))) then
-			if source:get("elite_type") == bID or Object.findInstance(source:get("parent")):get("elite_type") == bID or source:getParent():get("elite_type") == bID then
-				local lockedSkill = math.random(2,5)
-				local tD = target:getData()
-				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
-				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
-			end
+		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) then
+			local lockedSkill = math.random(2,5)
+			local tD = target:getData()
+			target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
+			tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
 		end
 	end
 end
