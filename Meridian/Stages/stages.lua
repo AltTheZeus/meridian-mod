@@ -214,7 +214,6 @@ callback.register("postLoad", function()
 
 		--Starswept Valley
 		StarsweptValley.enemies:add(con1)
-		StarsweptValley.enemies:add(giant)
 		--print("MERIDIAN ENEMIES DETECTED!")
 	end
 	if modloader.checkMod("starstorm") then
