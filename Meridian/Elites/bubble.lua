@@ -15,14 +15,12 @@ end
 
 registercallback("postLoad", function()
 for _, m in ipairs(modloader.getMods()) do
-	if m:getModName(m) == "Starstorm" then
-		print("hey")
-		for _, i in ipairs(MonsterCard.findAll(m)) do
-			if i ~= MonsterCard.find("Squall Elver")
-			i.eliteTypes:add(elite)
-		end
-	else
-		for _, i in ipairs(MonsterCard.findAll(m)) do
+	for _, i in ipairs(MonsterCard.findAll(m)) do
+		if m == "Starstorm" then
+			if i ~= MonsterCard.find("Squall Elver") then
+				i.eliteTypes:add(elite)
+			end
+		else
 			i.eliteTypes:add(elite)
 		end
 	end
