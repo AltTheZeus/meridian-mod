@@ -28,21 +28,16 @@ end
 
 registercallback("onDamage", function(target, damage, source)
 	if not CheckValid(source) then return end
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail")) then return end
+	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
-		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent"))))) then
-			if source:get("elite_type") == ID or Object.findInstance(source:get("parent")):get("elite_type") == ID or source:getParent():get("elite_type") == ID then
-				target:applyBuff(shat1, 120)
-			end
+		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) then
+			target:applyBuff(shat1, 120)
 		end
 	end
-	if not CheckValid(source) then return end
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail")) then return end
+	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
-		if source:get("elite_type") == bID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent"))))) then
-			if source:get("elite_type") == bID or Object.findInstance(source:get("parent")):get("elite_type") == bID or source:getParent():get("elite_type") == bID then
-				target:applyBuff(shat1, 120)
-			end
+		if source:get("elite_type") == bID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) then
+			target:applyBuff(shat1, 120)
 		end
 	end
 end)
