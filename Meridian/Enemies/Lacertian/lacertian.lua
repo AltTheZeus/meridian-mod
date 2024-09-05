@@ -820,3 +820,10 @@ if not modloader.checkFlag("mn_disable_elites") then
 	card.eliteTypes:add(EliteType.find("sorrow", "meridian"))
 end
 
+monsLog.displayName = "Lacertian"
+monsLog.story = "Field Notes: Okay what the hell. You simply cannot catch a break on this planet. This creature is beyond crazy, once it spots you it WILL chase you until it's body simply can not move anymore. It's scales are hard as stone and It's teeth are sharp as a brand new knife. It seems to burrow underground and wait for prey to step near so it can ambush it, the 'Lacertian' as came to call it is vicious and fast, I have to be careful where I step next time, Last time I survived by sheer luck."
+monsLog.statHP = 900
+monsLog.statDamage = 25
+monsLog.statSpeed = 1
+monsLog.sprite = sprites.walk
+monsLog.portrait = sprites.portrait
