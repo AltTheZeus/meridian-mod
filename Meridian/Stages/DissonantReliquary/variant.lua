@@ -3053,6 +3053,8 @@ local STAGE_INTERACTABLES = {
     {"Drone2", "Vanilla"},
     {"Drone3", "Vanilla"},
     {"Drone4", "Vanilla"},
+    {"Shrine1", "Vanilla"},
+    {"Shrine5", "Vanilla"},
 }
 
 local STAGE_ENEMIES = {
