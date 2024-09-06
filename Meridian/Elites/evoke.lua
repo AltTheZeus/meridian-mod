@@ -76,14 +76,60 @@ registercallback("onStep", function()
 			aD.pointTimer = aD.pointTimer + 1
 		end
 		if aD.pointTimer >= 60 then
-			aD.points = aD.points + 1 + misc.director:get("stages_passed")
+			aD.points = aD.points + 100 + misc.director:get("stages_passed") --REVERT THIS TO 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 			aD.pointTimer = 0
 		end
 		if aD.points >= aD.timer and aD.minionCount < 3 then
+local heightLevel = 1
+
+local groundLevel = 1
+local groundC1 = Object.find("B"):findLine(i.x, i.y, i.x, i.y + 20)
+if groundC1 then groundC1 = groundC1.y end
+local groundC2 = Object.find("BNoSpawn"):findLine(i.x, i.y, i.x, i.y + 20)
+if groundC2 then groundC2 = groundC2.y end
+if groundC1 and groundC2 then
+	if groundC2 < groundC1 then
+		groundLevel = groundC2
+	else
+		groundLevel = groundC1
+	end
+elseif groundC1 then
+	groundLevel = groundC1
+elseif groundC2 then
+	groundLevel = groundC2
+end
+
+local ceilLevel = 1
+local ceilC1 = Object.find("B"):findLine(i.x, i.y, i.x, i.y - 50)
+if ceilC1 then
+	ceilC1 = ceilC1.y + (ceilC1:get("height_box") * 16)
+end
+local ceilC2 = Object.find("BNoSpawn"):findLine(i.x, i.y, i.x, i.y - 50)
+if ceilC2 then
+	ceilC2 = ceilC2.y + (ceilC2:get("height_box") * 16)
+end
+if ceilC1 and ceilC2 then
+	if ceilC2 > ceilC1 then
+		ceilLevel = ceilC2
+	else
+		ceilLevel = ceilC1
+	end
+elseif ceilC1 then
+	ceilLevel = ceilC1
+elseif ceilC2 then
+	ceilLevel = ceilC2
+end
+
+if ceilLevel and groundLevel then
+	heightLevel = groundLevel - ceilLevel
+end
+if aD.card.object.sprite.height < heightLevel then
+--			print("aaaaaaaah")
+--			print("Ground at Y"..groundLevel)
+--			print("Ceiling at Y"..ceilLevel)
+--			print(heightLevel)
 			aD.points = aD.points - aD.timer
-			local height = aD.card.object.sprite.height
-			height = height + i.sprite.yorigin
-			local newGuy = aD.card.object:create(i.x, i.y - height)
+			local newGuy = aD.card.object:create(i.x, groundLevel - aD.card.object.sprite.height + aD.card.object.sprite.yorigin)
 			local nD = newGuy:getData()
 			nD.evoker = i.id
 			aD.minionCount = aD.minionCount + 1
@@ -100,6 +146,7 @@ registercallback("onStep", function()
 			aD.timer = aD.card.cost
 		end
 	end
+end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local aD = i:getData()
 		if aD.minionCount < 4 then
@@ -110,10 +157,52 @@ registercallback("onStep", function()
 			aD.pointTimer = 0
 		end
 		if aD.points >= aD.timer and aD.minionCount < 4 then
+local heightLevel = 1
+
+local groundLevel = 1
+local groundC1 = Object.find("B"):findLine(i.x, i.y, i.x, i.y + 20)
+if groundC1 then groundC1 = groundC1.y end
+local groundC2 = Object.find("BNoSpawn"):findLine(i.x, i.y, i.x, i.y + 20)
+if groundC2 then groundC2 = groundC2.y end
+if groundC1 and groundC2 then
+	if groundC2 < groundC1 then
+		groundLevel = groundC2
+	else
+		groundLevel = groundC1
+	end
+elseif groundC1 then
+	groundLevel = groundC1
+elseif groundC2 then
+	groundLevel = groundC2
+end
+
+local ceilLevel = 1
+local ceilC1 = Object.find("B"):findLine(i.x, i.y, i.x, i.y - 50)
+if ceilC1 then
+	ceilC1 = ceilC1.y + (ceilC1:get("height_box") * 16)
+end
+local ceilC2 = Object.find("BNoSpawn"):findLine(i.x, i.y, i.x, i.y - 50)
+if ceilC2 then
+	ceilC2 = ceilC2.y + (ceilC2:get("height_box") * 16)
+end
+if ceilC1 and ceilC2 then
+	if ceilC2 > ceilC1 then
+		ceilLevel = ceilC2
+	else
+		ceilLevel = ceilC1
+	end
+elseif ceilC1 then
+	ceilLevel = ceilC1
+elseif ceilC2 then
+	ceilLevel = ceilC2
+end
+
+if ceilLevel and groundLevel then
+	heightLevel = groundLevel - ceilLevel
+end
+if aD.card.object.sprite.height < heightLevel then
 			aD.points = aD.points - aD.timer
-			local height = aD.card.object.sprite.height
-			height = height + i.sprite.yorigin
-			local newGuy = aD.card.object:create(i.x, i.y - height)
+			local newGuy = aD.card.object:create(i.x, groundLevel - aD.card.object.sprite.height + aD.card.object.sprite.yorigin)
 			local nD = newGuy:getData()
 			nD.evoker = i.id
 			aD.minionCount = aD.minionCount + 1
@@ -132,6 +221,7 @@ registercallback("onStep", function()
 		end
 	end
 	end
+end
 end)
 
 registercallback("onNPCDeath", function(npc)
