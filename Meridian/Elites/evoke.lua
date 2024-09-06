@@ -76,7 +76,7 @@ registercallback("onStep", function()
 			aD.pointTimer = aD.pointTimer + 1
 		end
 		if aD.pointTimer >= 60 then
-			aD.points = aD.points + 100 + misc.director:get("stages_passed") --REVERT THIS TO 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+			aD.points = aD.points + 1 + misc.director:get("stages_passed")
 			aD.pointTimer = 0
 		end
 		if aD.points >= aD.timer and aD.minionCount < 3 then
