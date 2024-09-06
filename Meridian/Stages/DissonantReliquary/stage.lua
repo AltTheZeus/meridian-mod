@@ -3146,7 +3146,7 @@ local STAGE_ENEMIES = {
 	    d.t = tiles
 	end
 
-	local room = Room.new(STAGE_INFO.name)
+	local room = Room.new("Reliquary1")
 	room:resize(STAGE_INFO.width, STAGE_INFO.height)
 	for col, coordlist in pairs(STAGE_COLLISION) do
 		local obj = Object.find(col, "Vanilla")
