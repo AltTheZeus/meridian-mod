@@ -29,4 +29,8 @@ require("qols")
 if modloader.checkMod("LivelyWorld") then
 	require("LivelyWorldSupport")
 end
+
+if not modloader.checkFlag("mn_debug") then 
+	require("Misc/dev")
+end
 -- Survivors (none, yet)
