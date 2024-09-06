@@ -26,6 +26,20 @@ registercallback("onPlayerStep", function(player)
     end
 end)
 
+registercallback("onPlayerHUDDraw", function(player, x, y)
+	if player:countItem(item) > 0 then
+		if player:getAlarm(3) > 0 then
+			graphics.drawImage{ef, x + 21, y - 2}
+		end
+		if player:getAlarm(4) > 0 then
+			graphics.drawImage{ef, x + 44, y - 2}
+		end
+		if player:getAlarm(5) > 0 then
+			graphics.drawImage{ef, x + 67, y - 2}
+		end
+	end
+end)
+
 item:setLog{
     group = "boss",
     description = "For every skill on cooldown, reduce skill cooldowns by &y&7%&!& &dg&(+7% per stack)&!&.",
