@@ -783,6 +783,13 @@ lacertianCorpse.sprite = sprites.death
 lacertianCorpse:addCallback("create", function(self)
 	self.spriteSpeed = 0.15
 	self.depth = 13
+	if self:collidesWith(ParentObject.find("items"):findNearest(self.x, self.y), self.x, self.y) then
+		if math.chance(15) then
+			local lameItem = ParentObject.find("items"):findNearest(self.x, self.y)
+			Item.find("Relentless Fang"):create(lameItem.x, lameItem.y)
+			lameItem:delete()
+		end
+	end
 end)
 lacertianCorpse:addCallback("step", function(self)
 	if math.floor(self.subimage) == self.sprite.frames then 
