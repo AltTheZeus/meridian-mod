@@ -8,7 +8,9 @@ elite.color = Color.fromRGB(87, 70, 168)
 elite.palette = sprPal
 
 for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-	i.eliteTypes:add(elite)
+	if i ~= MonsterCard.find("Magma Worm", "vanilla") then
+		i.eliteTypes:add(elite)
+	end
 end
 
 registercallback("postLoad", function()
