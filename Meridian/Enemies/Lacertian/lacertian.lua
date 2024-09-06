@@ -72,7 +72,7 @@ lacertian:addCallback("create", function(actor)
 		
 		actorAc.name = "Lacertian"
 		actorAc.name2 = "Relentless Pursuer"
-		actorAc.maxhp = 900 * Difficulty.getScaling("hp")
+		actorAc.maxhp = 1400 * Difficulty.getScaling("hp")
 		actorAc.hp = actorAc.maxhp
 		actorAc.damage = 25 * Difficulty.getScaling("damage")
 		actorAc.pHmax = 0.9
@@ -390,7 +390,7 @@ lacertian:addCallback("step", function(actor)
 			if actorData.hitTimer > 0 then 
 				actorData.hitTimer = actorData.hitTimer - 1
 			elseif actorData.poiseDamage > 0 then 
-				actorData.poiseDamage = math.max(actorData.poiseDamage - 4/60, 0)
+				actorData.poiseDamage = math.max(actorData.poiseDamage - 1/60, 0)
 			end
 			
 			local poise = math.min(actorData.poiseDamage + actorData.poiseStun, 100)
@@ -768,7 +768,7 @@ callback.register("onHit", function(damager, hit)
 			local stunAmount = damager:get("stun") * 15 													 --- poise damage from stun
 			hit:getData().poiseDamage = math.min(hit:getData().poiseDamage + damagePercent, 100)
 			hit:getData().poiseStun = math.min(hit:getData().poiseStun + stunAmount, 100)
-			hit:getData().hitTimer = 8 * 60			--- timer until poise from normal damage starts to decay
+			hit:getData().hitTimer = 6 * 60			--- timer until poise from normal damage starts to decay
 			damager:set("damage", damager:get("damage") / 2)
 			damager:set("damage_fake", damager:get("damage_fake") / 2) 
 		else 
@@ -805,7 +805,7 @@ card.sprite = sprites.spawn
 card.sound = sounds.spawn
 --card.canBlight = true
 card.type = "origin"
-card.cost = 750
+card.cost = 800
 card.isBoss = true
 
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
