@@ -141,14 +141,6 @@ local HC = Stage.find("Hive Cluster")
 local TOTE = Stage.find("Temple of the Elders")
 local ROR = Stage.find("Risk of Rain")
 
-StageValue = 0
-
---Stage Counter
-callback.register("onStageEntry", function()
-	StageValue = StageValue + 1
-	print("StageValue" .. StageValue)
-end)
-
 callback.register("globalRoomStart", function(room)
 	if room == Room.find("Start") then
 		StageValue = 0
