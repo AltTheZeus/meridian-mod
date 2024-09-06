@@ -2353,7 +2353,7 @@ local function spawnTS(sprite, depth, tiles, grid)
     d.t = tiles
 end
 
-local room = Room.new(STAGE_INFO.name)
+local room = Room.new("Deadmine1")
 room:resize(STAGE_INFO.width, STAGE_INFO.height)
 for col, coordlist in pairs(STAGE_COLLISION) do
 	local obj = Object.find(col, "Vanilla")
