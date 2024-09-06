@@ -7,9 +7,9 @@ if not modloader.checkFlag("mn_disable_elites") then
 end
 
 -- Items
---if not modloader.checkFlag("mn_disable_items") then 
---	require("Items/items")
---end
+if not modloader.checkFlag("mn_disable_items") then 
+	require("Items/items")
+end
 
 
 -- Enemies 
