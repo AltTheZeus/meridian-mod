@@ -1,0 +1,8 @@
+require("Items/battery")
+require("Items/berries")
+require("Items/cable")
+require("Items/cards")
+require("Items/gas")
+require("Items/lacertianfang")
+require("Items/paddle")
+require("Items/snowball")
