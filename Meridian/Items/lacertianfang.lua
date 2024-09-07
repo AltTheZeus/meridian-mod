@@ -43,9 +43,9 @@ end)
 
 item:setLog{
     group = "boss",
-    description = "For every skill on cooldown, reduce skill cooldowns by &y&7%&!& &dg&(+7% per stack)&!&.",
-    priority = "&y&Field-Found, Biological&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
+    description = "For every skill on cooldown, reduce skill cooldowns by &y&7%&!&.",
+    priority = "&b&Field-Found&!&",
+    destination = "8009,\nImperceptible Fields,\nUnknown",
     date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    story = "Through every environment this beast tailed me. Always moving, always chasing.\n\nIt's said humans were as prevalent as we were because of our persistence hunting style.\n\nThis tooth is evidence that we can outhunt the hunter itself."
 }
