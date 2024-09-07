@@ -831,7 +831,7 @@ local monsLog = MonsterLog.new("Lacertian")
 MonsterLog.map[lacertian] = monsLog
 
 monsLog.displayName = "Lacertian"
-monsLog.story = "Field Notes: Okay what the hell. You simply cannot catch a break on this planet. This creature is beyond crazy, once it spots you it WILL chase you until it's body simply can not move anymore. It's scales are hard as stone and It's teeth are sharp as a brand new knife. It seems to burrow underground and wait for prey to step near so it can ambush it, the 'Lacertian' as came to call it is vicious and fast, I have to be careful where I step next time, Last time I survived by sheer luck."
+monsLog.story = "Despite its great size, I did not see this Lacertian monstrosity until it was far too late. It must have been stalking me for days by the point it had ambushed me. It rose out of the ground, gnashing and snarling, deep eyes tracking my movements with precision like a machine.\n\nEven now as I hide, I know it's gaining on me. It may not be as fast, but it more than makes up for it with its unyielding persistence. What draws it to me? Can't it just eat a bison instead..."
 monsLog.statHP = 900
 monsLog.statDamage = 25
 monsLog.statSpeed = 1
