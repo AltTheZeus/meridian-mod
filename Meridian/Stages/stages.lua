@@ -28,6 +28,8 @@ Sprite.load("skyStar", path.."StarsweptValley/sky", 1, 0, 0)
 Sprite.load("pillarsStar", path.."StarsweptValley/pillars", 1, 0, 0)
 Sprite.load("valleyStar", path.."StarsweptValley/valley", 1, 0, 0)
 
+require("Misc.StageObjects.Stardust")
+
 local StarsweptValley = require("Stages.StarsweptValley.stage")
 Stage.progression[2]:add(StarsweptValley)
 local StarsweptValleyVar = require("Stages.StarsweptValley.variant")
@@ -140,6 +142,13 @@ local MB = Stage.find("Magma Barracks")
 local HC = Stage.find("Hive Cluster")
 local TOTE = Stage.find("Temple of the Elders")
 local ROR = Stage.find("Risk of Rain")
+
+StageValue = 0
+
+--Stage Counter
+callback.register("onStageEntry", function(room)
+	StageValue = StageValue + 1
+end)
 
 callback.register("globalRoomStart", function(room)
 	if room == Room.find("Start") then
