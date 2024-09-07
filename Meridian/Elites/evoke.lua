@@ -53,13 +53,17 @@ registercallback("onEliteInit", function(actor)
 		aD.pointTimer = 0
 		aD.points = 0
 		local enemyOptions = Stage.getCurrentStage().enemies:toTable()
-		local failsafe = 0
-		repeat
-			failsafe = failsafe + 1
-			aD.card = table.random(enemyOptions)
-		until (aD.card.cost < 500 and aD.card.type == "classic") or failsafe >= 30
-		if failsafe >= 30 then
+		if #enemyOptions < 1 then
 			aD.card = MonsterCard.find("Sand Crab")
+		else
+			local failsafe = 0
+			repeat
+				failsafe = failsafe + 1
+				aD.card = table.random(enemyOptions)
+			until (aD.card.cost < 500 and aD.card.type == "classic") or failsafe >= 30
+			if failsafe >= 30 then
+				aD.card = MonsterCard.find("Sand Crab")
+			end
 		end
 		aD.timer = aD.card.cost
 		aD.minionCount = 0
