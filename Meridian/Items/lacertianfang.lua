@@ -3,6 +3,7 @@ local item = Item("Relentless Fang")
 item.pickupText = "For every skill on cooldown, reduce your other skills' cooldowns." 
 
 item.sprite = Sprite.load("Items/lacertianfang.png", 1, 15, 15)
+local ef = Sprite.load("Items/lacertianfangEf.png", 1, 0, 0)
 
 registercallback("onPlayerStep", function(player)
     local itemAmount = player:countItem(item)
