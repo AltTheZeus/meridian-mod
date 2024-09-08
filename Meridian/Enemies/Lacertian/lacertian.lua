@@ -77,14 +77,14 @@ lacertian:addCallback("create", function(actor)
 		actorAc.damage = 25 * Difficulty.getScaling("damage")
 		actorAc.pHmax = 0.9
 		actorAc.walk_speed_coeff = 1
-	--[[    actor:setAnimations{
-			idle = sprites.idle,
+	    actor:setAnimations{
+		--[[	idle = sprites.idle,
 			jump = sprites.jump,
 			walk = sprites.walk,
 			death = sprites.death,
-			shoot1 = sprites.shoot1,
+			shoot1 = sprites.shoot1,]]
 			palette = sprites.palette
-		}]]
+		}
 		--actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
 	  --  actorAc.sound_death = Sound.find("GolemDeath","vanilla").id
 	   -- actor.mask = sprites.mask
