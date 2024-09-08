@@ -4,7 +4,7 @@ local ID = elite.ID
 local bID = EliteType.find("blessed").ID
 
 elite.displayName = "Sorrowful"
-elite.color = Color.fromRGB(87, 70, 168)
+elite.color = Color.fromRGB(146, 66, 63)
 elite.palette = sprPal
 
 for _, i in ipairs(MonsterCard.findAll("vanilla")) do
