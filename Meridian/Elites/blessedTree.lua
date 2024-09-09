@@ -117,9 +117,9 @@ tree:addCallback("destroy", function(self)
 	gogobalga:play()
 	treeDead:create(self.x, self.y)
 	if not modloader.checkFlag("mn_disable_items") then
-	if math.random(1,4000) == 1 then
-		aspect:create(self.x, self.y - 15)
-	end
+--	if math.random(1,4000) == 1 then
+--		aspect:create(self.x, self.y - 15)
+--	end
 	end
 	repeat
 		if math.random(1,2) == 1 then
