@@ -3947,7 +3947,7 @@ local STAGE_OBJECTS = {
 }
 
 local STAGE_BACKGROUNDS = {
-    [9800] = {"Beacon", "Meridian", 0, 0, 0.95, 0.95, -350, -400, 0.1, 1 },
+    [9800] = {"Beacon", "Meridian", 0, 0, 0.95, 0.95, -350, -300, 0.1, 1 },
     [9900] = {"ReliquaryBG1", "Meridian", 1, 0, 0.97, 0.97, -350, -153, 0.1, 1 },
     [10000] = {"ReliquaryBG2", "Meridian", 1, 0, 0.99,  0.99, -350, -300, 0.1, 1 },
     [10500] = {"HugePlanet", "Meridian", 0, 0, 1, 1, -500, -487, 0.50, 1 },
