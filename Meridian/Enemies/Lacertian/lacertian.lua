@@ -471,6 +471,7 @@ lacertian:addCallback("step", function(actor)
 				actorAc.moveRight = 0
 				actorAc.moveLeft = 0
 				actor.alpha = 0 
+				actor.sprite = sprites.maskNone
 				actor.mask = sprites.maskNone
 				local trg = findLacertianTarget(actor)
 				if trg then 
