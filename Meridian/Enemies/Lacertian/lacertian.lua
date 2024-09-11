@@ -218,10 +218,10 @@ findLacertianWalk = function(actor, x, y)
 	local x1
 	local x2
 	while findLacertianGround(actor, x + disX1, y) do 
-		disX1 = disX1 + 1
+		disX1 = disX1 + 4
 	end
 	while findLacertianGround(actor, x - disX2, y) do 
-		disX2 = disX2 + 1
+		disX2 = disX2 + 4
 	end
 	if disX1 + disX2 > sprites.mask2.width then 
 		x1 = x + disX1
@@ -242,7 +242,7 @@ findLacertianTarget = function(actor)
 		if act and act:isValid() and actor:get("team") ~= act:get("team") then 
 			local onFoot = true 	
 			local dir = math.sign(act.x - actor.x) 
-			for i = 0, math.abs(act.x - actor.x) do 
+			for i = 0, math.abs(act.x - actor.x), 16 do 
 				local xx = actor.x + i * dir
 				onFoot = findLacertianGround(actor, xx, actor.y)
 				--onFoot = obj.B:findLine(xx, actor.y, xx, actor.y + 12) and not obj.B:findLine(xx, actor.y - 12, xx, actor.y - 12 - actor.sprite.height)
@@ -284,7 +284,7 @@ lacertianPathfind = function(actor, target)
 		if actor.x - r1 < target.x and actor.x + r1 > target.x and actor.y - r2 < target.y and actor.y + r2 > target.y then 
 			local onFoot = true 	
 			local dir = math.sign(target.x - actor.x) 
-			for i = 0, math.abs(target.x - actor.x) do 
+			for i = 0, math.abs(target.x - actor.x), 16 do 
 				local xx = actor.x + i * dir
 				onFoot = findLacertianGround(actor, xx, actor.y)
 				--onFoot = obj.B:findLine(xx, actor.y, xx, actor.y + 12) and not obj.B:findLine(xx, actor.y - 12, xx, actor.y - 12 - actor.sprite.height)
@@ -494,7 +494,7 @@ lacertian:addCallback("step", function(actor)
 							ground = obj.BossSpawn2:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.BossSpawn2:findNearest(trg.x, trg.y)
 						end
 						local yy = ground.y 
-						for i = x1, x2 do 
+						for i = x1, x2, 16 do 
 							local groundCheck = findLacertianGround(actor, i, yy)
 							local dis = distance(i, trg.y, trg.x, trg.y) 
 							if (not minDis or (minDis > dis and dis > 5)) and groundCheck then 
@@ -822,6 +822,8 @@ end
 if modloader.checkMod("Starstorm") then 
 	card.eliteTypes:add(EliteType.find("Poisoning", "Starstorm"))
 	card.eliteTypes:add(EliteType.find("Weakening", "Starstorm"))
+	card.eliteTypes:add(EliteType.find("Gilded", "Starstorm"))
+	card.eliteTypes:add(EliteType.find("Corrosive", "Starstorm"))
 end 
 if not modloader.checkFlag("mn_disable_elites") then 
 	card.eliteTypes:add(EliteType.find("bubble", "meridian"))
@@ -833,8 +835,8 @@ MonsterLog.map[lacertian] = monsLog
 
 monsLog.displayName = "Lacertian"
 monsLog.story = "Despite its great size, I did not see this Lacertian monstrosity until it was far too late. It must have been stalking me for days by the point it had ambushed me. It rose out of the ground, gnashing and snarling, deep eyes tracking my movements with precision like a machine.\n\nEven now as I hide, I know it's gaining on me. It may not be as fast, but it more than makes up for it with its unyielding persistence. What draws it to me? Can't it just eat a bison instead..."
-monsLog.statHP = 900
+monsLog.statHP = 1400
 monsLog.statDamage = 25
-monsLog.statSpeed = 1
+monsLog.statSpeed = 0.9
 monsLog.sprite = sprites.walk
 monsLog.portrait = sprites.portrait
