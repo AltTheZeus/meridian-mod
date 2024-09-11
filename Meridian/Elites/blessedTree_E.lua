@@ -131,6 +131,12 @@ treeE:addCallback("destroy", function(self)
 	until leafCount == 20
 end)
 
+registercallback("onHit", function(damager, hit, x, y)
+	if hit:getObject() == treeE then
+		hit:setAlarm(6, 360)
+	end
+end)
+
 local circle = Object.find("efCircle")
 local enemies = ParentObject.find("enemies")
 local treegen = Buff.find("Auric Blessing")
@@ -138,6 +144,9 @@ local treeArmor = Buff.find("Auric Distinction")
 
 treeE:addCallback("step", function(self)
 	local iD = self:getData()
+	if self:getAlarm(6) > -1 then
+		self:setAlarm(6, self:getAlarm(6) - 1)
+	end
 	if self.sprite == treeSpawn_E and self.subimage > 8 and self.subimage < 10 and iD.noised == "so quiet..." then
 		shing:play()
 		iD.noised = "loud as hell!!"
