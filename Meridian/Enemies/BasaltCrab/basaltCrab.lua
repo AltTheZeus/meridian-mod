@@ -143,6 +143,8 @@ Monster.skillCallback(BasaltCrab, 2, function(actor, relevantFrame)
 			local angletrue = posToAngle(actor.x + eyes.maineye.x * actor.xscale, actor.y + eyes.maineye.y, target.x, target.y)
 			data.targetAngle = angletrue
 			data.targeting = target
+		else
+			actor.subimage = actor.sprite.frames
 		end
 	end
 	
