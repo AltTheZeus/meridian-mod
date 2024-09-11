@@ -70,7 +70,7 @@ tree:addCallback("create", function(self)
 	ac.pHmax = 0
 	ac.can_jump = 0
 	ac.name = "Auric Tree"
-	ac.maxhp = 300 * Difficulty.getScaling("hp")
+	ac.maxhp = 670 * Difficulty.getScaling("hp")
 	ac.hp = ac.maxhp
 	ac.damage = 0
 	ac.knockback_cap = 9999999
@@ -150,7 +150,7 @@ local treeArmor = Buff.new("Auric Distinction")
 treegen:addCallback("start", function(guy)
 	local gA = guy:getAccessor()
 	local gD = guy:getData()
-	gD.treeBuff1 = gA.maxhp / 600
+	gD.treeBuff1 = gA.maxhp / 6000
 	gA.hp_regen = gA.hp_regen + gD.treeBuff1
 end)
 
