@@ -156,7 +156,7 @@ treeE:addCallback("step", function(self)
 		iD.efTimer = 0
 		if iD.isPlayer == 0 then
 			for _, a in ipairs(ParentObject.find("actors"):findAllEllipse(self.x - 2 - 87, self.y - 5 - 87, self.x - 2 + 87, self.y - 5 + 87)) do
-				if a:getObject() == tree then
+				if a:getObject() ==E tree then
 				elseif a:getAccessor().team == "enemy" then
 					a:applyBuff(treeArmor, 95)
 					a:applyBuff(treegen, 95)
@@ -164,7 +164,7 @@ treeE:addCallback("step", function(self)
 			end
 		elseif iD.isPlayer == 1 then
 			for _, a in ipairs(ParentObject.find("actors"):findAllEllipse(self.x - 2 - 61, self.y - 5 - 61, self.x - 2 + 61, self.y - 5 + 61)) do
-				if a:getObject() == tree then
+				if a:getObject() == treeE then
 				elseif a:getAccessor().team == "player" then
 					a:applyBuff(treeArmor, 95)
 					a:applyBuff(treegen, 95)
