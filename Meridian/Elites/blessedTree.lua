@@ -140,6 +140,12 @@ tree:addCallback("destroy", function(self)
 	until leafCount == 20
 end)
 
+registercallback("onHit", function(damager, hit, x, y)
+	if hit:getObject() == tree then
+		hit:setAlarm(6, 360)
+	end
+end)
+
 local circle = Object.find("efCircle")
 local enemies = ParentObject.find("enemies")
 local treegen = Buff.new("Auric Blessing")
@@ -183,6 +189,9 @@ end)
 
 tree:addCallback("step", function(self)
 	local iD = self:getData()
+	if self:getAlarm(6) > -1 then
+		self:setAlarm(6, self:getAlarm(6) - 1)
+	end
 	if iD.timerActive == 0 and self.sprite == treeSpawn and self.subimage >= 3 then
 		iD.timerActive = 1
 	end
