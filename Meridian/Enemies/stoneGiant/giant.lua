@@ -79,7 +79,7 @@ end)
 fist:addCallback("step", function(self)
 	local sD = self:getData()
 	if self.subimage == 2 then
-		print(sD.damage)
+--		print(sD.damage)
 		if not sD.damage then
 			sD.damage = 34 * Difficulty.getScaling("damage")
 		end
