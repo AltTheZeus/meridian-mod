@@ -50,9 +50,9 @@ end)
 local leafEF = ParticleType.find("auricLeaf")
 
 treeE:addCallback("create", function(self)
-	shing:play()
 	local data = self:getData()
 	local ac = self:getAccessor()
+	data.noised = "so quiet..."
 	data.efTimer = 0
 	data.timer = 0
 	data.timerActive = 0
@@ -61,7 +61,7 @@ treeE:addCallback("create", function(self)
 	ac.pHmax = 0
 	ac.can_jump = 0
 	ac.name = "Auric Tree"
-	ac.maxhp = 300 * Difficulty.getScaling("hp")
+	ac.maxhp = 670 * Difficulty.getScaling("hp")
 	ac.hp = ac.maxhp
 	ac.damage = 0
 	ac.knockback_cap = 9999999
@@ -138,6 +138,10 @@ local treeArmor = Buff.find("Auric Distinction")
 
 treeE:addCallback("step", function(self)
 	local iD = self:getData()
+	if self.sprite == treeSpawn_E and self.subimage > 8 and self.subimage < 10 and iD.noised == "so quiet..." then
+		shing:play()
+		iD.noised = "loud as hell!!"
+	end
 	if iD.timerActive == 0 and self.sprite == treeSpawn_E and self.subimage >= 14 then
 		iD.timerActive = 1
 	end
