@@ -15,17 +15,17 @@ end)
 local sprites = {}
 do
 	local nameMap = {
-		["Magma Barracks"] = "magma",
-		["Sunken Tombs"] = "tombs",
-		["Risk of Rain"] = "ror",
-		["Desolate Forest"] = "desolate",
-		["Sky Meadow"] = "meadow",
-		["Temple of the Elders"] = "temple",
-		["Hive Cluster"] = "hive",
-		["Boar Beach"] = "boar",
-		["Dried Lake"] = "lake",
-		["Ancient Valley"] = "valley",
-		["Damp Caverns"] = "caverns",
+	["Magma Barracks"] = "magma",
+	["Sunken Tombs"] = "tombs",
+	["Risk of Rain"] = "ror",
+	["Desolate Forest"] = "desolate",
+	["Sky Meadow"] = "meadow",
+	["Temple of the Elders"] = "temple",
+	["Hive Cluster"] = "hive",
+	["Boar Beach"] = "boar",
+	["Dried Lake"] = "lake",
+	["Ancient Valley"] = "valley",
+	["Damp Caverns"] = "caverns",
         ["Serpentine Rainforest"] = "rainforest",
         ["Basalt Quarry"] = "basalt",
         ["Desert Peaks"] = "desert",
@@ -66,37 +66,42 @@ callback.register("postLoad", function()
 	updateTitle()
 end)
 
-local stars = Sprite.find("Titlescreen", "Vanilla") 
-local starsobj = Object.new("starsobj") 
-starsobj.depth = 9700 
+local stars = Sprite.find("Titlescreen", "Vanilla")
+local starsobj = Object.new("starsobj")
+starsobj.depth = 9700
+
+-- Cache stars dimensions and room dimensions
+local starsWidth, starsHeight = stars.width, stars.height
+local roomWidth, roomHeight = Stage.getDimensions()
+
 starsobj:addCallback("create", function(self)
-    self:getData().move = -0.7 
-    self:getData().moveStep = 0 
+    self:getData().move = -0.7
+    -- Start with moveStep as 0 to ensure the stars are fully covering the screen
+    self:getData().moveStep = 0
 end)
-starsobj:addCallback("step", function(self) 
-    self:getData().moveStep = self:getData().moveStep + self:getData().move * 0.1
+
+starsobj:addCallback("step", function(self)
+    self:getData().moveStep = (self:getData().moveStep + self:getData().move * 0.1) % starsWidth
 end)
-starsobj:addCallback("draw", function(self) 
-    local width = stars.width 
-    local height = stars.height
-    
-    local roomWidth, roomHeight = Stage.getDimensions()
-    
-    local moveX = (self:getData().moveStep) % width
 
-    local xParallax = 1 
-    local yParallax = 1 
+starsobj:addCallback("draw", function(self)
+    local moveX = self:getData().moveStep
 
-    for i = -1, math.floor((roomWidth * xParallax * 50) / width) do
-        for j = -1, math.floor((roomHeight * yParallax * 50) / height) do
+    local tilesX = math.ceil(roomWidth / starsWidth) + 1
+    local tilesY = math.ceil(roomHeight / starsHeight) + 1
+
+
+    for i = -1, tilesX do
+        for j = 0, tilesY do
             graphics.drawImage{
                 image = stars,
-                x = moveX * xParallax + i * width,
-                y = yParallax + j * height,
+                x = moveX + i * starsWidth,
+                y = j * starsHeight,
             }
         end
     end
 end)
+
 --[[
 local ShootingStar = ParticleType.new("ShootingStar")
 
