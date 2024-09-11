@@ -269,8 +269,8 @@ registercallback("onStep", function()
 	end
 			for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
 		local aD = i:getData()
-		if aD.sparkleCD > 0 then aD.sparkleCD = aD.sparkleCD - 1 end
-		if aD.sparkleCD <= 0 then
+		if aD.sparkleCD and aD.sparkleCD > 0 then aD.sparkleCD = aD.sparkleCD - 1 end
+		if aD.sparkleCD and aD.sparkleCD <= 0 then
 			if math.random(100) >= 95 then
 				local imageX = (i:getObject().sprite.width * 0.5) * math.random(-1, 1)
 				local imageY = (i:getObject().sprite.height * 0.5) * math.random(-1, 1)
