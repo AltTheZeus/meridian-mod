@@ -4,7 +4,7 @@
     "description": "An expansion mod.", 
 	"internalname": "meridian",
     "author": "Winslow, Altzeus, RetroPacifist, AnAwesomeDudette",
-	"mpcompat": false,
+	"mpcompat": true,
 	"dependencies": [
 		{
 			"name": "Starstorm",
