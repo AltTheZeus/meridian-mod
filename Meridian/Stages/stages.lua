@@ -188,7 +188,7 @@ callback.register("postLoad", function()
 		TOTE.enemies:add(giant)
 
 		--Risk of Rain
-		ROR.enemies:add(Lizard)
+		--ROR.enemies:add(Lizard)
 		ROR.enemies:add(giant)
 
 		--Serpentine Rainforest
