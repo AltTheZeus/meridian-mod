@@ -232,32 +232,59 @@ callback.register("postLoad", function()
 		ShallowRotlands.enemies:add(exploder)
 		ShallowRotlands.enemies:add(wayfarer)
 		ShallowRotlands.enemies:add(eel)
+		ShallowRotlands.interactables:add(stunner)
+		ShallowRotlands.interactables:add(dronekiller)
+		ShallowRotlands.interactables:add(brokenpod)
+		ShallowRotlands.interactables:add(hax)
 
 		--Desert Peaks
 		DesertPeaks.enemies:add(admonitor)
 		DesertPeaks.enemies:add(overseer)
+		DesertPeaks.interactables:add(dupeglitch)
+		DesertPeaks.interactables:add(dronekiller)
+		DesertPeaks.interactables:add(brokenpod)
 
 		--Marshland Sanctuary
 		MarshlandSanctuary.enemies:add(exploder)
 		MarshlandSanctuary.enemies:add(follower)
 		MarshlandSanctuary.enemies:add(admonitor)
 		MarshlandSanctuary.enemies:add(overseer)
+		MarshlandSanctuary.interactables:add(dupeglitch)
+		MarshlandSanctuary.interactables:add(stunner)
+		MarshlandSanctuary.interactables:add(dronekiller)
+		MarshlandSanctuary.interactables:add(brokenpod)
 
 		--Basalt Quarry
 		BasaltQuarry.enemies:add(follower)
 		BasaltQuarry.enemies:add(wayfarer)
 		BasaltQuarry.enemies:add(overseer)
+		BasaltQuarry.interactables:add(dupeglitch)
+		BasaltQuarry.interactables:add(dronekiller)
+		BasaltQuarry.interactables:add(brokenpod)
+		BasaltQuarry.interactables:add(hax)
 
 		--Dissonant Reliquary
 		DissonantReliquary.enemies:add(overseer)
 		DissonantReliquary.enemies:add(elver)
 		DissonantReliquary.enemies:add(wyvern)
-
+		DissonantReliquary.interactables:add(relic)
+		DissonantReliquary.interactables:add(dupeglitch)
+		DissonantReliquary.interactables:add(dronekiller)
+		DissonantReliquary.interactables:add(brokenpod)
+		
 		--Starswept Valley
 		StarsweptValley.enemies:add(overseer)
 		StarsweptValley.enemies:add(wayfarer)
 		StarsweptValley.enemies:add(follower)
 		StarsweptValley.enemies:add(admonitor)
+		StarsweptValley.interactables:add(stunner)
+		StarsweptValley.interactables:add(hax)
+		StarsweptValley.interactables:add(dronekiller)
+		StarsweptValley.interactables:add(brokenpod)
+
+		--Serpentine Rainforest
+		SerpentineRainforest.interactables:add(dronekiller)
+		SerpentineRainforest.interactables:add(brokenpod)
 	end
 end)
 
