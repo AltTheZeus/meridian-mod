@@ -308,9 +308,11 @@ lacertianPathfind = function(actor, target)
 	return moveType
 end
 
+local objComp = Object.find("Command", "vanilla")
 lacertian:addCallback("step", function(actor)
 	local actorAc = actor:getAccessor()
 	local actorData = actor:getData()
+	actorAc.hp = math.min(actorAc.hp, actorAc.maxhp)
 	if misc.getTimeStop() == 0 then
 	if actor and actor:isValid() then 
 		if not modloader.checkMod("Starstorm") then
@@ -760,6 +762,16 @@ lacertian:addCallback("step", function(actor)
 	else 
 		actor.spriteSpeed = 0
 	end
+	
+	local comp = objComp:findNearest(0, 0)
+	if comp then 
+		if comp:get("active") == 1 then 
+			actorAc.exp_worth = 0 
+			actor:getData().noDeathSound = true
+			actor:destroy()
+		end
+	end
+	
 end)
 
 callback.register("onHit", function(damager, hit)
@@ -799,7 +811,9 @@ lacertianCorpse:addCallback("step", function(self)
 end)
 
 lacertian:addCallback("destroy", function(actor)
-	sounds.death:play(1, 1)
+	if not actor:getData().noDeathSound then
+		sounds.death:play(1, 1)
+	end
 	local corpse = lacertianCorpse:create(actor.x, actor.y)
 	corpse.blendColor = actor.blendColor
 	corpse.xscale = actor.xscale
