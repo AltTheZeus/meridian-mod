@@ -766,9 +766,10 @@ lacertian:addCallback("step", function(actor)
 	local comp = objComp:findNearest(0, 0)
 	if comp then 
 		if comp:get("active") == 1 then 
-			actorAc.exp_worth = 0 
-			actor:getData().noDeathSound = true
-			actor:destroy()
+			actor:delete()
+			--actorAc.exp_worth = 0 
+			--actor:getData().noDeathSound = true
+			--actor:destroy()
 		end
 	end
 	
@@ -811,9 +812,9 @@ lacertianCorpse:addCallback("step", function(self)
 end)
 
 lacertian:addCallback("destroy", function(actor)
-	if not actor:getData().noDeathSound then
-		sounds.death:play(1, 1)
-	end
+	--if not actor:getData().noDeathSound then
+	sounds.death:play(1, 1)
+	--end
 	local corpse = lacertianCorpse:create(actor.x, actor.y)
 	corpse.blendColor = actor.blendColor
 	corpse.xscale = actor.xscale
