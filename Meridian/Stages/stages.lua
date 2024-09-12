@@ -217,6 +217,14 @@ callback.register("postLoad", function()
 		--print("MERIDIAN ENEMIES DETECTED!")
 	end
 	if modloader.checkMod("starstorm") then
+		local brokenpod = Interactable.find("Broken Escape Pod", "starstorm")
+		local activator = Interactable.find("Activator", "starstorm")
+		local stunner = Interactable.find("Stunner Drone", "starstorm")
+		local hax = Interactable.find("Hacking Drone", "starstorm")
+		local dupeglitch = Interactable.find("Duplicator Drone", "starstorm")
+		local dronekiller = Interactable.find("Refabricator", "starstorm")
+		local relic = Interactable.find("Relic Shrine", "starstorm")
+
 		local admonitor = MonsterCard.find("Clay Admonitor", "starstorm")
 		local exploder = MonsterCard.find("Exploder", "Starstorm")
 		local follower = MonsterCard.find("Follower", "Starstorm")
