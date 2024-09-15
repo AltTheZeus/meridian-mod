@@ -39,6 +39,7 @@ registercallback("onActorInit", function(self)
 			local dD = d:getData()
 			dD.shield_cooldown = 0
 			dD.chromeArmor = 0
+			return
 		end
 	end
 end)
@@ -49,6 +50,8 @@ registercallback("onStep", function()
 	for _, d in ipairs(drones:findAll()) do
 		local dD = d:getData()
 		local id = d.id
+		if not dD.shield_cooldown then dD.shield_cooldown = 0 end
+		if not dD.chromeArmor then dD.chromeArmor = 0 end
 		if dD.shield_cooldown > 0 then
 			dD.shield_cooldown = dD.shield_cooldown - 1
 			if dD.shield_cooldown == 1 then
