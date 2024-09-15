@@ -4,6 +4,9 @@ item.pickupText = "For every skill on cooldown, reduce your other skills' cooldo
 
 item.sprite = Sprite.load("Items/lacertianfang.png", 1, 15, 15)
 local ef = Sprite.load("Items/lacertianfangEf.png", 1, 0, 0)
+if modloader.checkMod("Starstorm") then
+	ItemPool.find("legendary", "Starstorm"):add(item)
+end
 
 registercallback("onPlayerStep", function(player)
     local itemAmount = player:countItem(item)
