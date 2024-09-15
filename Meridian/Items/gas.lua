@@ -2,7 +2,7 @@ local item = Item("Tear Gas")
 
 item.pickupText = "Increase damage against stunned enemies." 
 
-item.sprite = Sprite.load("Items/gas.png", 1, 12,  13)
+item.sprite = Sprite.load("Items/gas.png", 1, 15, 15)
 
 registercallback("onFireSetProcs", function(damager, parent)
 	if parent:getObject() == Object.find("p") then
