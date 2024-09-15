@@ -792,16 +792,34 @@ callback.register("onHit", function(damager, hit)
 	end
 end)
 
+
+local allCrates = {}
 local lacertianCorpse = Object.new("LacertianCorpse")
 lacertianCorpse.sprite = sprites.death 
 lacertianCorpse:addCallback("create", function(self)
 	self.spriteSpeed = 0.15
 	self.depth = 13
-	if self:collidesWith(ParentObject.find("items"):findNearest(self.x, self.y), self.x, self.y) then
-		if math.chance(15) then
-			local lameItem = ParentObject.find("items"):findNearest(self.x, self.y)
-			Item.find("Relentless Fang"):create(lameItem.x, lameItem.y)
-			lameItem:delete()
+	if Artifact.find("Command").active == false then
+		if self:collidesWith(ParentObject.find("items"):findNearest(self.x, self.y), self.x, self.y) then
+			if math.chance(15) then
+				local lameItem = ParentObject.find("items"):findNearest(self.x, self.y)
+				Item.find("Relentless Fang"):create(lameItem.x, lameItem.y)
+				lameItem:delete()
+			end
+		end
+	elseif Artifact.find("Command").active == true and modloader.checkMod("Starstorm") and net.online == false then
+		for _, i in ipairs(ItemPool.findAll()) do
+			allCrates[i] = i:getCrate()
+		end
+		for pool, crate in pairs(allCrates) do
+			if crate:findNearest(self.x, self.y) and self:collidesWith(crate:findNearest(self.x, self.y), self.x, self.y) then
+				if math.chance(15) then
+					local lameBox = crate:findNearest(self.x, self.y)
+					ItemPool.find("legendary", "Starstorm"):getCrate():create(self.x, self.y)
+					lameBox:delete()
+				end
+				return
+			end
 		end
 	end
 end)
