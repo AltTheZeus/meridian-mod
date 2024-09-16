@@ -61,7 +61,7 @@ end)
 Monster.skillCallback(giant, 1, function(actor, relevantFrame)
 	if relevantFrame == 6 or relevantFrame == 8 then
 		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y, 1, 1, 2, sprites.hit, nil)
+		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y, 1, 1, 0.7, sprites.hit, nil)
 	end
 end)
 
@@ -117,6 +117,7 @@ Monster.skillCallback(giant, 2, function(actor, relevantFrame)
 		sounds.attack:play(1 + 1)
 --		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y, 1, 1, 2, sprites.hit, nil)
 		local player = Object.findInstance(aA.target)
+		if not player then return end
 		local pickedGround = Object.find("b"):findLine(player.x, player.y, player.x, player.y + 100) or Object.find("bNoSpawn"):findLine(player.x, player.y, player.x, player.y + 100) or Object.find("b"):findNearest(player.x, player.y)
 		local w = warning:create(math.clamp(player.x + math.random(-45, 45), pickedGround.x, pickedGround.x + (pickedGround.xscale * 16)), pickedGround.y - 5)
 		local wD = w:getData() --no way wd gaster from undertale
