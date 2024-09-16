@@ -34,6 +34,7 @@ end
 
 registercallback("onDamage", function(target, damage, source)
 if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
+	if source == target then return end
 	if not CheckValid(source) then return end
 	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
