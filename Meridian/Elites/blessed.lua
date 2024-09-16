@@ -12,6 +12,8 @@ registercallback("onGameStart", function()
 	dD.blessed1 = 0
 	dD.blessed2 = 0
 	dD.blessed3 = 0
+	dD.loopCount = 0
+	dD.blessedLimit = 1
 end)
 
 registercallback("onStageEntry", function()
@@ -41,6 +43,12 @@ elseif misc.director:get("stages_passed") >= 15 and dD.blessed2 == 0 then
 	end
 	dD.blessed2 = 1
 end
+for _, stage in ipairs(Stage.progression[1]:toTable()) do
+	if stage == Stage.getCurrentStage() then
+		dD.loopCount = dD.loopCount + 1
+		dD.blessedLimit = dD.loopCount - 1
+	end
+end
 end)
 
 registercallback("onGameStart", function()
@@ -64,6 +72,7 @@ local enemies = ParentObject.find("enemies")
 
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
+	local dD = misc.director:getData()
 	if actor:get("elite_type") == ID then
 		actor:set("maxhp", actor:get("maxhp") * 3)
 		actor:set("hp", actor:get("maxhp"))
@@ -75,7 +84,7 @@ registercallback("onEliteInit", function(actor)
 		for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 			blesseddudes = blesseddudes + 1
 		end
-		if blesseddudes > 1 then
+		if blesseddudes > dD.blessedLimit then
 			local replacement = actor:getObject():create(actor.x, actor.y)
 			replacement:makeElite()
 			actor:delete()
