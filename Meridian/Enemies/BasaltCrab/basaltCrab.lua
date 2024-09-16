@@ -80,7 +80,7 @@ BasaltCrab:addCallback("create", function(actor)
     actorAc.name = "Basalt Crab"
     actorAc.maxhp = 400 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
-    actorAc.damage = 57 * Difficulty.getScaling("damage")
+    actorAc.damage = 40 * Difficulty.getScaling("damage")
     actorAc.pHmax = 0.8
 	actorAc.walk_speed_coeff = 1.25
 	data.attackFrames = 0
@@ -169,7 +169,7 @@ Monster.skillCallback(BasaltCrab, 2, function(actor, relevantFrame)
 		data.attackFrames = 12
 		sndLaser:play(2, 1)
 		for _, eye in pairs(eyes) do 
-			actor:fireBullet(actor.x + eye.x * actor.xscale, actor.y + eye.y, data.targetAngle, 300, 1)
+			actor:fireBullet(actor.x + eye.x * actor.xscale, actor.y + eye.y, data.targetAngle, 300, 0.5)
 		end
 		data.curTargeting = false
 		if onScreen(actor) then misc.shakeScreen(2) end
