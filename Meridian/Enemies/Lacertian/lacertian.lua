@@ -488,35 +488,37 @@ lacertian:addCallback("step", function(actor)
 						actor.xscale = math.sign(trg.x - actor.x)
 						local n
 						local minDis
-						local ground = obj.B:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.B:findNearest(trg.x, trg.y)
+						local ground = obj.B:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.B:findNearest(trg.x, trg.y)
 						if not ground then 
-							ground = obj.BossSpawn:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.BossSpawn:findNearest(trg.x, trg.y)
+							ground = obj.BossSpawn:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.BossSpawn:findNearest(trg.x, trg.y)
 						end 
 						if not ground then 
-							ground = obj.BossSpawn2:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.BossSpawn2:findNearest(trg.x, trg.y)
+							ground = obj.BossSpawn2:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.BossSpawn2:findNearest(trg.x, trg.y)
 						end
-						local yy = ground.y 
-						for i = x1, x2, 16 do 
-							local groundCheck = findLacertianGround(actor, i, yy)
-							local dis = distance(i, trg.y, trg.x, trg.y) 
-							if (not minDis or (minDis > dis and dis > 5)) and groundCheck then 
-								minDis = dis 
-								n = i 
+						if ground then
+							local yy = ground.y 
+							for i = x1, x2, 16 do 
+								local groundCheck = findLacertianGround(actor, i, yy)
+								local dis = distance(i, trg.y, trg.x, trg.y) 
+								if (not minDis or (minDis > dis and dis > 5)) and groundCheck then 
+									minDis = dis 
+									n = i 
+								end
 							end
-						end
-						if n then 
-							actor.x = n
-							actor.y = yy
-							actorAc.ghost_x = actor.x
-							actorAc.ghost_y = actor.y
-							actorData.animLoop = 2
-							actorData.shoot2Atk = nil
-							if actor:getAlarm(3) == -1 then 
-								actorData.animLoop = 3
-								actorData.shoot2Atk = true
+							if n then 
+								actor.x = n
+								actor.y = yy
+								actorAc.ghost_x = actor.x
+								actorAc.ghost_y = actor.y
+								actorData.animLoop = 2
+								actorData.shoot2Atk = nil
+								if actor:getAlarm(3) == -1 then 
+									actorData.animLoop = 3
+									actorData.shoot2Atk = true
+								end
+								actorAc.state = "unburrow"
+								actor.subimage = 1
 							end
-							actorAc.state = "unburrow"
-							actor.subimage = 1
 						end
 					end
 				end
