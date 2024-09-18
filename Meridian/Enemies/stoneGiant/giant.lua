@@ -110,9 +110,11 @@ warning:addCallback("step", function(self)
 		local f = fist:create(self.x, self.y + 5)
 		local fD = f:getData()
 		if sD.elite ~= nil then
-			fD.elite = sD.elite
-			f.sprite = fistElite
-			f.blendColor = eliteList[sD.elite + 1].color
+			if eliteList[sD.elite + 1] ~= nil and eliteList[sD.elite + 1].color ~= nil then
+				f.blendColor = eliteList[sD.elite + 1].color
+				fD.elite = sD.elite
+				f.sprite = fistElite
+			end
 		end
 		fD.damage = sD.damage
 		self:destroy()
@@ -135,10 +137,12 @@ Monster.skillCallback(giant, 2, function(actor, relevantFrame)
 		local wD = w:getData() --no way wd gaster from undertale
 		wD.damage = aA.damage
 		if aA.elite_type > -1 then
-			wD.elite = aA.elite_type
-			w.sprite = warningElite
-			w.blendColor = eliteList[aA.elite_type + 1].color
-			print(eliteList[aA.elite_type + 1])
+			if eliteList[aA.elite_type + 1] ~= nil and eliteList[aA.elite_type + 1].color ~= nil then
+				wD.elite = aA.elite_type
+				w.sprite = warningElite
+				w.blendColor = eliteList[aA.elite_type + 1].color
+			end
+--			print(eliteList[aA.elite_type + 1])
 		end
 	end
 end)
@@ -219,7 +223,7 @@ local monsLog = MonsterLog.new("Stone Giant")
 MonsterLog.map[giant] = monsLog
 
 monsLog.displayName = "Stone Giant"
-monsLog.story = "I thought the golems were large. I wish that were still the case. Comparitively enormous, these Stone Giants are simply monumental. Their terrifying triple-gaze follows unblinking, tracking my movements precisely for swift destruction.\n\nAs if that wasn't enough, their arms are laser cannons of some kind, and though I have only seen one activate, I know it would surely decimate me, based on what it did to the terrain it was unleashed upon. I must take great care not to disturb these behemoth guardians.."
+monsLog.story = "I thought the golems were large. I wish that were still the case. Comparatively enormous, these Stone Giants are simply monumental. Their terrifying triple-gaze follows unblinking, tracking my movements precisely for swift destruction.\n\nAs if that wasn't enough, their arms are laser cannons of some kind, and though I have only seen one activate, I know it would surely decimate me, based on what it did to the terrain it was unleashed upon. I must take great care not to disturb these behemoth guardians.."
 monsLog.statHP = 670
 monsLog.statDamage = 34
 monsLog.statSpeed = 0.6
