@@ -1,6 +1,11 @@
+local eliteList = {}
+for _, e in ipairs(EliteType.findAll()) do
+	eliteList[e.id + 1] = e
+end
+
 local path = "Enemies/stoneGiant/"
 local sprites = {
-    idle = Sprite.load("giantIdle", path.."giantIdle", 1, 14, 48),
+    idle = Sprite.load("giantIdle", path.."giantIdle", 1, 13, 48),
     walk = Sprite.load("giantWalk", path.."giantWalk", 4, 21, 49),
     shoot = Sprite.load("giantAttack", path.."giantShoot", 12, 15, 48),
     shoot2 = Sprite.load("giantAttack2", path.."giantShoot2", 11, 26, 51),
@@ -9,7 +14,7 @@ local sprites = {
     mask = Sprite.load("giantMask", path.."giantMask", 1, 14, 48),
     palette = Sprite.load("giantPal", path.."giantPal", 1, 0, 0),
     jump = Sprite.load("giantJump", path.."giantJump", 1, 17, 47),
-    hit = Sprite.load("giantBlast", path.."giantBlast", 3, 14, 18),
+    hit = Sprite.load("giantBlast", path.."giantBlast", 3, 13, 18),
     portrait = Sprite.load("giantPortrait", path.."giantPortrait", 1, 119, 119)
 }
 
@@ -67,19 +72,21 @@ end)
 
 local warning = Object.new("giantwarning")
 warning.sprite = Sprite.load("giantWarning", path.."giantWarning", 2, 9, 20)
+local warningElite = Sprite.load("giantWarningElite", path.."giantWarningElite", 2, 9, 20)
 
 local fist = Object.new("giantfist")
 fist.sprite = Sprite.load("giantFist", path.."giantFist", 9, 6, 16)
+local fistElite = Sprite.load("giantFistElite", path.."giantFistElite", 9, 6, 16)
 
 fist:addCallback("create", function(self)
 	local sD = self:getData()
 	self.spriteSpeed = 0.2
+	
 end)
 
 fist:addCallback("step", function(self)
 	local sD = self:getData()
 	if self.subimage == 2 then
---		print(sD.damage)
 		if not sD.damage then
 			sD.damage = 34 * Difficulty.getScaling("damage")
 		end
@@ -102,6 +109,11 @@ warning:addCallback("step", function(self)
 	if sD.life >= 61 then
 		local f = fist:create(self.x, self.y + 5)
 		local fD = f:getData()
+		if sD.elite ~= nil then
+			fD.elite = sD.elite
+			f.sprite = fistElite
+			f.blendColor = eliteList[sD.elite + 1].color
+		end
 		fD.damage = sD.damage
 		self:destroy()
 	end
@@ -122,6 +134,12 @@ Monster.skillCallback(giant, 2, function(actor, relevantFrame)
 		local w = warning:create(math.clamp(player.x + math.random(-45, 45), pickedGround.x, pickedGround.x + (pickedGround.xscale * 16)), pickedGround.y - 5)
 		local wD = w:getData() --no way wd gaster from undertale
 		wD.damage = aA.damage
+		if aA.elite_type > -1 then
+			wD.elite = aA.elite_type
+			w.sprite = warningElite
+			w.blendColor = eliteList[aA.elite_type + 1].color
+			print(eliteList[aA.elite_type + 1])
+		end
 	end
 end)
 
