@@ -1,4 +1,5 @@
 local item = Item("Relentless Fang")
+item.color = "y"
 
 item.pickupText = "For every skill on cooldown, reduce your other skills' cooldowns." 
 
