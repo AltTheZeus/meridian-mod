@@ -10,7 +10,8 @@ local headSprites = {
     palette = Sprite.load("con2Pal_B", path.."con2Pal_B", 1, 0, 0),
     jump = Sprite.load("con2Jump_B", path.."con2Jump_B", 1, 8, 6),
     death = Sprite.load("con2Death_B", path.."con2Death_B", 9, 11, 6),
-    spawn = Sprite.load("con2Spawn_B", path.."con2Spawn_B", 15, 8, 26)
+    spawn = Sprite.load("con2Spawn_B", path.."con2Spawn_B", 15, 8, 26),
+    mask = Sprite.load("con2Mask_B", path.."con2Mask_B", 1, 0, 0)
 }
 
 local head = Object.base("Enemy", "Beta Construct Head")
@@ -46,12 +47,14 @@ head:addCallback("create", function(actor)
     actorAc.can_jump = 0
     data.shot = false
     data.angleLocked = false
+    actor.mask = headSprites.mask
 end)
 
 local everyonelol = ParentObject.find("actors")
 head:addCallback("step", function(self)
 	local sD = self:getData()
 	local actorAc = self:getAccessor()
+	self:setAlarm(6, -1)
 	if not sD.body or not sD.body:isValid() then self:destroy() return end
 	if self:get("prefix_type") ~= sD.body:get("prefix_type") then
 		if sD.body:get("prefix_type") == 1 then
@@ -129,9 +132,10 @@ local sprites = {
 }
 
 local sounds = {
-    attack = Sound.find("CrabDeath"),
-    spawn = Sound.find("GuardSpawn"),
-    death = Sound.find("GuardDeath")
+    attack = Sound.load( path.."shootCon2"),
+    spawn = Sound.load( path.."spawnCon2"),
+    hit = Sound.load( path.."hitCon2"),
+    death = Sound.load( path.."deathCon2")
 }
 
 local con2 = Object.base("EnemyClassic", "Beta Construct2")
@@ -156,7 +160,7 @@ con2:addCallback("create", function(actor)
         death = sprites.death,
 	palette = sprites.palette
     }
-    actorAc.sound_hit = Sound.find("MushHit","vanilla").id
+    actorAc.sound_hit = sounds.hit.id
     actorAc.sound_death = sounds.death.id
     actor.mask = sprites.mask
     actorAc.health_tier_threshold = 3
@@ -176,7 +180,7 @@ Monster.setSkill(con2, 1, 50, 1.5 * 60, function(actor)
 end)
 Monster.skillCallback(con2, 1, function(actor, relevantFrame)
 	if relevantFrame == 9 then
-		sounds.attack:play(1 + 1)
+		sounds.attack:play(1, 1)
 --		actor:fireExplosion(actor.x + actor.xscale * 30, actor.y - 18, 30/19, 5/4, 1)
 	end
 end)
