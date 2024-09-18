@@ -141,6 +141,7 @@ end)
 
 sorrowBoon:addCallback("step", function(self)
 	local sD = self:getData()
+	if not sD.targ or sD.targ == nil or not sD.targ:isValid() then return end
 	local xVar = (math.sign(self.x - sD.targ.x) * (self.x - sD.targ.x))
 	local yVar = (math.sign(self.y - sD.targ.y) * (self.y - sD.targ.y))
 	local c2 = (xVar * xVar) + (yVar * yVar)
@@ -193,26 +194,39 @@ local enemies = ParentObject.find("enemies")
 registercallback("onNPCDeath", function(npc)
 	local npcX = npc.x
 	local npcY = npc.y
-	for _, i in ipairs(enemies:findAll()) do
-		if i:get("elite_type") == ID or i:get("elite_type") == bID then
-			local xVar = (math.sign(npcX - i.x) * (npcX - i.x))
-			local yVar = (math.sign(npcY - i.y) * (npcY - i.y))
-			local c2 = (xVar * xVar) + (yVar * yVar)
-			local c = c2 ^ 0.5
-			if c <= 100 then
-				local myBoon = sorrowBoon:create(npcX, npcY)
-				local bD = myBoon:getData()
-				bD.targ = i
-				if i:get("elite_type") == ID then
-					bD.type = elite.color
-				else
-					bD.type = EliteType.find("blessed").color
+	local dD = misc.director:getData()
+	if npc:get("team") == "enemy" then
+		dD.sorrowSpawnEnemy = 1
+		dD.sorrowSpawnEnemyX = npcX
+		dD.sorrowSpawnEnemyY = npcY
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	if dD.sorrowSpawnEnemy and dD.sorrowSpawnEnemy == 1 then
+		for _, i in ipairs(enemies:findAll()) do
+			if i:get("elite_type") == ID or i:get("elite_type") == bID then
+				local xVar = (math.sign(dD.sorrowSpawnEnemyX - i.x) * (dD.sorrowSpawnEnemyX - i.x))
+				local yVar = (math.sign(dD.sorrowSpawnEnemyY - i.y) * (dD.sorrowSpawnEnemyY - i.y))
+				local c2 = (xVar * xVar) + (yVar * yVar)
+				local c = c2 ^ 0.5
+				if c <= 100 then
+					local myBoon = sorrowBoon:create(dD.sorrowSpawnEnemyX, dD.sorrowSpawnEnemyY)
+					local bD = myBoon:getData()
+					bD.targ = i
+					if i:get("elite_type") == ID then
+						bD.type = elite.color
+					else
+						bD.type = EliteType.find("blessed").color
+					end
+					bD.dirX = dD.sorrowSpawnEnemyX + math.random(-25, 25)
+					bD.dirY = dD.sorrowSpawnEnemyY + math.random(-25, 25)
+					bD.distance = c
+					bD.cCurrent = 0
+					dD.sorrowSpawnEnemy = 0
 				end
-				bD.dirX = npcX + math.random(-25, 25)
-				bD.dirY = npcY + math.random(-25, 25)
-				bD.distance = c
-				bD.cCurrent = 0
 			end
 		end
 	end
-end, -1000)
+end)
