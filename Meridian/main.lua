@@ -23,6 +23,11 @@ if not modloader.checkFlag("mn_disable_stages") then
 	require("Stages/stages")
 end
 
+-- Stages
+if not modloader.checkFlag("mn_disable_interactables") then 
+	require("Interactables/interactables")
+end
+
 require("Misc.UI.UI")
 require("qols")
 
