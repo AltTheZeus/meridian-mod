@@ -3,7 +3,7 @@ item.pickupText = "Become an aspect of Divinity."
 item.sprite = Sprite.load("Items/gildedLeaf.png", 1, 15, 15)
 item.isUseItem = true
 item.useCooldown = 240
-item.color = Color.YELLOW
+item.color = "y"
 local playa = Object.find("p")
 local enemies = ParentObject.find("enemies")
 
@@ -121,27 +121,38 @@ local everyoneever = ParentObject.find("actors")
 registercallback("onNPCDeath", function(npc)
 	local npcX = npc.x
 	local npcY = npc.y
+	local dD = misc.director:getData()
 	if npc:get("team") == "player" then
+		dD.sorrowSpawnPlayer = 1
+		dD.sorrowSpawnPlayerX = npcX
+		dD.sorrowSpawnPlayerY = npcY
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	if dD.sorrowSpawnPlayer and dD.sorrowSpawnPlayer == 1 then
 		for _, i in ipairs(misc.players) do
 			if i.useItem == item then
-				local xVar = (math.sign(npcX - i.x) * (npcX - i.x))
-				local yVar = (math.sign(npcY - i.y) * (npcY - i.y))
+				local xVar = (math.sign(dD.sorrowSpawnPlayerX - i.x) * (dD.sorrowSpawnPlayerX - i.x))
+				local yVar = (math.sign(dD.sorrowSpawnPlayerY - i.y) * (dD.sorrowSpawnPlayerY - i.y))
 				local c2 = (xVar * xVar) + (yVar * yVar)
 				local c = c2 ^ 0.5
 				if c <= 100 then
-					local myBoon = sorrowBoon:create(npcX, npcY)
+					local myBoon = sorrowBoon:create(dD.sorrowSpawnPlayerX, dD.sorrowSpawnPlayerY)
 					local bD = myBoon:getData()
 					bD.targ = i
 					bD.type = EliteType.find("blessed").color
-					bD.dirX = npcX + math.random(-25, 25)
-					bD.dirY = npcY + math.random(-25, 25)
+					bD.dirX = dD.sorrowSpawnPlayerX + math.random(-25, 25)
+					bD.dirY = dD.sorrowSpawnPlayerY + math.random(-25, 25)
 					bD.distance = c
 					bD.cCurrent = 0
+					dD.sorrowSpawnPlayer = 0
 				end
 			end
 		end
 	end
-end, -1000)
+end)
 
 --MOLDING
 registercallback("onStageEntry", function()
