@@ -28,7 +28,7 @@ function CheckValid(anInstance)
 	return anInstance and anInstance:isValid()
 end
 
-registercallback("onDamage", function(target, damage, source)
+--[[registercallback("onDamage", function(target, damage, source)
 	if source == target then return end
 	if not CheckValid(source) then return end
 	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
@@ -43,6 +43,36 @@ registercallback("onDamage", function(target, damage, source)
 			target:applyBuff(shat1, 120)
 		end
 	end
+end)]]
+
+local shieldEf = Object.new("sorrowShield")
+shieldEf.sprite = Sprite.load("Elites/sorrowEf.png", 3, 13, 28)
+local shieldBlessed = Sprite.load("Elites/sorrowEfBlessed.png", 3, 13, 28)
+
+shieldEf:addCallback("create", function(self)
+	local sD = self:getData()
+	sD.life = 0
+	self.spriteSpeed = 0
+end)
+
+shieldEf:addCallback("step", function(self)
+	local sD = self:getData()
+	sD.life = sD.life + 1
+	if sD.life >= 10 and sD.life < 22 then
+		self.subimage = 2
+	end
+	if sD.life >= 22 then
+		self.subimage = 3
+	end
+	if sD.life >= 45 then
+		self.y = self.y - 0.2
+	end
+	if sD.life >= 60 then
+		self.alpha = self.alpha - 0.04
+	end
+	if self.alpha <= 0 then
+		self:destroy()
+	end
 end)
 
 registercallback("preHit", function(damager, hit)
@@ -51,7 +81,138 @@ registercallback("preHit", function(damager, hit)
 			if damager:get("damage") > math.round(hit:get("maxhp") * 0.05) then
 				damager:set("damage", math.round(hit:get("maxhp") * 0.05))
 				damager:set("damage_fake", math.round(hit:get("maxhp") * 0.05))
+				Sound.find("Crit"):play(0.4, 1.2)
+				local shield = Object.find("EfOutline"):create(hit.x, hit.y)
+				shield:set("parent", hit.id)
+				if (hit:get("elite_type")) == ID then
+					shield.blendColor = Color.fromRGB(104, 90, 90)
+					shieldEf:create(hit.x, hit.y - 20)
+				elseif (hit:get("elite_type")) == bID then
+					shield.blendColor = Color.fromRGB(255, 237, 187)
+					local bShield = shieldEf:create(hit.x, hit.y - 20)
+					bShield.sprite = shieldBlessed
+				end
 			end
 		end
 	end
 end)
+
+registercallback("onActorInit", function(self)
+	local sD = self:getData()
+	sD.sorrowBuffTimer = 0
+end)
+
+local sorrowBuff = Buff.new("sorrowBuff")
+sorrowBuff.sprite = Sprite.load("Elites/sorrowBuff.png", 1, 10, 0)
+
+sorrowBuff:addCallback("start", function(actor)
+	local aD = actor:getData()
+	aD.sorrowBuffDam = actor:get("damage") / 5 --buffed from 10%... is it too strong?
+	actor:set("damage", actor:get("damage") + aD.sorrowBuffDam)
+end)
+
+sorrowBuff:addCallback("step", function(actor)
+	local aD = actor:getData()
+	aD.sorrowBuffTimer = aD.sorrowBuffTimer - 1
+end)
+
+sorrowBuff:addCallback("end", function(actor)
+	local aD = actor:getData()
+	actor:set("damage", actor:get("damage") - aD.sorrowBuffDam)
+end)
+
+local sBoonPart = ParticleType.new("sBoonParticle")
+sBoonPart:shape("Smoke")
+sBoonPart:scale(0.13, 0.13)
+sBoonPart:size(1, 1, -0.01, 0)
+sBoonPart:alpha(1, 0.8, 0)
+sBoonPart:angle(0, 360, 0, 5, false)
+sBoonPart:speed(0, 0, 0, 0)
+sBoonPart:direction(0, 0, 0, 0)
+sBoonPart:gravity(0, 0)
+sBoonPart:life(60, 60)
+
+local sorrowBoon = Object.new("sorrowBoon")
+
+sorrowBoon:addCallback("create", function(self)
+	local sD = self:getData()
+	sD.life = 0
+end)
+
+sorrowBoon:addCallback("step", function(self)
+	local sD = self:getData()
+	local xVar = (math.sign(self.x - sD.targ.x) * (self.x - sD.targ.x))
+	local yVar = (math.sign(self.y - sD.targ.y) * (self.y - sD.targ.y))
+	local c2 = (xVar * xVar) + (yVar * yVar)
+	sD.cCurrent = c2 ^ 0.5
+	sD.life = sD.life + 1
+	if not sD.targ or not sD.targ:isValid() then self:destroy() return end
+	if sD.life >= 30 then
+		local xMath
+		local yMath
+--[[		if sD.cCurrent <= sD.distance * 0.2 then
+			xMath = math.abs(self.x - sD.targ.x)/4
+			yMath = math.abs(self.y - sD.targ.y)/4
+		elseif sD.cCurrent <= sD.distance/2 then
+			xMath = math.abs(self.x - sD.targ.x)/10
+			yMath = math.abs(self.y - sD.targ.y)/10
+		else
+			xMath = math.abs(self.x - sD.targ.x)/100
+			yMath = math.abs(self.y - sD.targ.y)/100
+		end]]
+		xMath = math.abs(self.x - sD.targ.x)/20
+		yMath = math.abs(self.y - sD.targ.y)/20
+		self.x = math.approach(self.x, sD.targ.x, xMath)
+		self.y = math.approach(self.y, sD.targ.y, yMath)
+	else
+		self.x = math.approach(self.x, sD.dirX, 5)
+		self.y = math.approach(self.y, sD.dirY, 5)
+	end
+	if sD.cCurrent <= 5 then
+		sD.targ:getData().sorrowBuffTimer = sD.targ:getData().sorrowBuffTimer + 180
+		sD.targ:applyBuff(sorrowBuff, sD.targ:getData().sorrowBuffTimer)
+		self:destroy()
+--		print("absorbed")
+	end
+end)
+
+sorrowBoon:addCallback("draw", function(self)
+	local sD = self:getData()
+	graphics.alpha(0.3)
+	graphics.color(sD.type)
+	graphics.circle(self.x, self.y, 6, false)
+	graphics.alpha(1)
+	graphics.circle(self.x, self.y, 3, true)
+	local colorCalc = Color.mix(sD.type, Color.WHITE, (sD.cCurrent/sD.distance))
+	if sD.cCurrent <= sD.distance and sD.life >= 30 then
+		sBoonPart:burst("above", self.x, self.y, 1, colorCalc)
+	end
+end)
+
+local enemies = ParentObject.find("enemies")
+registercallback("onNPCDeath", function(npc)
+	local npcX = npc.x
+	local npcY = npc.y
+	for _, i in ipairs(enemies:findAll()) do
+		if i:get("elite_type") == ID or i:get("elite_type") == bID then
+			local xVar = (math.sign(npcX - i.x) * (npcX - i.x))
+			local yVar = (math.sign(npcY - i.y) * (npcY - i.y))
+			local c2 = (xVar * xVar) + (yVar * yVar)
+			local c = c2 ^ 0.5
+			if c <= 100 then
+				local myBoon = sorrowBoon:create(npcX, npcY)
+				local bD = myBoon:getData()
+				bD.targ = i
+				if i:get("elite_type") == ID then
+					bD.type = elite.color
+				else
+					bD.type = EliteType.find("blessed").color
+				end
+				bD.dirX = npcX + math.random(-25, 25)
+				bD.dirY = npcY + math.random(-25, 25)
+				bD.distance = c
+				bD.cCurrent = 0
+			end
+		end
+	end
+end, -1000)

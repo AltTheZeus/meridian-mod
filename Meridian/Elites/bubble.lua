@@ -41,6 +41,7 @@ bubbleObj.sprite = Sprite.load("Elites/bubble", 4, 7, 7)
 local bubblePop = Sprite.load("Elites/bubblePop", 4, 17, 21)
 local goldBub = Sprite.load("Elites/bubbleBlessed", 4, 7, 7)
 local goldBubPop = Sprite.load("Elites/bubbleBlessedPop", 4, 17, 21)
+local bubbleWarn = Sprite.load("Elites/bubbleWarning", 4, 7, 7)
 
 local spawn = Sound.find("Use", "vanilla")
 local pop = Sound.find("JellyHit", "vanilla")
@@ -67,6 +68,22 @@ bubbleObj:addCallback("step", function(self)
 			end
 			self:destroy()
 			pop:play()
+	elseif sD.life >= sD.lifeLim * 0.95 then
+		if sD.swag == "normal" then
+			self.sprite = bubbleObj.sprite
+		else
+			self.sprite = goldBub
+		end
+	elseif sD.life >= sD.lifeLim * 0.9 then
+		self.sprite = bubbleWarn
+	elseif sD.life >= sD.lifeLim * 0.85 then
+		if sD.swag == "normal" then
+			self.sprite = bubbleObj.sprite
+		else
+			self.sprite = goldBub
+		end
+	elseif sD.life >= sD.lifeLim * 0.8 then
+		self.sprite = bubbleWarn
 	end
 	if not sD.owner:isValid() then
 		self:destroy()

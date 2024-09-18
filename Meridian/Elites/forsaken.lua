@@ -32,6 +32,36 @@ function CheckValid(anInstance)
 	return anInstance and anInstance:isValid()
 end
 
+local chainsEf = Object.new("forsakenChains")
+chainsEf.sprite = Sprite.load("Elites/forsakenEf.png", 13, 23, 60)
+local chainsBlessed = Sprite.load("Elites/forsakenEfBlessed.png", 13, 23, 60)
+local clang = Sound.load("Elites/ForsakenChains")
+
+chainsEf:addCallback("create", function(self)
+	local sD = self:getData()
+	sD.life = 0
+	self.spriteSpeed = 0.26
+	sD.life2 = 0
+end)
+
+chainsEf:addCallback("step", function(self)
+	local sD = self:getData()
+	sD.life2 = sD.life2 + 1
+	if sD.life2 >= 60 then
+		self.spriteSpeed = 0.26
+	end
+	if self.subimage >= 10 and self.subimage < 11 then
+		self.spriteSpeed = 0.05
+	end
+	if self.subimage >= 13 then
+		sD.life = 1
+	end
+	if sD.life == 1 and self.subimage <= 2 then
+		self:destroy()
+	end
+end)
+
+
 registercallback("onDamage", function(target, damage, source)
 if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
 	if source == target then return end
@@ -44,17 +74,20 @@ if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_p
 				local lockedSkill = math.random(2,5)
 				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
 				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
+				chainsEf:create(target.x, target.y)
+				clang:play(1, 0.6)
 			end
 		end
-	end
-	if not CheckValid(source) then return end
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
-	if target:isValid() and isa(target, "PlayerInstance") then
-		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) then
-			local lockedSkill = math.random(2,5)
+		if source:get("elite_type") == bID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) then
 			local tD = target:getData()
-			target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
-			tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
+			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
+				local lockedSkill = math.random(2,5)
+				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
+				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
+				local chainsYay = chainsEf:create(target.x, target.y)
+				chainsYay.sprite = chainsBlessed
+				clang:play(1, 0.6)
+			end
 		end
 	end
 end
