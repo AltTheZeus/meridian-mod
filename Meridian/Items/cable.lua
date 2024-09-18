@@ -3,10 +3,22 @@ local item = Item("Jumpstart Cable")
 item.pickupText = "Once per stage, purchase a drone for free." 
 
 item.sprite = Sprite.load("Items/cable.png", 1, 13, 13)
+item:setTier("uncommon")
 
 registercallback("onGameStart", function()
 	local dD = misc.director:getData()
 	dD.freedrones = 0
+	dD.pickupSilencer = 0
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	if dD.pickupSilencer > 0
+		then dD.pickupSilencer = dD.pickupSilencer - 1
+	end
+	if dD.pickupSilencer == 1 then
+		Sound.find("Pickup"):stop()
+	end
 end)
 
 local drones = ParentObject.find("droneItems")
@@ -30,6 +42,9 @@ registercallback("onMapObjectActivate", function(self, player)
 	local sD = self:getData()
 	local dD = misc.director:getData()
 	if sD.IMADRONE == "i sure am" and dD.freedrones > 0 then
+		ParticleType.find("Spark"):burst("above", self.x, self.y - 6, 20)
+		Sound.find("BubbleShield"):play(1.2, 1)
+		dD.pickupSilencer = 5
 		misc.setGold(misc.getGold() + self:get("cost"))
 		dD.freedrones = dD.freedrones -1
 		if dD.freedrones <= 0 then
@@ -65,3 +80,45 @@ item:setLog{
     date = "--",
     story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
 }
+
+local ach = Achievement.new("cableitem")
+ach.requirement = 1
+ach.deathReset = true
+ach.description = "Repair 6 re-broken drones in one run."
+ach:assignUnlockable(item)
+
+registercallback("onPlayerInit", function(player)
+	local pD = player:getData()
+	pD.achCable = 0
+end)
+
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.checkedDrones = {}
+end)
+
+local dronesReal = ParentObject.find("drones")
+registercallback("onStep", function(self)
+	local dD = misc.director:getData()
+	for _, d in ipairs(dronesReal:findAll()) do
+		local me = 0
+		for dID, c in pairs(dD.checkedDrones) do
+			if dID == d.id then
+				me = me + 1
+			end
+		end
+		if me == 0 then
+			if d:get("value") > 40 then
+				local player = Object.findInstance(d:get("master"))
+				if player:getObject() == Object.find("p") then
+					local pD = player:getData()
+					pD.achCable = pD.achCable + 1
+					if pD.achCable == 6 then
+						ach:increment(1)
+					end
+				end
+			end
+		end
+		dD.checkedDrones[d.id] = "checked"
+	end
+end)

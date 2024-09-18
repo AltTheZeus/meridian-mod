@@ -4,6 +4,7 @@ local item = Item("Chrome Finish")
 item.pickupText = "You and your drones gain a regenerating shield." 
 
 item.sprite = Sprite.load("Items/chrome.png", 1, 15,  15)
+item:setTier("uncommon")
 
 local drones = ParentObject.find("drones")
 item:addCallback("pickup", function(player)

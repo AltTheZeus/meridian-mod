@@ -4,6 +4,7 @@ item.pickupText = "Increase regen while equipment is off cooldown."
 
 item.sprite = Sprite.load("Items/battery.png", 1, 10, 11)
 itemEf = Sprite.load("Items/batteryEf.png", 1, 0, 0)
+item:setTier("common")
 
 registercallback("onPlayerInit", function(player)
 	local sD = player:getData()
@@ -15,13 +16,13 @@ end)
 registercallback("onPlayerStep", function(self)
 	local sD = self:getData()
 	if self:countItem(item) >= 1 and self.useItem ~= nil and self:getAlarm(0) == -1 and sD.batteryTracker == "false" then
-		print("boosting")
+--		print("boosting")
 		sD.batteryAddition = 0.005 * self:countItem(item)
 		self:set("hp_regen", self:get("hp_regen") + sD.batteryAddition)
 		sD.batteryTracker = "true"
 	end
 	if self:countItem(item) >= 1 and self.useItem ~= nil and self:getAlarm(0) ~= -1 and sD.batteryTracker == "true" then
-		print("unboosting")
+--		print("unboosting")
 		self:set("hp_regen", self:get("hp_regen") - sD.batteryAddition)
 		sD.batteryAddition = 0
 		sD.batteryTracker = "false"
@@ -75,7 +76,7 @@ end)
 
 registercallback("onUseItemUse", function(player, item2)
 	local itemCheck = 0
-	print(achBatteryTracker)
+--	print(achBatteryTracker)
 	for i, id in pairs(achBatteryTracker) do
 		if id == player.id and i == item2 then
 			itemCheck = itemCheck + 1

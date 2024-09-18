@@ -5,6 +5,7 @@ item.pickupText = "Chance to ground enemies."
 item.sprite = Sprite.load("Items/iron.png", 1, 15, 15)
 local itemEf = Sprite.load("Items/ironEf.png", 1, 0, 0)
 local buffSpr = Sprite.load("Items/ironBuff.png", 1, 0, 0)
+item:setTier("uncommon")
 
 local shackled = Buff.new("ball and chain")
 shackled.sprite = buffSpr
@@ -80,3 +81,18 @@ item:setLog{
     date = "--",
     story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
 }
+
+local ach = Achievement.new("ironitem")
+ach.requirement = 1
+ach.deathReset = true
+ach.description = "Overwhelm a Lacertian, and kill it while it's stunned."
+ach:assignUnlockable(item)
+
+registercallback("onNPCDeath", function(npc)
+	if npc:getObject() == Object.find("Lacertian") then
+		local lA = npc:getAccessor()
+		if lA.state == "stun" then
+			ach:increment(1)
+		end
+	end
+end)

@@ -58,6 +58,7 @@ registercallback("onDamage", function(target, damage, source)
 				bD.locY = target.y + math.random(-50, 50)
 				bubbleAmount = bubbleAmount - 1
 				baby.sprite = goldBub
+				bD.swag = "awesome"
 			until bubbleAmount <= 0
 			spawn:play()
 		end
@@ -98,14 +99,49 @@ registercallback("onPlayerStep", function(player)
 end)
 
 --SORROWFUL
+local shieldEf = Object.find("sorrowShield")
+local shieldBlessed = Sprite.find("sorrowEfBlessed")
 registercallback("preHit", function(damager, hit)
 	if hit:isValid() and hit:getObject() == playa and hit.useItem == item then
 		if damager:get("damage") > math.round(hit:get("maxhp") * 0.4) then
 			damager:set("damage", math.round(hit:get("maxhp") * 0.4))
 			damager:set("damage_fake", math.round(hit:get("maxhp") * 0.4))
+			Sound.find("Crit"):play(0.4, 1.2)
+			local shield = Object.find("EfOutline"):create(hit.x, hit.y)
+			shield:set("parent", hit.id)
+			shield.blendColor = Color.fromRGB(255, 237, 187)
+			local bShield = shieldEf:create(hit.x, hit.y - 20)
+			bShield.sprite = shieldBlessed
 		end
 	end
 end)
+
+local sorrowBoon = Object.find("sorrowBoon")
+local everyoneever = ParentObject.find("actors")
+registercallback("onNPCDeath", function(npc)
+	local npcX = npc.x
+	local npcY = npc.y
+	if npc:get("team") == "player" then
+		for _, i in ipairs(misc.players) do
+			if i.useItem == item then
+				local xVar = (math.sign(npcX - i.x) * (npcX - i.x))
+				local yVar = (math.sign(npcY - i.y) * (npcY - i.y))
+				local c2 = (xVar * xVar) + (yVar * yVar)
+				local c = c2 ^ 0.5
+				if c <= 100 then
+					local myBoon = sorrowBoon:create(npcX, npcY)
+					local bD = myBoon:getData()
+					bD.targ = i
+					bD.type = EliteType.find("blessed").color
+					bD.dirX = npcX + math.random(-25, 25)
+					bD.dirY = npcY + math.random(-25, 25)
+					bD.distance = c
+					bD.cCurrent = 0
+				end
+			end
+		end
+	end
+end, -1000)
 
 --MOLDING
 registercallback("onStageEntry", function()
