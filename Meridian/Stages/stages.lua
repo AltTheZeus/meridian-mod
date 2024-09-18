@@ -341,3 +341,13 @@ callback.register("onStageEntry", function()
         end
     end
 end)
+
+callback.register("globalRoomStart", function(room)
+	if room == Room.find("Start") then
+		enteredStage = false
+	end
+end)
+
+callback.register("onPlayerDeath", function()
+	enteredStage = false
+end)
