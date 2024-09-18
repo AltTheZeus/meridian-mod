@@ -12,9 +12,10 @@ local sprites = {
 }
 
 local sounds = {
-    attack = Sound.find("CrabDeath"),
-    spawn = Sound.find("GuardSpawn"),
-    death = Sound.find("GuardDeath")
+    attack = Sound.load( path.."shootCon1"),
+    spawn = Sound.load( path.."spawnCon1"),
+    hit = Sound.load( path.."hitCon1"),
+    death = Sound.load( path.."deathCon1")
 }
 
 local con1 = Object.base("EnemyClassic", "Beta Construct1")
@@ -39,7 +40,7 @@ con1:addCallback("create", function(actor)
         death = sprites.death,
 	palette = sprites.palette
     }
-    actorAc.sound_hit = Sound.find("MushHit","vanilla").id
+    actorAc.sound_hit = sounds.hit.id
     actorAc.sound_death = sounds.death.id
     actor.mask = sprites.mask
     actorAc.health_tier_threshold = 3
@@ -57,7 +58,7 @@ Monster.setSkill(con1, 1, 30, 1.3 * 60, function(actor)
 end)
 Monster.skillCallback(con1, 1, function(actor, relevantFrame)
 	if relevantFrame == 6 then
-		sounds.attack:play(1 + 1)
+		sounds.attack:play(1, 1)
 		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
 	end
 end)
