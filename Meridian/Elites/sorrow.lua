@@ -16,7 +16,13 @@ end
 registercallback("postLoad", function()
 for _, m in ipairs(modloader.getMods()) do
 	for _, i in ipairs(MonsterCard.findAll(m)) do
-		i.eliteTypes:add(elite)
+		if m == "Starstorm" then
+			if i ~= MonsterCard.find("Squall Elver") then
+				i.eliteTypes:add(elite)
+			end
+		else
+			i.eliteTypes:add(elite)
+		end
 	end
 end
 end)
@@ -93,13 +99,37 @@ registercallback("preHit", function(damager, hit)
 					bShield.sprite = shieldBlessed
 				end
 			end
+			damager:set("damage", damager:get("damage") * (100 / (100 + hit:getData().sorrowArmor)))
+			damager:set("damage_fake", damager:get("damage_fake") * (100 / (100 + hit:getData().sorrowArmor)))
+			hit:getData().sorrowArmor = hit:getData().sorrowArmor + 5
 		end
 	end
 end)
 
-registercallback("onActorInit", function(self)
+registercallback("onStep", function()
+	for _, i in ipairs(enemies:findAll()) do
+	if i:get("elite_type") == ID or i:get("elite_type") == bID then
+		local sD = i:getData()
+		if sD.sorrowArmorTimer < 20 then
+			sD.sorrowArmorTimer = sD.sorrowArmorTimer + 1
+		elseif sD.sorrowArmorTimer >= 20 then
+			sD.sorrowArmorTimer = 0
+			if sD.sorrowArmor > 0 then
+				sD.sorrowArmor = sD.sorrowArmor - 1
+			end
+		end
+		print(sD.sorrowArmor)
+	end
+	end
+end)
+
+registercallback("onEliteInit", function(self)
 	local sD = self:getData()
 	sD.sorrowBuffTimer = 0
+	if self:get("elite_type") == ID or self:get("elite_type") == bID then
+		sD.sorrowArmor = 0
+		sD.sorrowArmorTimer = 0
+	end
 end)
 
 local sorrowBuff = Buff.new("sorrowBuff")
@@ -141,7 +171,7 @@ end)
 
 sorrowBoon:addCallback("step", function(self)
 	local sD = self:getData()
-	if not sD.targ or sD.targ == nil or not sD.targ:isValid() then return end
+	if not sD.targ or sD.targ == nil or not sD.targ:isValid() then self:destroy() return end
 	local xVar = (math.sign(self.x - sD.targ.x) * (self.x - sD.targ.x))
 	local yVar = (math.sign(self.y - sD.targ.y) * (self.y - sD.targ.y))
 	local c2 = (xVar * xVar) + (yVar * yVar)

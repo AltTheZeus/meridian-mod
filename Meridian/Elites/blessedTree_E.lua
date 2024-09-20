@@ -194,9 +194,24 @@ end)
 
 local bID = EliteType.find("blessed").ID
 
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.bTrees = {}
+end)
+
 registercallback("onNPCDeath", function(npc)
+	local dD = misc.director:getData()
 	local nD = npc:getData()
 	if npc:get("elite_type") == bID then
-		treeSpawnerE:create(npc.x, npc.y - 3)
+		dD.bTrees[npc.x] = npc.y - 3
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+--	print(dD.bTrees)
+	for i, n in pairs(dD.bTrees) do
+		treeSpawnerE:create(i, n)
+		dD.bTrees[i] = nil
 	end
 end)

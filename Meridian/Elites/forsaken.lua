@@ -14,7 +14,13 @@ end
 registercallback("postLoad", function()
 for _, m in ipairs(modloader.getMods()) do
 	for _, i in ipairs(MonsterCard.findAll(m)) do
-		i.eliteTypes:add(elite)
+		if m == "Starstorm" then
+			if i ~= MonsterCard.find("Squall Elver") then
+				i.eliteTypes:add(elite)
+			end
+		else
+			i.eliteTypes:add(elite)
+		end
 	end
 end
 end)
@@ -36,6 +42,7 @@ local chainsEf = Object.new("forsakenChains")
 chainsEf.sprite = Sprite.load("Elites/forsakenEf.png", 13, 23, 60)
 local chainsBlessed = Sprite.load("Elites/forsakenEfBlessed.png", 13, 23, 60)
 local clang = Sound.load("Elites/ForsakenChains")
+chainsEf.depth = -12
 
 chainsEf:addCallback("create", function(self)
 	local sD = self:getData()
@@ -189,7 +196,7 @@ registercallback("onStep", function()
 			radiusOuter = 75
 		end
 		for _, a in ipairs(everyone:findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
-			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
+			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.y - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
 				if i:getAccessor().team == "enemy" then
 					if a:getAccessor().team == "player" then
 						a:applyBuff(slimed, 2)
@@ -214,7 +221,7 @@ registercallback("onStep", function()
 			radiusOuter = 75
 		end
 		for _, a in ipairs(everyone:findAllEllipse(i.x + radiusOuter, i.y + radiusOuter, i.x - radiusOuter, i.y - radiusOuter)) do
-			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.x - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
+			if ((((math.sign(a.x - i.x) * (a.x - i.x)) * (math.sign(a.x - i.x) * (a.x - i.x))) + ((math.sign(a.y - i.y) * (a.y - i.y)) * (math.sign(a.y - i.y) * (a.y - i.y)))) ^ 0.5) >= radiusInner then
 				if i:getAccessor().team == "enemy" then
 					if a:getAccessor().team == "player" then
 						a:applyBuff(slimed, 2)
