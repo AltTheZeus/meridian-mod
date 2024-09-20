@@ -74,12 +74,12 @@ registercallback("onDraw", function()
 end)
 
 item:setLog{
-    group = "uncommon",
+    group = "uncommon_locked",
     description = "5% chance on hit to stop enemies from jumping or flying.",
     priority = "&g&Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "Great Memorial,\nCanada 2,\nPluto",
+    date = "12/9/2056",
+    story = "The sample you requested has successfully been analyzed and confirmed as a genuine artifact from the period of the Plutonian convict uprisings of 2000. You have this item leased for 12 months, after which point we will send someone to reclaim it, or re-negotiate further possession.\n\nThank you."
 }
 
 local ach = Achievement.new("ironitem")

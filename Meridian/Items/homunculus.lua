@@ -141,12 +141,12 @@ registercallback("onStep", function()
 end)
 
 item:setLog{
-    group = "rare",
+    group = "rare_locked",
     description = "Spawn 4 &r&chunks of flesh&!& around the map. Collecting all 4 will summon a &r&Flesh Amalgamate&!& near the Teleporter. While the Telporter is active, killing an enemy near the &r&Flesh Amalgamate&!& will create an explosion for &y&800% damage&!&.",
-    priority = "&r&High Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    priority = "&r&High Priority/Biological?&!&",
+    destination = "Caroline Williams,\nRare/Extinct\nStudy Center,\nVenus",
+    date = "8/4/2056",
+    story = "Hey Car, me again. I know it's not your usual thing and all, but this little freak of nature was too cute! It was all whining and begging at me in the alleyway- Stop asking me where I find them -and I just *need* you to look at it! At least let me know how long it's gonna last... I wanna keep it!"
 }
 
 local ach = Achievement.new("homunculusitem")

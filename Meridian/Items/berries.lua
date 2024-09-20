@@ -132,8 +132,8 @@ end)
 item:setLog{
     group = "uncommon",
     description = "Bosses have a 5% &dg&(+2.5% per stack)&!& chance to drop a &r&unique item&!&.",
-    priority = "&g&Field Found&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    priority = "&g&Field-Found&!&",
+    destination = "Bio-Analysis Lab,\nCaledew,\n25 and 4th Quadrant",
+    date = "6/5/2056",
+    story = "My time on this planet has taught me many things. Among them, resourcefulness. Finding food is a constant struggle, and I'm left desperate enough to consume alien plants such as this. To my delight, they don't seem to have had any ill-effects yet, and they only taste bad if I think about it too hard.\n\n...Which is hard to do on an empty stomach."
 }

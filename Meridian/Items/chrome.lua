@@ -113,7 +113,7 @@ item:setLog{
     group = "uncommon",
     description = "Gain &g&10 shield&!&. Your drones gain &g&20 shield&!& &dg&(+5 per stack)&!&. You and your drones gain &g&10 armor&!& while you have shield.",
     priority = "&g&Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "Cutting Edge Robotics\n& Technologies,\nAzure Fields,\nVenus",
+    date = "2/4/2056",
+    story = "finally finished cooking this one up, way better than the previous batch i sent. this stuff has the same durability-increasing compounds as the last one, but wait until you see the pristine shine this stuff gives off when applied. get a nice even coat spread onto the droid and leave it in the air for a while. dont stick close to it, the fumes it gives off while setting arent exactly great to breathe in. then voila, your polished robot is ready for service."
 }

@@ -53,12 +53,12 @@ registercallback("onPlayerHUDDraw", function(player, x, y)
 end)
 
 item:setLog{
-    group = "common",
+    group = "common_locked",
     description = "While your equipment is off cooldown, increase &g&health regen&!& by &g&0.3&!& &dg&(+0.3 per stack)&!& per second.",
     priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "Stepped Terraces,\n3rd Colony,\nMars",
+    date = "8/12/2056",
+    story = "I know it's a bit antiquated by this point, but my pops gave me this battery for my first 'bot, so I'll do the same for you. You might have it running slower than others, but boy howdy does it last. This thing hasn't been refreshed since I first got it way back when, and it's still kicking! I know you'll get some better use out of it than I do."
 }
 
 local ach = Achievement.new("batteryitem")

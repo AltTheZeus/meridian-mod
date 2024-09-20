@@ -73,12 +73,12 @@ item:addCallback("pickup", function(player)
 end)
 
 item:setLog{
-    group = "uncommon",
+    group = "uncommon_locked",
     description = "Purchase one drone &g&for free&!& per stage.",
     priority = "&g&Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "18a Grenthik Highrise,\nNeo-Neo York,\nYun Star A",
+    date = "5/20/2056",
+    story = "Look, we both know what they're for. A car breaks down? I got you. Fridge breaks down? Unorthodox, but I got you. A top-of-the-line multitool assistance droid breaks down? Well, clearly I have you. But this one's not on the record, got it?"
 }
 
 local ach = Achievement.new("cableitem")

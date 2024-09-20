@@ -46,12 +46,12 @@ registercallback("onNPCDeathProc", function(npc, player)
 end)
 
 item:setLog{
-    group = "uncommon",
+    group = "uncommon_locked",
     description = "Every 5 seconds, enemies become worth &y&1&!& &dg&(+1 per stack)&!& more gold, scaling with time.",
-    priority = "&g&Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    priority = "&g&High Priority&!&",
+    destination = "12 Cherish Place,\nThe Landing Strip,\nJupiter",
+    date = "12/28/2056",
+    story = "DO NOT TAKE THEM OUT OF THE PACKAGING! Give this box STRAIGHT to the graders. These cards are worth a fortune, look at them! First edition, mint condition, half of them damn near may as well be sealed! These are collector's items, prime material. I'm gonna be so rich when these get back to me!"
 }
 
 local ach = Achievement.new("cardsitem")

@@ -41,12 +41,12 @@ registercallback("onItemPickup", function(itemHey, player)
 end)
 
 item:setLog{
-    group = "common",
+    group = "common_locked",
     description = "When picking up an item, decrease the cost of all interactables on the stage by &y&2%&!& &dg&(+2% per stack)&!&.",
     priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "Lot 2,\nEx-Shipping District,\nStorage Planet",
+    date = "6/25/2056",
+    story = "Here, a bit of a meta-delivery for you folks back at the gig. This is the very same paddle Rando Jarkins used in the infamous episode which almost got us canned. Plant this in one of the lockers, it's sure to get people talking about us again!"
 }
 
 local ach = Achievement.new("paddleitem")
