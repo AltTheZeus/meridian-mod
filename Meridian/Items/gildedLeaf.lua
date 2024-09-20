@@ -89,7 +89,7 @@ registercallback("onPlayerStep", function(player)
 		local radiusInner = 50
 		local radiusOuter = 75
 		for _, a in ipairs(everyone:findAllEllipse(player.x + radiusOuter, player.y + radiusOuter, player.x - radiusOuter, player.y - radiusOuter)) do
-			if ((((math.sign(a.x - player.x) * (a.x - player.x)) * (math.sign(a.x - player.x) * (a.x - player.x))) + ((math.sign(a.y - player.y) * (a.y - player.y)) * (math.sign(a.x - player.y) * (a.y - player.y)))) ^ 0.5) >= radiusInner then
+			if ((((math.sign(a.x - player.x) * (a.x - player.x)) * (math.sign(a.x - player.x) * (a.x - player.x))) + ((math.sign(a.y - player.y) * (a.y - player.y)) * (math.sign(a.y - player.y) * (a.y - player.y)))) ^ 0.5) >= radiusInner then
 				if a:getAccessor().team == "enemy" then
 					a:applyBuff(slimed, 2)
 				end
