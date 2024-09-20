@@ -5,10 +5,10 @@ local shrine = Object.base("MapObject", eliteShrine)
 local shrineInt = Interactable.new(shrine, "Shrine of Bestowal")
 shrineInt.spawnCost = 100
 shrine.depth = -9
-local shrinebabies = {}
 
 registercallback("onStageEntry", function()
-	shrinebabies = {}
+	local dD = misc.director:getData()
+	dD.shrineBabies = {}
 end)
 
 shrine.sprite = Sprite.load(path .. "eliteShrine", 7, 12, 53)
@@ -70,6 +70,7 @@ arrowBuff.sprite = Sprite.load(path .. "shrineIndicator", 1, 8, 7)
 
 shrine:addCallback("step", function(self)
 	local sD = self:getData()
+	local dD = misc.director:getData()
 	local nonElites = enemies:findMatching("prefix_type", 0)
 	local diffBonus = math.round(misc.director:get("stages_passed") * 0.4)
 	if self.subimage >= 2 and sD.opened == 0 then
@@ -83,7 +84,7 @@ shrine:addCallback("step", function(self)
 				local spriteMaths = i.sprite.height - i.sprite.yorigin
 				shrinesplosion:create(i.x, i.y + spriteMaths)
 				elited = elited + 1
-				shrinebabies[i.id] = i
+				dD.shrineBabies[i.id] = i
 			end
 		end
 		sD.opened = 1
@@ -106,12 +107,12 @@ shrine:addCallback("step", function(self)
 						sD.errorCD = 20
 					end
 				else
-						local pickedShrine = shrine:findNearest(player.x, player.y)
+					local pickedShrine = shrine:findNearest(player.x, player.y)
 					local sD = pickedShrine:getData()
 					if sD.opened == 0 then
 						pickedShrine.spriteSpeed = 0.35
 						sD.activator = player.id
-						end
+					end
 				end
 			end
 		end
@@ -126,12 +127,13 @@ local white = ItemPool.find("common")
 
 registercallback("onNPCDeath", function(npc)
 	local nD = npc:getData()
+	local dD = misc.director:getData()
 	if nD.shrineborn then --accidentally wrote shrimpborne while writing this. they should have done that for skyrim instead
 		local sD = Object.findInstance(nD.shrineborn):getData()
 		local sA = Object.findInstance(nD.shrineborn):getAccessor()
 		local p = Object.findInstance(sD.activator)
 		sD.childrenkilled = sD.childrenkilled + 1
-		shrinebabies[npc.id] = nil
+		dD.shrineBabies[npc.id] = nil
 		if sD.childrenkilled >= 3 then
 			local chestMath = math.random(0,100)
 			if Artifact.find("Command").active == true then
@@ -161,16 +163,20 @@ function distance(x1, y1, x2, y2)
 end
 
 registercallback("onPlayerDrawAbove", function(player)
-	if #shrinebabies > 0 then
+	local dD = misc.director:getData()
+	if dD.shrineBabies ~= nil then
 		local targetDist
 		local target
-		for a, i in pairs(shrinebabies) do
+		for a, i in pairs(dD.shrineBabies) do
 			local newDist = distance(i.x, i.y, player.x, player.y)
 			if not targetDist or newDist < targetDist then
 				targetDist = newDist
 				target = i
 			end
 		end
+		print(target)
+		print(dD.shrineBabies)
+		if target ~= nil then
 		local angle = math.atan2(target.y - player.y, target.x - player.x)
 		local xPosition = math.cos(angle) * 20
 		local yPosition = math.sin(angle) * 20
@@ -180,5 +186,6 @@ registercallback("onPlayerDrawAbove", function(player)
 			y = player.y + yPosition,
 			angle = -math.deg(angle)
 		}
+		end
 	end
 end)
