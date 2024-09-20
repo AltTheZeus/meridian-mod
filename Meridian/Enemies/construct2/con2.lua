@@ -190,6 +190,21 @@ end)
 	graphics.line(self.x, self.y - 4, self.x + (210 * self.xscale), self.y - 4, 1)
 end)]]
 
+registercallback("onStep", function()
+	for _, i in ipairs(Object.find("Spawn"):findAll()) do
+		if i:get("child") == con2.id and not i:getData().twinned then
+			local twin = Object.find("Spawn"):create(i.x, i.y)
+			twin:getData().twinned = true
+			twin:set("child", Object.find("Beta Construct1").id)
+			twin:set("prefix_type", i:get("prefix_type"))
+			twin:set("blight_type", i:get("blight_type"))
+			twin:set("elite_type", i:get("elite_type"))
+			twin.sprite = MonsterCard.find("con1").sprite
+			i:getData().twinned = true
+		end
+	end
+end)
+
 --------------------------------------
 
 local card = MonsterCard.new("con2", con2)
@@ -198,7 +213,7 @@ card.sprite = sprites.spawn
 card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
-card.cost = 8
+card.cost = 12
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
     card.eliteTypes:add(elite)
 end
