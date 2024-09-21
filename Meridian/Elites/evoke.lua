@@ -30,8 +30,8 @@ eliteBabyBlessed.palette = sprPalBabyBlessed
 for _, i in ipairs(MonsterCard.findAll("vanilla")) do
 	if i.isBoss == false and i.type == "classic" then
 		i.eliteTypes:add(elite)
-		i.eliteTypes:add(eliteBaby)
-		i.eliteTypes:add(eliteBabyBlessed)
+--		i.eliteTypes:add(eliteBaby)
+--		i.eliteTypes:add(eliteBabyBlessed)
 	end
 end
 
@@ -40,8 +40,8 @@ for _, m in ipairs(modloader.getMods()) do
 	for _, i in ipairs(MonsterCard.findAll(m)) do
 		if i.isBoss == false and i.type == "classic" then
 			i.eliteTypes:add(elite)
-			i.eliteTypes:add(eliteBaby)
-			i.eliteTypes:add(eliteBabyBlessed)
+--			i.eliteTypes:add(eliteBaby)
+--			i.eliteTypes:add(eliteBabyBlessed)
 		end
 	end
 end
@@ -133,11 +133,13 @@ if aD.card.object.sprite.height < heightLevel then
 --			print("Ceiling at Y"..ceilLevel)
 --			print(heightLevel)
 			aD.points = aD.points - aD.timer
+			aD.card.eliteTypes:add(eliteBaby)
 			local newGuy = aD.card.object:create(i.x, groundLevel - aD.card.object.sprite.height + aD.card.object.sprite.yorigin)
 			local nD = newGuy:getData()
 			nD.evoker = i.id
 			aD.minionCount = aD.minionCount + 1
 			newGuy:makeElite(eliteBaby)
+			aD.card.eliteTypes:remove(eliteBaby)
 				newGuy:set("maxhp", (math.round(((newGuy:get("maxhp") / 2.6) * 0.75))))
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
@@ -206,11 +208,13 @@ if ceilLevel and groundLevel then
 end
 if aD.card.object.sprite.height < heightLevel then
 			aD.points = aD.points - aD.timer
+			aD.card.eliteTypes:add(eliteBabyBlessed)
 			local newGuy = aD.card.object:create(i.x, groundLevel - aD.card.object.sprite.height + aD.card.object.sprite.yorigin)
 			local nD = newGuy:getData()
 			nD.evoker = i.id
 			aD.minionCount = aD.minionCount + 1
 			newGuy:makeElite(eliteBabyBlessed)
+			aD.card.eliteTypes:remove(eliteBabyBlessed)
 				newGuy:set("maxhp", (math.round(((newGuy:get("maxhp") / 2.6) * 0.75))))
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
