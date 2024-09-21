@@ -37,6 +37,10 @@
 		{
             "name" : "Disable interactables",
             "flag" : "mn_disable_interactables"
+        },
+		{
+            "name" : "Dewdrops TESTING",
+            "flag" : "enable_mergers"
         }
 	]
 }
