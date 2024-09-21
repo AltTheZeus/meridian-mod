@@ -24,7 +24,7 @@ paddleEf:addCallback("step", function(self)
 	end
 end)
 
-local things = ParentObject.find("mapObjects")
+local things = ParentObject.find("chests")
 registercallback("onItemPickup", function(itemHey, player)
 	if player:countItem(item) > 0 then
 		for _, i in ipairs(things:findAll()) do
@@ -42,7 +42,7 @@ end)
 
 item:setLog{
     group = "common_locked",
-    description = "When picking up an item, decrease the cost of all interactables on the stage by &y&2%&!& &dg&(+2% per stack)&!&.",
+    description = "When picking up an item, decrease the cost of all chests on the stage by &y&2%&!& &dg&(+2% per stack)&!&.",
     priority = "&w&Standard&!&",
     destination = "Lot 2,\nEx-Shipping District,\nStorage Planet",
     date = "6/25/2056",
