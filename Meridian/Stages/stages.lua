@@ -164,18 +164,55 @@ end)
 
 callback.register("globalRoomStart", function(room)
 	if room == Room.find("Start") and not modloader.checkFlag("mn_disable_enemies") then
-		SM.enemies:remove(m2)
-		SM.enemies:remove(m3)
-		ShallowRotlands.enemies:remove(m3)
-		HC.enemies:remove(m3)
-		ST.enemies:remove(m3)
+		if modloader.checkFlag("enable_mergers") then
+			local m1 = MonsterCard.find("m1", "meridian")
+			local m2 = MonsterCard.find("m2", "meridian")
+			local m3 = MonsterCard.find("m3", "meridian")
 
-		HC.enemies:add(m1)
-		ST.enemies:add(m1)
-		ShallowRotlands.enemies:add(m1)
+			SM.enemies:remove(m2)
+			SM.enemies:remove(m3)
+			ShallowRotlands.enemies:remove(m3)
+			HC.enemies:remove(m3)
+			ST.enemies:remove(m3)
+
+			HC.enemies:add(m1)
+			ST.enemies:add(m1)
+			ShallowRotlands.enemies:add(m1)
+		end
 	end
 end)
 
+callback.register("postLoad", function()
+		if not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers") then
+			local m1 = MonsterCard.find("m1", "meridian")
+			local m2 = MonsterCard.find("m2", "meridian")
+			local m3 = MonsterCard.find("m3", "meridian")
+
+			ST.enemies:add(m1)
+			ST.enemies:add(m2)
+
+			HC.enemies:add(m1)
+			HC.enemies:add(m2)
+
+			ShallowRotlands.enemies:add(m1)
+			ShallowRotlands.enemies:add(m2)
+		end
+end)
+
+callback.register("onStageEntry", function()
+	if StageValue == 5 and not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers")then
+		SM.enemies:add(m2)
+		SM.enemies:add(m3)
+		ShallowRotlands.enemies:add(m3)
+		HC.enemies:add(m3)
+		ST.enemies:add(m3)
+
+		HC.enemies:remove(m1)
+		ST.enemies:remove(m1)
+		ShallowRotlands.enemies:remove(m1)
+		
+	end
+end)
 
 callback.register("postLoad", function()
 
@@ -187,9 +224,6 @@ callback.register("postLoad", function()
 		local giant = MonsterCard.find("giant", "meridian")
 		local BC = MonsterCard.find("Basalt Crab", "meridian")
 		local Lizard = MonsterCard.find("Lacertian", "meridian")
-		local m1 = MonsterCard.find("m1", "meridian")
-		local m2 = MonsterCard.find("m2", "meridian")
-		local m3 = MonsterCard.find("m3", "meridian")
 
 		--Desolate Forest
 		DF.enemies:add(Lizard)
@@ -199,12 +233,9 @@ callback.register("postLoad", function()
 
 		--Sunken Tombs
 		ST.enemies:add(Lizard)
-		ST.enemies:add(m1)
-		ST.enemies:add(m2)
 
 		--Hive Cluster
-		HC.enemies:add(m1)
-		HC.enemies:add(m2)
+
 
 		--Sky Meadow
 		--none <3
@@ -223,8 +254,7 @@ callback.register("postLoad", function()
 		--Shallow Rotlands
 		ShallowRotlands.enemies:add(con1)
 		ShallowRotlands.enemies:add(Lizard)
-		ShallowRotlands.enemies:add(m1)
-		ShallowRotlands.enemies:add(m2)
+
 
 		--Marshland Sanctuary
 		MarshlandSanctuary.enemies:add(giant)
@@ -332,15 +362,6 @@ callback.register("onStageEntry", function()
 		DF.enemies:add(MonsterCard.find("Archaic Wisp"))
 		DL.enemies:add(MonsterCard.find("Archaic Wisp"))
 		SerpentineRainforest.enemies:add(MonsterCard.find("Archaic Wisp"))
-		SM.enemies:add(m2)
-		SM.enemies:add(m3)
-		ShallowRotlands.enemies:add(m3)
-		HC.enemies:add(m3)
-		ST.enemies:add(m3)
-
-		HC.enemies:remove(m1)
-		ST.enemies:remove(m1)
-		ShallowRotlands.enemies:remove(m1)
 		
 	end
 end)
