@@ -118,7 +118,7 @@ registercallback("onStep", function()
 				sD.sorrowArmor = sD.sorrowArmor - 1
 			end
 		end
-		print(sD.sorrowArmor)
+--		print(sD.sorrowArmor)
 	end
 	end
 end)
