@@ -219,7 +219,7 @@ callback.register("postLoad", function()
 	if modloader.checkMod("starstorm") then
 		local brokenpod = Interactable.find("Broken Escape Pod", "starstorm")
 		local activator = Interactable.find("Activator", "starstorm")
-		local stunner = Interactable.find("Stunner Drone", "starstorm")
+		local stunner = Interactable.find("Shocker Drone", "starstorm")
 		local hax = Interactable.find("Hacking Drone", "starstorm")
 		local dupeglitch = Interactable.find("Duplicator Drone", "starstorm")
 		local dronekiller = Interactable.find("Refabricator", "starstorm")
