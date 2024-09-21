@@ -27,6 +27,7 @@ shrine:addCallback("create", function(self)
 	sD.childrenkilled = 0
 	self.spriteSpeed = 0
 	sD.errorCD = 0
+	sD.item = false
 end)
 
 local enemies = ParentObject.find("enemies")
@@ -137,7 +138,7 @@ shrine:addCallback("step", function(self)
 			end
 		end
 	end
-	if sD.childrenkilled >= 3 then
+	if sD.childrenkilled >= 3 and sD.item == false then
 		local p = Object.findInstance(sD.activator)
 		local chestMath = math.random(0,100)
 		if Artifact.find("Command").active == true then
@@ -157,6 +158,7 @@ shrine:addCallback("step", function(self)
 				white:roll():getObject():create(p.x, p.y - 8)
 			end
 		end
+		sD.item = true
 	end	
 end)
 
