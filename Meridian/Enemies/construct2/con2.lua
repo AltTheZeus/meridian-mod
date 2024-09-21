@@ -1,3 +1,20 @@
+local eliteClones = {}
+registercallback("postLoad", function()
+	for _, i in ipairs(EliteType.findAll()) do
+		local i2 = EliteType.new(i:getName() .. "_Clone")
+		i2.displayName = i.displayName
+		i2.color = i.color
+		i2.colorHard = i.colorHard
+		i2.palette = i.palette
+--		print(i.palette)
+--		print(i2.palette)
+		eliteClones[i] = i2
+	end
+	EliteType.refreshPalettes()
+--	print(eliteClones)
+end)
+		
+
 local path = "Enemies/construct2/"
 
 local bulletCheck = Object.new("bCon2Bullet")
@@ -58,8 +75,8 @@ head:addCallback("step", function(self)
 	if not sD.body or not sD.body:isValid() then self:destroy() return end
 	if self:get("prefix_type") ~= sD.body:get("prefix_type") then
 		if sD.body:get("prefix_type") == 1 then
-			actorAc.elite_type = (sD.body:get("elite_type"))
-			actorAc.prefix_type = 1
+			local key = sD.body:get("elite_type")
+			self:makeElite(eliteClones[key])
 		elseif sD.body:get("prefix_type") == 2 then
 --			self:makeBlighted(sD.body:getBlighted())
 			actorAc.prefix_type = 2
