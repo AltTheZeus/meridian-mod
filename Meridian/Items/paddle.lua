@@ -26,14 +26,14 @@ end)
 
 local things = ParentObject.find("chests")
 registercallback("onItemPickup", function(itemHey, player)
-	if player:countItem(item) > 0 then
+	if player:countItem(item) > 0 and itemHey:get("is_use") ~= 1 then
 		for _, i in ipairs(things:findAll()) do
 			if i:get("cost") and i:get("cost") > 0 then
-				print("old: "..i:get("cost"))
+--				print("old: "..i:get("cost"))
 				local costNew = math.round(((i:get("cost") * 0.02) * player:countItem(item)))
 				if costNew < 1 then costNew = 1 end
 				i:set("cost", i:get("cost") - costNew)
-				print("new: "..i:get("cost"))
+--				print("new: "..i:get("cost"))
 			end
 		end
 		paddleEf:create(player.x, player.y)
