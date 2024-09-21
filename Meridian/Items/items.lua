@@ -9,3 +9,19 @@ require("Items/lacertianfang")
 require("Items/paddle")
 require("Items/homunculus")
 require("Items/snowball")
+
+--Starstorm tab menu stuff
+if modloader.checkMod("Starstorm") then
+	TabMenu.setItemInfo(Item.find("Portable Battery"), nil, "While equipment is off cooldown, increase health regeneration by 3.", "+3 health regeneration.")
+	TabMenu.setItemInfo(Item.find("Foraged Spoils"), 39, "5% chance for a boss kill to yield a unique item.", "+2.5% drop chance.")
+	TabMenu.setItemInfo(Item.find("Jumpstart Cable"), nil, "Purchase 1 drone for free per stage.", "+1 free drones.")
+	TabMenu.setItemInfo(Item.find("Collectible Cards"), nil, "Every 5 seconds, increase the value of enemies by $1 (scales with time).", "+$1 every 5 seconds.")
+	TabMenu.setItemInfo(Item.find("Chrome Finish"), nil, "Gain 10 shield. Your drones gain 20 scaling shield. While shield is\nactive, you and your drones gain 10 armor.", "+10 player shield. +5 drone shield.")
+	TabMenu.setItemInfo(Item.find("Tear Gas"), nil, "Deal 10% more damage to stunned enemies.", "+10% damage.")
+	TabMenu.setItemInfo(Item.find("Gilded Leaf"), nil, "Inherit all passive effects of Blessed elites.", nil)
+	TabMenu.setItemInfo(Item.find("Discarded Homunculus"), nil, "Spawn 4 chunks of flesh on every stage. Collecting them spawns a\nflesh amalgamate at the teleporter. While the teleport is active, killing\nan enemy near the flesh amalgamate will cause it to explode for 800% damage.", "Damage stacks multiplicatively.")
+	TabMenu.setItemInfo(Item.find("Worn Iron"), 39, "5% to ground enemies on hit for 3.5 seconds, stopping them from flying, jumping, or dropping down ledges.", "+2.5% chance.")
+	TabMenu.setItemInfo(Item.find("Relentless Fang"), nil, "Reduce skill cooldowns by 3% for every skill currently on cooldown.", "Cooldown reduction stacks multiplicatively.")
+	TabMenu.setItemInfo(Item.find("Bidder's Paddle"), 50, "Picking up an item reduces the cost of all chests on the stage by 2%.", "+2% per stack.")
+	TabMenu.setItemInfo(Item.find("Snowball"), nil, "Multiplicitavely increase damage of all attacks, based on the attack's base damage.", "Multiplicative damage increase stacks multiplicatively.")
+end
