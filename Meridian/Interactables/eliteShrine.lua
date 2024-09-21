@@ -68,6 +68,10 @@ end)
 local arrowBuff = Buff.new("shrineBuff")
 arrowBuff.sprite = Sprite.load(path .. "shrineIndicator", 1, 8, 7)
 
+local red = ItemPool.find("rare")
+local green = ItemPool.find("uncommon")
+local white = ItemPool.find("common")
+
 shrine:addCallback("step", function(self)
 	local sD = self:getData()
 	local dD = misc.director:getData()
@@ -78,9 +82,25 @@ shrine:addCallback("step", function(self)
 		local elited = 0
 		for _, i in ipairs(nonElites) do
 			if elited < (3 + diffBonus) then
+				local card
+				local elites
+				local elite
+				for _, c in ipairs(MonsterCard.findAll()) do
+					if c.object == i:getObject() then
+						elites = c.eliteTypes:toTable()
+						local failsafe = 0
+						repeat
+							elite = table.random(elites)
+							failsafe = failsafe + 1
+						until elite ~= EliteType.find("blessed") or failsafe >= 100
+						if failsafe >= 100 then
+							elite = EliteType.find("blazing")
+						end
+					end
+				end
 				local iD = i:getData()
 				iD.shrineborn = self.id
-				i:makeElite()
+				i:makeElite(elite)
 				local spriteMaths = i.sprite.height - i.sprite.yorigin
 				shrinesplosion:create(i.x, i.y + spriteMaths)
 				elited = elited + 1
@@ -117,11 +137,28 @@ shrine:addCallback("step", function(self)
 			end
 		end
 	end
+	if sD.childrenkilled >= 3 then
+		local p = Object.findInstance(sD.activator)
+		local chestMath = math.random(0,100)
+		if Artifact.find("Command").active == true then
+			if chestMath <= 1 then
+				red:getCrate().create(p.x, p.y)
+			elseif chestMath >= 2 and chestMath <= 30 then
+				green:getCrate():create(p.x, p.y)
+			else
+				white:getCrate():create(p.x, p.y)
+			end
+		else
+			if chestMath <= 1 then
+				red:roll():getObject():create(p.x, p.y - 8)
+			elseif chestMath >= 2 and chestMath <= 30 then
+				green:roll():getObject():create(p.x, p.y - 8)
+			else
+				white:roll():getObject():create(p.x, p.y - 8)
+			end
+		end
+	end	
 end)
-
-local red = ItemPool.find("rare")
-local green = ItemPool.find("uncommon")
-local white = ItemPool.find("common")
 
 --straight up genuinely dont know how the code below works. none of the indexes show up in game <3
 
@@ -131,29 +168,8 @@ registercallback("onNPCDeath", function(npc)
 	if nD.shrineborn then --accidentally wrote shrimpborne while writing this. they should have done that for skyrim instead
 		local sD = Object.findInstance(nD.shrineborn):getData()
 		local sA = Object.findInstance(nD.shrineborn):getAccessor()
-		local p = Object.findInstance(sD.activator)
 		sD.childrenkilled = sD.childrenkilled + 1
 		dD.shrineBabies[npc.id] = nil
-		if sD.childrenkilled >= 3 then
-			local chestMath = math.random(0,100)
-			if Artifact.find("Command").active == true then
-				if chestMath <= 1 then
-					red:getCrate().create(p.x, p.y)
-				elseif chestMath >= 2 and chestMath <= 30 then
-					green:getCrate():create(p.x, p.y)
-				else
-					white:getCrate():create(p.x, p.y)
-				end
-			else
-				if chestMath <= 1 then
-					red:roll():getObject():create(p.x, p.y - 8)
-				elseif chestMath >= 2 and chestMath <= 30 then
-					green:roll():getObject():create(p.x, p.y - 8)
-				else
-					white:roll():getObject():create(p.x, p.y - 8)
-				end
-			end
-		end	
 	end
 end)
 
@@ -174,8 +190,8 @@ registercallback("onPlayerDrawAbove", function(player)
 				target = i
 			end
 		end
-		print(target)
-		print(dD.shrineBabies)
+--		print(target)
+--		print(dD.shrineBabies)
 		if target ~= nil then
 		local angle = math.atan2(target.y - player.y, target.x - player.x)
 		local xPosition = math.cos(angle) * 20
