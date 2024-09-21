@@ -128,12 +128,12 @@ registercallback("preHit", function(damager, hit)
 end)
 
 item:setLog{
-    group = "rare",
+    group = "rare_locked",
     description = "Increase the damage of attacks based on the damage of the attack. The higher the damage, the more extra damage is added.",
-    priority = "&r&High Priority&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    priority = "&r&High Priority/Fragile&!&",
+    destination = "7 Backways Crescent,\nWintersphere,\nPluto",
+    date = "2/7/2056",
+    story = "haha! think fast!"
 }
 
 local ach = Achievement.new("snowballitem")
