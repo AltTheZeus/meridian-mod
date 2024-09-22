@@ -1,13 +1,13 @@
 local path = "Enemies/construct1/"
 local sprites = {
-    idle = Sprite.load("con1Idle", path.."con1Idle", 1, 6, 13),
-    walk = Sprite.load("con1Walk", path.."con1Walk", 12, 8, 14),
-    shoot = Sprite.load("con1Shoot", path.."con1Shoot", 11, 9, 14),
-    spawn = Sprite.load("con1Spawn", path.."con1Spawn", 6, 12, 17),
-    death = Sprite.load("con1Death", path.."con1Death", 12, 13, 19),
-    mask = Sprite.load("con1Mask", path.."con1Mask", 1, 6, 13),
+    idle = Sprite.load("con1Idle", path.."con1Idle", 1, 6, 7),
+    walk = Sprite.load("con1Walk", path.."con1Walk", 12, 8, 8),
+    shoot = Sprite.load("con1Shoot", path.."con1Shoot", 11, 9, 8),
+    spawn = Sprite.load("con1Spawn", path.."con1Spawn", 6, 12, 11),
+    death = Sprite.load("con1Death", path.."con1Death", 12, 13, 13),
+    mask = Sprite.load("con1Mask", path.."con1Mask", 1, 6, 7),
     palette = Sprite.load("con1Pal", path.."con1Pal", 1, 0, 0),
-    jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 14),
+    jump = Sprite.load("con1Jump", path.."con1Jump", 1, 6, 8),
     portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
 }
 
@@ -59,7 +59,7 @@ end)
 Monster.skillCallback(con1, 1, function(actor, relevantFrame)
 	if relevantFrame == 6 then
 		sounds.attack:play(1, 1)
-		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
+		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y + 2, 15/19, 8/4, 1, nil)
 	end
 end)
 
