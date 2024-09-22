@@ -1,4 +1,4 @@
-local eliteClones = {}
+--[[local eliteClones = {}
 registercallback("postLoad", function()
 	for _, i in ipairs(EliteType.findAll()) do
 		local i2 = EliteType.new(i:getName() .. "_Clone")
@@ -12,22 +12,22 @@ registercallback("postLoad", function()
 	end
 	EliteType.refreshPalettes()
 --	print(eliteClones)
-end)
+end)]]
 		
 
 local path = "Enemies/construct2/"
 
 local bulletCheck = Object.new("bCon2Bullet")
-bulletCheck.sprite = Sprite.load("bConBullet", path.."bConBullet", 1, 0, 9)
+bulletCheck.sprite = Sprite.load("bConBullet", path.."bConBullet", 1, 0, 7)
 
 local headSprites = {
-    idle = Sprite.load("con2Idle_B", path.."con2Idle_B", 1, 8, 6),
-    walk = Sprite.load("con2Walk_B", path.."con2Walk_B", 6, 8, 13),
-    shoot = Sprite.load("con2Shoot_B", path.."con2Shoot_B", 12, 8, 11),
+    idle = Sprite.load("con2Idle_B", path.."con2Idle_B", 1, 7, 13),
+    walk = Sprite.load("con2Walk_B", path.."con2Walk_B", 6, 7, 20),
+    shoot = Sprite.load("con2Shoot_B", path.."con2Shoot_B", 12, 7, 18),
     palette = Sprite.load("con2Pal_B", path.."con2Pal_B", 1, 0, 0),
-    jump = Sprite.load("con2Jump_B", path.."con2Jump_B", 1, 8, 6),
-    death = Sprite.load("con2Death_B", path.."con2Death_B", 9, 11, 6),
-    spawn = Sprite.load("con2Spawn_B", path.."con2Spawn_B", 15, 8, 26),
+    jump = Sprite.load("con2Jump_B", path.."con2Jump_B", 1, 7, 14),
+    death = Sprite.load("con2Death_B", path.."con2Death_B", 9, 10, 14),
+    spawn = Sprite.load("con2Spawn_B", path.."con2Spawn_B", 15, 8, 16),
     mask = Sprite.load("con2Mask_B", path.."con2Mask_B", 1, 0, 0)
 }
 
@@ -75,8 +75,10 @@ head:addCallback("step", function(self)
 	if not sD.body or not sD.body:isValid() then self:destroy() return end
 	if self:get("prefix_type") ~= sD.body:get("prefix_type") then
 		if sD.body:get("prefix_type") == 1 then
-			local key = sD.body:get("elite_type")
-			self:makeElite(eliteClones[key])
+			self:set("prefix_type", sD.body:get("prefix_type"))
+			self:set("elite_type", sD.body:get("elite_type"))
+--			local key = sD.body:get("elite_type")
+--			self:makeElite(eliteClones[key])
 		elseif sD.body:get("prefix_type") == 2 then
 --			self:makeBlighted(sD.body:getBlighted())
 			actorAc.prefix_type = 2
@@ -90,8 +92,9 @@ head:addCallback("step", function(self)
 	self.subimage = sD.body.subimage
 	self.xscale = sD.body.xscale
 	self.yscale = sD.body.yscale
-	self.x = sD.body.x + (1 * sD.body.xscale)
-	self.y = sD.body.y - (17 * sD.body.yscale)
+	self.x = sD.body.x
+	self.y = sD.body.y
+	self.depth = sD.body.depth - 1
 	local targ = Object.findInstance(sD.body:get("target"))
 	if sD.angleLocked == false then
 	if targ ~= nil and targ.y < self.y then
@@ -115,7 +118,7 @@ head:addCallback("step", function(self)
 		sD.angleLocked = true
 	end
 	if self.sprite == headSprites.shoot and self.subimage >= 9 and self.subimage <= 10 and sD.shot == false then
-		local explosion = bulletCheck:create(self.x + (9 * self.xscale), self.y - (3 * self.yscale))
+		local explosion = bulletCheck:create(self.x + (6 * self.xscale), self.y - (8 * self.yscale))
 		explosion.mask = explosion.sprite
 		explosion.angle = self.angle
 		explosion.xscale = self.xscale
@@ -135,16 +138,20 @@ head:addCallback("step", function(self)
 	end
 end)
 
+bulletCheck:addCallback("step", function(self)
+	self:destroy()
+end)
+
 local sprites = {
-    idle = Sprite.load("con2Idle", path.."con2Idle", 1, 7, 23),
-    walk = Sprite.load("con2Walk", path.."con2Walk", 6, 7, 30),
-    shoot = Sprite.load("con2Shoot", path.."con2Shoot", 12, 7, 28),
-    log = Sprite.load("con2Shoot_LOG", path.."con2Shoot_LOG", 12, 7, 28),
-    spawn = Sprite.load("con2Spawn", path.."con2Spawn", 15, 8, 26),
-    death = Sprite.load("con2Death", path.."con2Death", 9, 10, 24),
-    mask = Sprite.load("con2Mask", path.."con2Mask", 1, 7, 23),
+    idle = Sprite.load("con2Idle", path.."con2Idle", 1, 7, 13),
+    walk = Sprite.load("con2Walk", path.."con2Walk", 6, 7, 20),
+    shoot = Sprite.load("con2Shoot", path.."con2Shoot", 12, 7, 18),
+    log = Sprite.load("con2Shoot_LOG", path.."con2Shoot_LOG", 12, 7, 18),
+    spawn = Sprite.load("con2Spawn", path.."con2Spawn", 15, 8, 16),
+    death = Sprite.load("con2Death", path.."con2Death", 9, 10, 14),
+    mask = Sprite.load("con2Mask", path.."con2Mask", 1, 7, 13),
     palette = Sprite.load("con2Pal", path.."con2Pal", 1, 0, 0),
-    jump = Sprite.load("con2Jump", path.."con2Jump", 1, 7, 24),
+    jump = Sprite.load("con2Jump", path.."con2Jump", 1, 7, 14),
     portrait = Sprite.load("con2Portrait", path.."con2Portrait", 1, 119, 119)
 }
 
