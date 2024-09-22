@@ -9,9 +9,9 @@ local sprites = {
 	burrow = Sprite.load("LacertianBurrow", path.."burrow", 10, 85, 51),
 	shoot2 = Sprite.load("LacertianShoot2", path.."shoot2", 7, 90, 80), -- 
 	shoot2neutral = Sprite.load("LacertianShoot2Neutral", path.."shoot2neutral", 7, 90, 80),
-	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51),
-	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51),
-	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31),
+	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51 - 6),
+	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51 - 6),
+	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31 - 6),
 	maskNone = Sprite.load("LacertianMaskNone", path.."maskNone", 1, 0, 50),
 	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 90, 51),
 	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 90, 51),
@@ -205,7 +205,7 @@ findLacertianGround = function(actor, x, y)
 	return x2, x1]]
 	
 	actor.mask = sprites.mask2
-	local checkDown = actor:collidesMap(x, y + 12)
+	local checkDown = actor:collidesMap(x, y + 6)
 	actor.mask = sprites.mask3
 	local checkUp = not actor:collidesMap(x, y - 12)
 	actor.mask = sprites.mask
