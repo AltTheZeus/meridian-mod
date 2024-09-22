@@ -410,7 +410,7 @@ lacertian:addCallback("step", function(actor)
 			
 			if actorAc.state == "idle" or actorAc.state == "chase" then
 				local n = actorAc.moveRight - actorAc.moveLeft
-				if n ~= 0 and findLacertianGround(actor, actor.x + sprites.mask.width / 2 * n, actor.y) then 
+				if n ~= 0 and findLacertianGround(actor, actor.x + sprites.mask.width / 2 * n, actor.y) and actorAc.pHmax > 0 then 
 					n = actorAc.moveRight - actorAc.moveLeft
 					actor.x = actor.x + n * actorAc.pHmax 
 					actor.xscale = n 
