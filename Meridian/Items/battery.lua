@@ -3,7 +3,7 @@ local item = Item("Portable Battery")
 item.pickupText = "Increase regen while equipment is off cooldown." 
 
 item.sprite = Sprite.load("Items/battery.png", 1, 10, 11)
-itemEf = Sprite.load("Items/batteryEf.png", 1, 0, 0)
+local itemEf = Sprite.load("Items/batteryEf.png", 1, 0, 0)
 item:setTier("common")
 
 registercallback("onPlayerInit", function(player)

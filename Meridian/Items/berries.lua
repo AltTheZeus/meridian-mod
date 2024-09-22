@@ -4,7 +4,7 @@ item.pickupText = "Living off the land."
 item:setTier("uncommon")
 
 item.sprite = Sprite.load("Items/berries.png", 1, 15, 15)
-itemEf = Sprite.load("Items/berriesEf.png", 3, 5, 5)
+local itemEf = Sprite.load("Items/berriesEf.png", 3, 5, 5)
 local itemAssignments = {
 	GolemG = Item.find("Colossal Knurl"),
 	GiantJelly = Item.find("Nematocyst Nozzle"),
