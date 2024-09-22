@@ -25,6 +25,13 @@ for _, m in ipairs(modloader.getMods()) do
 end
 end)
 
+registercallback("onEliteInit", function(actor)
+	local aD = actor:getData()
+	if actor:get("elite_type") == ID or actor:get("elite_type") == bID then
+		aD.eliteVar = 1
+	end
+end)
+
 local enemies = ParentObject.find("enemies")
 
 registercallback("onPlayerInit", function(player)
@@ -75,7 +82,7 @@ if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_p
 	if not CheckValid(source) then return end
 	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
 	if target:isValid() and isa(target, "PlayerInstance") then
-		if source:get("elite_type") == ID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) then
+		if (source:get("elite_type") == ID and (source:getData().eliteVar == 1 or source:getObject() == Object.find("Worm") or source:getObject() == Object.find("WormHead") or source:getObject() == Object.find("WormBody"))) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) and (source:getParent():getData().eliteVar == 1 or source:getParent():getObject() == Object.find("Worm") or source:getParent():getObject() == Object.find("WormHead") or source:getParent():getObject() == Object.find("WormBody"))) then
 			local tD = target:getData()
 			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
 				local lockedSkill = math.random(2,5)
@@ -85,7 +92,7 @@ if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_p
 				clang:play(1, 0.6)
 			end
 		end
-		if source:get("elite_type") == bID or ((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) then
+		if (source:get("elite_type") == bID and source:getData().eliteVar == 1) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) and source:getParent():getData().eliteVar == 1) then
 			local tD = target:getData()
 			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
 				local lockedSkill = math.random(2,5)
@@ -143,41 +150,44 @@ end)
 registercallback("onDraw", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
-		local radiusInner
-		local radiusOuter
-		if i:get("show_boss_health") == 1 then
-			radiusInner = 80
-			radiusOuter = 120
-		else
-			radiusInner = 50
-			radiusOuter = 75
+		if i:getData().eliteVar == 1 or i:getObject() == Object.find("Worm") or i:getObject() == Object.find("WormHead") or i:getObject() == Object.find("WormBody") then
+			local radiusInner
+			local radiusOuter
+			if i:get("show_boss_health") == 1 then
+				radiusInner = 80
+				radiusOuter = 120
+			else
+				radiusInner = 50
+				radiusOuter = 75
+			end
+			graphics.color(Color.fromRGB(57, 92, 90))
+--			graphics.alpha(0.2)
+--			graphics.circle(i.x, i.y, radius, false)
+			graphics.alpha(1)
+			graphics.circle(i.x, i.y, radiusInner, true)
+			graphics.circle(i.x, i.y, radiusOuter, true)
 		end
-		graphics.color(Color.fromRGB(57, 92, 90))
---		graphics.alpha(0.2)
---		graphics.circle(i.x, i.y, radius, false)
-		graphics.alpha(1)
-		graphics.circle(i.x, i.y, radiusInner, true)
-		graphics.circle(i.x, i.y, radiusOuter, true)
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
-		local radiusInner
-		local radiusOuter
-		if i:get("show_boss_health") == 1 then
-			radiusInner = 80
-			radiusOuter = 120
-		else
-			radiusInner = 50
-			radiusOuter = 75
+		if i:getData().eliteVar == 1 then
+			local radiusInner
+			local radiusOuter
+			if i:get("show_boss_health") == 1 then
+				radiusInner = 80
+				radiusOuter = 120
+			else
+				radiusInner = 50
+				radiusOuter = 75
+			end
+			graphics.color(Color.fromRGB(255, 237, 187))
+--			graphics.alpha(0.2)
+--			graphics.circle(i.x, i.y, radius, false)
+			graphics.alpha(1)
+			graphics.circle(i.x, i.y, radiusInner, true)
+			graphics.circle(i.x, i.y, radiusOuter, true)
 		end
-		graphics.color(Color.fromRGB(255, 237, 187))
---		graphics.alpha(0.2)
---		graphics.circle(i.x, i.y, radius, false)
-		graphics.alpha(1)
-		graphics.circle(i.x, i.y, radiusInner, true)
-		graphics.circle(i.x, i.y, radiusOuter, true)
 	end
-
 end)
 
 local slimed = Buff.find("slow")
@@ -186,6 +196,7 @@ local everyone = ParentObject.find("actors")
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
+		if i:getData().eliteVar == 1 or i:getObject() == Object.find("Worm") or i:getObject() == Object.find("WormHead") or i:getObject() == Object.find("WormBody") then
 		local radiusInner
 		local radiusOuter
 		if i:get("show_boss_health") == 1 then
@@ -207,10 +218,12 @@ registercallback("onStep", function()
 					end
 				end
 			end
+		end
 		end
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
+		if i:getData().eliteVar == 1 then
 		local radiusInner
 		local radiusOuter
 		if i:get("show_boss_health") == 1 then
@@ -233,6 +246,33 @@ registercallback("onStep", function()
 				end
 			end
 		end
+		end
 	end
 
+end)
+
+--oh, worm?
+local bodySpr = Sprite.load("Elites/forsakenWormBody", 3, 15, 19)
+local headSpr = Sprite.load("Elites/forsakenWormHead", 6, 15, 19)
+
+registercallback("onStep", function()
+	for _, i in ipairs(Object.find("Worm"):findAll()) do
+		if i:get("elite_type") == ID and not i:getData().changed then
+			i:set("name", "Forsaken Worm")
+			i:set("name2", "The Great Inhibitor")
+			i:getData().changed = 1
+		end
+	end
+	for _, i in ipairs(Object.find("WormBody"):findAll()) do
+		if i:get("elite_type") == ID and not i:getData().changed then
+			i.sprite = bodySpr
+			i:getData().changed = 1
+		end
+	end
+	for _, i in ipairs(Object.find("WormHead"):findAll()) do
+		if i:get("elite_type") == ID and not i:getData().changed then
+			i.sprite = headSpr
+			i:getData().changed = 1
+		end
+	end
 end)

@@ -16,13 +16,7 @@ end
 registercallback("postLoad", function()
 for _, m in ipairs(modloader.getMods()) do
 	for _, i in ipairs(MonsterCard.findAll(m)) do
-		if m == "Starstorm" then
-			if i ~= MonsterCard.find("Squall Elver") then
-				i.eliteTypes:add(elite)
-			end
-		else
-			i.eliteTypes:add(elite)
-		end
+		i.eliteTypes:add(elite)
 	end
 end
 end)
@@ -30,6 +24,7 @@ end)
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
 	if actor:get("elite_type") == ID or actor:get("elite_type") == bID then
+		aD.eliteVar = 1
 		aD.bubbleCooldown = 0
 	end
 end)
@@ -101,13 +96,13 @@ end)
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
-		if iD.bubbleCooldown > 0 then
+		if iD.bubbleCooldown and iD.bubbleCooldown > 0 then
 			iD.bubbleCooldown = iD.bubbleCooldown - 1
 		end
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
-		if iD.bubbleCooldown > 0 then
+		if iD.bubbleCooldown and iD.bubbleCooldown > 0 then
 			iD.bubbleCooldown = iD.bubbleCooldown - 1
 		end
 	end
@@ -115,7 +110,7 @@ end)
 
 registercallback("onDamage", function(target, damage, source)
 	if not CheckValid(source) then return end
-	if target:isValid() and (target:get("elite_type") == ID or target:get("elite_type") == bID) then
+	if target:isValid() and (target:get("elite_type") == ID or target:get("elite_type") == bID) and target:getData().eliteVar == 1 then
 		local tD = target:getData()
 		if tD.bubbleCooldown <= 0 then
 			local bubbleAmount = math.random(1, 3)

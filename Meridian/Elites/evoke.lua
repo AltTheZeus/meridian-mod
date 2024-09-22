@@ -67,6 +67,7 @@ registercallback("onEliteInit", function(actor)
 		end
 		aD.timer = aD.card.cost
 		aD.minionCount = 0
+		aD.eliteVar = 1
 	end
 end)
 
@@ -76,6 +77,7 @@ registercallback("onStep", function()
 	if misc.getTimeStop() == 0 then
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local aD = i:getData()
+		if aD.eliteVar == 1 then
 		if aD.minionCount < 3 then
 			aD.pointTimer = aD.pointTimer + 1
 		end
@@ -151,10 +153,12 @@ if aD.card.object.sprite.height < heightLevel then
 			until aD.card.cost < 500 and aD.card.type == "classic"
 			aD.timer = aD.card.cost
 		end
+		end
 	end
 end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local aD = i:getData()
+		if aD.eliteVar == 1 then
 		if aD.minionCount < 4 then
 			aD.pointTimer = aD.pointTimer + 1
 		end
@@ -227,6 +231,7 @@ if aD.card.object.sprite.height < heightLevel then
 			until aD.card.cost < 500 and aD.card.type == "classic"
 			aD.timer = aD.card.cost
 		end
+		end
 	end
 	end
 end
@@ -255,7 +260,7 @@ sparkle:life(60 * 1, 60 * 1)
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", bIDb)) do
 		local aD = i:getData()
-		if not aD.terezi then
+		if not aD.terezi and i:getObject() ~= Object.find("Beta Construct Head") then
 			if i:get("team") == "enemy" then
 				local replacement = i:getObject():create(i.x, i.y)
 				replacement:makeElite()
@@ -265,7 +270,7 @@ registercallback("onStep", function()
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", IDb)) do
 		local aD = i:getData()
-		if not aD.terezi then
+		if not aD.terezi and i:getObject() ~= Object.find("Beta Construct Head") then
 			local replacement = i:getObject():create(i.x, i.y)
 			replacement:makeElite()
 			i:delete()

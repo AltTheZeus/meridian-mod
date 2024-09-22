@@ -202,8 +202,8 @@ end)
 registercallback("onNPCDeath", function(npc)
 	local dD = misc.director:getData()
 	local nD = npc:getData()
-	if npc:get("elite_type") == bID then
-		dD.bTrees[npc.x] = npc.y - 3
+	if npc:get("elite_type") == bID and nD.eliteVar == 1 then
+		dD.bTrees[npc.x] = npc.y
 	end
 end)
 

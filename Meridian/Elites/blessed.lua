@@ -27,18 +27,32 @@ if misc.director:get("stages_passed") >= 5 and dD.blessed1 == 0 then
 	for _, m in ipairs(modloader.getMods()) do
 		for _, i in ipairs(MonsterCard.findAll(m)) do
 			if i.isBoss == false then
+		if m == "Starstorm" then
+			if i ~= MonsterCard.find("Squall Elver") then
 				i.eliteTypes:add(elite)
+			end
+		else
+			i.eliteTypes:add(elite)
+		end
 			end
 		end
 	end
 	dD.blessed1 = 1
 elseif misc.director:get("stages_passed") >= 15 and dD.blessed2 == 0 then
 	for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-		i.eliteTypes:add(elite)
+		if i ~= MonsterCard.find("Magma Worm") then
+			i.eliteTypes:add(elite)
+		end
 	end
 	for _, m in ipairs(modloader.getMods()) do
 		for _, i in ipairs(MonsterCard.findAll(m)) do
+		if m == "Starstorm" then
+			if i ~= MonsterCard.find("Squall Elver") then
+				i.eliteTypes:add(elite)
+			end
+		else
 			i.eliteTypes:add(elite)
+		end
 		end
 	end
 	dD.blessed2 = 1
@@ -89,19 +103,22 @@ registercallback("onEliteInit", function(actor)
 			replacement:makeElite()
 			actor:delete()
 		end
+		aD.eliteVar = 1
 	end
 end, -10)
 
 registercallback("onDraw", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
-		local iD = i:getData()
-		local idle = i:getAnimation("idle")
-		graphics.drawImage{
-		image = halo,
-		x = i.x,
-		y = i.y - idle.yorigin - 5,--i.y - 10,
-		xscale = i.xscale,
-		alpha = 1
-		}
+		if i:getObject() ~= Object.find("Beta Construct Head") then
+			local iD = i:getData()
+			local idle = i:getAnimation("idle")
+			graphics.drawImage{
+			image = halo,
+			x = i.x,
+			y = i.y - idle.yorigin - 5,--i.y - 10,
+			xscale = i.xscale,
+			alpha = 1
+			}
+		end
 	end
 end)

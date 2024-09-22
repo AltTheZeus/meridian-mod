@@ -16,13 +16,7 @@ end
 registercallback("postLoad", function()
 for _, m in ipairs(modloader.getMods()) do
 	for _, i in ipairs(MonsterCard.findAll(m)) do
-		if m == "Starstorm" then
-			if i ~= MonsterCard.find("Squall Elver") then
-				i.eliteTypes:add(elite)
-			end
-		else
-			i.eliteTypes:add(elite)
-		end
+		i.eliteTypes:add(elite)
 	end
 end
 end)
@@ -83,7 +77,7 @@ end)
 
 registercallback("preHit", function(damager, hit)
 	if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
-		if hit:isValid() and (hit:get("elite_type") == ID or hit:get("elite_type") == bID) then
+		if hit:isValid() and (hit:get("elite_type") == ID or hit:get("elite_type") == bID) and hit:getData().eliteVar == 1 then
 			if damager:get("damage") > math.round(hit:get("maxhp") * 0.05) then
 				damager:set("damage", math.round(hit:get("maxhp") * 0.05))
 				damager:set("damage_fake", math.round(hit:get("maxhp") * 0.05))
@@ -100,15 +94,18 @@ registercallback("preHit", function(damager, hit)
 				end
 			end
 			damager:set("damage", damager:get("damage") * (100 / (100 + hit:getData().sorrowArmor)))
-			damager:set("damage_fake", damager:get("damage_fake") * (100 / (100 + hit:getData().sorrowArmor)))
+			damager:set("damage_fake", damager:get("damage_fake") * (100 / (100 + hit:getData().sorrowArmor))) 
 			hit:getData().sorrowArmor = hit:getData().sorrowArmor + 5
+			if hit:getData().sorrowArmor >= 100 then
+				hit:getData().sorrowArmor = 100
+			end
 		end
 	end
 end)
 
 registercallback("onStep", function()
 	for _, i in ipairs(enemies:findAll()) do
-	if i:get("elite_type") == ID or i:get("elite_type") == bID then
+	if (i:get("elite_type") == ID or i:get("elite_type") == bID) and i:getData().eliteVar == 1 then
 		local sD = i:getData()
 		if sD.sorrowArmorTimer < 20 then
 			sD.sorrowArmorTimer = sD.sorrowArmorTimer + 1
@@ -129,6 +126,7 @@ registercallback("onEliteInit", function(self)
 	if self:get("elite_type") == ID or self:get("elite_type") == bID then
 		sD.sorrowArmor = 0
 		sD.sorrowArmorTimer = 0
+		sD.eliteVar = 1
 	end
 end)
 
@@ -236,7 +234,7 @@ registercallback("onStep", function()
 	local dD = misc.director:getData()
 	if dD.sorrowSpawnEnemy and dD.sorrowSpawnEnemy == 1 then
 		for _, i in ipairs(enemies:findAll()) do
-			if i:get("elite_type") == ID or i:get("elite_type") == bID then
+			if (i:get("elite_type") == ID or i:get("elite_type") == bID) and i:getData().eliteVar == 1 then
 				local xVar = (math.sign(dD.sorrowSpawnEnemyX - i.x) * (dD.sorrowSpawnEnemyX - i.x))
 				local yVar = (math.sign(dD.sorrowSpawnEnemyY - i.y) * (dD.sorrowSpawnEnemyY - i.y))
 				local c2 = (xVar * xVar) + (yVar * yVar)
