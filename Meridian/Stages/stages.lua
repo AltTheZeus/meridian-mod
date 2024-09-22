@@ -162,13 +162,23 @@ callback.register("globalRoomStart", function(room)
 	end
 end)
 
+local m1
+local m2
+local m3
+
 callback.register("globalRoomStart", function(room)
 	if room == Room.find("Start") and not modloader.checkFlag("mn_disable_enemies") then
 		if modloader.checkFlag("enable_mergers") then
-			local m1 = MonsterCard.find("m1", "meridian")
-			local m2 = MonsterCard.find("m2", "meridian")
-			local m3 = MonsterCard.find("m3", "meridian")
+			m1 = MonsterCard.find("m1", "meridian")
+			m2 = MonsterCard.find("m2", "meridian")
+			m3 = MonsterCard.find("m3", "meridian")
+		end
+	end
+end)
 
+callback.register("globalRoomStart", function(room)
+	if room == Room.find("Start") and not modloader.checkFlag("mn_disable_enemies") then
+		if modloader.checkFlag("enable_mergers") then
 			SM.enemies:remove(m2)
 			SM.enemies:remove(m3)
 			ShallowRotlands.enemies:remove(m3)
