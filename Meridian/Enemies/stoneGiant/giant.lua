@@ -5,15 +5,15 @@ end
 
 local path = "Enemies/stoneGiant/"
 local sprites = {
-    idle = Sprite.load("giantIdle", path.."giantIdle", 1, 13, 48),
-    walk = Sprite.load("giantWalk", path.."giantWalk", 4, 21, 49),
-    shoot = Sprite.load("giantAttack", path.."giantShoot", 12, 15, 48),
-    shoot2 = Sprite.load("giantAttack2", path.."giantShoot2", 11, 26, 51),
-    spawn = Sprite.load("giantSpawn", path.."giantSpawn", 17, 21, 54),
-    death = Sprite.load("giantDeath", path.."giantDeath", 10, 81, 57),
-    mask = Sprite.load("giantMask", path.."giantMask", 1, 14, 48),
+    idle = Sprite.load("giantIdle", path.."giantIdle", 1, 13, 35),
+    walk = Sprite.load("giantWalk", path.."giantWalk", 4, 21, 36),
+    shoot = Sprite.load("giantAttack", path.."giantShoot", 12, 15, 35),
+    shoot2 = Sprite.load("giantAttack2", path.."giantShoot2", 11, 26, 38),
+    spawn = Sprite.load("giantSpawn", path.."giantSpawn", 17, 21, 41),
+    death = Sprite.load("giantDeath", path.."giantDeath", 10, 81, 44),
+    mask = Sprite.load("giantMask", path.."giantMask", 1, 14, 35),
     palette = Sprite.load("giantPal", path.."giantPal", 1, 0, 0),
-    jump = Sprite.load("giantJump", path.."giantJump", 1, 17, 47),
+    jump = Sprite.load("giantJump", path.."giantJump", 1, 17, 34),
     hit = Sprite.load("giantBlast", path.."giantBlast", 3, 13, 18),
     portrait = Sprite.load("giantPortrait", path.."giantPortrait", 1, 119, 119)
 }
@@ -66,7 +66,7 @@ end)
 Monster.skillCallback(giant, 1, function(actor, relevantFrame)
 	if relevantFrame == 6 or relevantFrame == 8 then
 		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y, 1, 1, 0.7, sprites.hit, nil)
+		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y + 7, 1, 1, 0.7, sprites.hit, nil)
 	end
 end)
 
@@ -81,7 +81,6 @@ local fistElite = Sprite.load("giantFistElite", path.."giantFistElite", 9, 6, 16
 fist:addCallback("create", function(self)
 	local sD = self:getData()
 	self.spriteSpeed = 0.2
-	
 end)
 
 fist:addCallback("step", function(self)
