@@ -1,13 +1,13 @@
 local path = "Enemies/mergers/"
 local sprites = {
-    idle = Sprite.load("mergerMIdle", path.."mergerMIdle", 1, 5, 9),
-    walk = Sprite.load("mergerMWalk", path.."mergerMWalk", 6, 6, 9),
-    spawn = Sprite.load("mergerMSpawn", path.."mergerMSpawn", 10, 15, 25),
-    death = Sprite.load("mergerMDeath", path.."mergerMDeath", 6, 8, 13),
-    shoot = Sprite.load("mergerMShoot", path.."mergerMShoot", 9, 6, 10),
-    mask = Sprite.load("mergerMMask", path.."mergerMMask", 1, 6, 12),
+    idle = Sprite.load("mergerMIdle", path.."mergerMIdle", 1, 5, 2),
+    walk = Sprite.load("mergerMWalk", path.."mergerMWalk", 6, 6, 2),
+    spawn = Sprite.load("mergerMSpawn", path.."mergerMSpawn", 10, 15, 18),
+    death = Sprite.load("mergerMDeath", path.."mergerMDeath", 6, 8, 6),
+    shoot = Sprite.load("mergerMShoot", path.."mergerMShoot", 9, 6, 3),
+    mask = Sprite.load("mergerMMask", path.."mergerMMask", 1, 6, 5),
     palette = Sprite.load("mergerMPal", path.."mergerMPal", 1, 0, 0),
-    jump = Sprite.load("mergerMJump", path.."mergerMJump", 1, 5, 9)--,
+    jump = Sprite.load("mergerMJump", path.."mergerMJump", 1, 5, 2)--,
 --    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
 }
 
@@ -140,11 +140,11 @@ m2:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y + 2, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y + 2, (sD.mergeTime / 15) + math.random(-2, 2))
 	end
 end)
 
@@ -171,7 +171,7 @@ end)
 Monster.skillCallback(m2, 1, function(actor, relevantFrame)
 	if relevantFrame == 3 then
 		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
+		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y + 3, 15/19, 8/4, 1, nil)
 	end
 end)
 

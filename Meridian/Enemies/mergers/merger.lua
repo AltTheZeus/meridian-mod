@@ -1,13 +1,13 @@
 local path = "Enemies/mergers/"
 local sprites = {
-    idle = Sprite.load("mergerIdle", path.."mergerIdle", 1, 12, 23),
-    walk = Sprite.load("mergerWalk", path.."mergerWalk", 8, 12, 24),
-    spawn = Sprite.load("mergerSpawn", path.."mergerSpawn", 21, 111, 45),
-    death = Sprite.load("mergerDeath", path.."mergerDeath", 15, 61, 86),
-    shoot = Sprite.load("mergerShoot", path.."mergerShoot", 8, 34, 32),
-    mask = Sprite.load("mergerMask", path.."mergerMask", 1, 11, 23),
+    idle = Sprite.load("mergerIdle", path.."mergerIdle", 1, 12, 18),
+    walk = Sprite.load("mergerWalk", path.."mergerWalk", 8, 12, 19),
+    spawn = Sprite.load("mergerSpawn", path.."mergerSpawn", 21, 111, 40),
+    death = Sprite.load("mergerDeath", path.."mergerDeath", 15, 61, 81),
+    shoot = Sprite.load("mergerShoot", path.."mergerShoot", 8, 34, 27),
+    mask = Sprite.load("mergerMask", path.."mergerMask", 1, 11, 18),
     palette = Sprite.load("mergerPal", path.."mergerPal", 1, 0, 0),
-    jump = Sprite.load("mergerJump", path.."mergerJump", 1, 14, 26)--,
+    jump = Sprite.load("mergerJump", path.."mergerJump", 1, 14, 21)--,
 --    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
 }
 
@@ -220,6 +220,7 @@ m3:addCallback("step", function(self)
 	end
 end)
 
+--the below code has not been adjusted to use the new y origin coords
 if modloader.checkFlag("meridian_debug") then
 m3:addCallback("draw", function(self)
 	local sD = self:getData()
@@ -251,11 +252,11 @@ m3:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y, (sD.mergeTime / 15) + math.random(-2, 2))
 	end
 end)
 
@@ -302,7 +303,7 @@ end)
 Monster.skillCallback(m3, 1, function(actor, relevantFrame)
 	if relevantFrame == 3 then
 		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
+		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y + 1, 15/19, 8/4, 1, nil)
 	end
 end)
 

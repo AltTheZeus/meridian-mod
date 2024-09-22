@@ -1,12 +1,12 @@
 local path = "Enemies/mergers/"
 local sprites = {
-    idle = Sprite.load("mergerSIdle", path.."mergerSIdle", 1, 3, 5),
-    walk = Sprite.load("mergerSWalk", path.."mergerSWalk", 5, 4, 6),
-    spawn = Sprite.load("mergerSSpawn", path.."mergerSSpawn", 7, 7, 11),
-    death = Sprite.load("mergerSDeath", path.."mergerSDeath", 5, 10, 14),
-    mask = Sprite.load("mergerSMask", path.."mergerSMask", 1, 4, 12),
+    idle = Sprite.load("mergerSIdle", path.."mergerSIdle", 1, 3, 0),
+    walk = Sprite.load("mergerSWalk", path.."mergerSWalk", 5, 4, 1),
+    spawn = Sprite.load("mergerSSpawn", path.."mergerSSpawn", 7, 7, 6),
+    death = Sprite.load("mergerSDeath", path.."mergerSDeath", 5, 10, 9),
+    mask = Sprite.load("mergerSMask", path.."mergerSMask", 1, 4, 7),
     palette = Sprite.load("mergerSPal", path.."mergerSPal", 1, 0, 0),
-    jump = Sprite.load("mergerSJump", path.."mergerSJump", 1, 4, 6)--,
+    jump = Sprite.load("mergerSJump", path.."mergerSJump", 1, 4, 1)--,
 --    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
 }
 
@@ -137,11 +137,11 @@ m1:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 5, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y, (sD.mergeTime / 15) + math.random(-2, 2))
 	end
 end)
 
