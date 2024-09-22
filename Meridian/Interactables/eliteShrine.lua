@@ -12,9 +12,15 @@ registercallback("onStageEntry", function()
 end)
 
 shrine.sprite = Sprite.load(path .. "eliteShrine", 7, 12, 53)
-registercallback("onLoad", function()
-	for _, s in ipairs(Stage.findAll("Vanilla")) do
-		s.interactables:add(shrineInt)
+registercallback("onGameStart", function()
+	if Artifact.find("Honor").active == true then
+		for _, s in ipairs(Stage.findAll("Vanilla")) do
+			s.interactables:remove(shrineInt)
+		end
+	else
+		for _, s in ipairs(Stage.findAll("Vanilla")) do
+			s.interactables:add(shrineInt)
+		end
 	end
 end)
 
@@ -204,6 +210,15 @@ registercallback("onPlayerDrawAbove", function(player)
 			y = player.y + yPosition,
 			angle = -math.deg(angle)
 		}
+		end
+	end
+end)
+
+registercallback("onStep", function()
+	for _, i in ipairs(enemies:findAll()) do
+		local iD = i:getData()
+		if iD.shrineborn then
+			i:set("death_timer", 300)
 		end
 	end
 end)
