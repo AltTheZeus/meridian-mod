@@ -1,13 +1,13 @@
 local path = "Enemies/guardDog/"
 local sprites = {
-    idle = Sprite.load("dogIdle", path.."dogIdle", 1, 18, 24),
-    walk = Sprite.load("dogWalk", path.."dogWalk", 5, 18, 27),
-    shoot = Sprite.load("dogShoot", path.."dogShoot", 6, 21, 26),
-    spawn = Sprite.load("dogSpawn", path.."dogSpawn", 35, 36, 26),
-    death = Sprite.load("dogDeath", path.."dogDeath", 9, 36, 35),
-    mask = Sprite.load("dogMask", path.."dogMask", 1, 18, 24),
+    idle = Sprite.load("dogIdle", path.."dogIdle", 1, 18, 12),
+    walk = Sprite.load("dogWalk", path.."dogWalk", 5, 18, 15),
+    shoot = Sprite.load("dogShoot", path.."dogShoot", 6, 21, 14),
+    spawn = Sprite.load("dogSpawn", path.."dogSpawn", 35, 36, 14),
+    death = Sprite.load("dogDeath", path.."dogDeath", 9, 36, 23),
+    mask = Sprite.load("dogMask", path.."dogMask", 1, 18, 12),
     palette = Sprite.load("dogPal", path.."dogPal", 1, 0, 0),
-    jump = Sprite.load("dogJump", path.."dogJumpTEMP", 1, 18, 24),
+    jump = Sprite.load("dogJump", path.."dogJumpTEMP", 1, 18, 12),
     portrait = Sprite.load("dogPortrait", path.."dogPortrait", 1, 119, 119)
 }
 
@@ -58,7 +58,7 @@ end)
 Monster.skillCallback(dog, 1, function(actor, relevantFrame)
 	if relevantFrame == 3 then
 		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y - 8, 1.3, 3, 1, nil, nil)
+		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y + 4, 1.3, 3, 1, nil, nil)
 	end
 end)
 
