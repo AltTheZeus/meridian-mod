@@ -77,8 +77,8 @@ registercallback("preHit", function(damager, hit)
 				damCheck = damCheck + 0.02 + (dD.balling * 0.01)
 				counter = counter + 0.1
 			until counter >= raw
-		damager:set("damage", damager:get("damage") + (damCheck * dD.ballParent:get("damage")))
-		damager:set("damage_fake", (damager:get("damage_fake") + (damCheck * dD.ballParent:get("damage"))))
+		damager:set("damage", damager:get("damage") + damCheck)
+		damager:set("damage_fake", damager:get("damage_fake") + damCheck)
 		local pX = dD.ballParent.x
 		local pY = dD.ballParent.y
 		local tX = hit.x
