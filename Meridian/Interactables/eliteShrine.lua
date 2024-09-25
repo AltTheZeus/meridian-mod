@@ -19,7 +19,9 @@ registercallback("onGameStart", function()
 		end
 	else
 		for _, s in ipairs(Stage.findAll("Vanilla")) do
-			s.interactables:add(shrineInt)
+			if s ~= Stage.find("Risk of Rain") then
+				s.interactables:add(shrineInt)
+			end
 		end
 	end
 end)
@@ -34,9 +36,10 @@ shrine:addCallback("create", function(self)
 	self.spriteSpeed = 0
 	sD.errorCD = 0
 	sD.item = false
+	sD.shrineBabies = {}
 end)
 
-local enemies = ParentObject.find("enemies")
+local enemies = ParentObject.find("classicEnemies")
 
 local shrinesplosion = Object.new("eliteShrineEf")
 shrinesplosion.sprite = Sprite.load(path .. "eliteShrineEf", 6, 26, 66)
@@ -60,6 +63,11 @@ shrine:addCallback("draw", function(self)
 	local sD = self:getData()
 	if self:collidesWith(playerobj, self.x, self.y) and sD.opened == 0 then
 		local nonElites = enemies:findMatching("prefix_type", 0)
+		for a, i in pairs(nonElites) do
+			if i:get("team") == "player" or i:get("ghost") == 1 or i:get("show_boss_health") == 1 or i:getObject() == Object.find("LizardF") or i:getObject() == Object.find("LizardFG") then
+				table.remove(nonElites, a)
+			end
+		end
 		local diffBonus = math.round(misc.director:get("stages_passed") * 0.4)
 		if #nonElites < (3 + diffBonus) then
 			graphics.color(Color.GREY)
@@ -83,6 +91,11 @@ shrine:addCallback("step", function(self)
 	local sD = self:getData()
 	local dD = misc.director:getData()
 	local nonElites = enemies:findMatching("prefix_type", 0)
+	for a, i in pairs(nonElites) do
+		if i:get("team") == "player" or i:get("ghost") == 1 or i:get("show_boss_health") == 1 or i:getObject() == Object.find("LizardF") or i:getObject() == Object.find("LizardFG") then
+			table.remove(nonElites, a)
+		end
+	end
 	local diffBonus = math.round(misc.director:get("stages_passed") * 0.4)
 	if self.subimage >= 2 and sD.opened == 0 then
 		shrineNoise:play()
@@ -112,6 +125,7 @@ shrine:addCallback("step", function(self)
 				shrinesplosion:create(i.x, i.y + spriteMaths)
 				elited = elited + 1
 				dD.shrineBabies[i.id] = i
+				sD.shrineBabies[i.id] = i
 			end
 		end
 		sD.opened = 1
@@ -125,6 +139,11 @@ shrine:addCallback("step", function(self)
 		if self:collidesWith(player, self.x, self.y) then
 			if player:control("enter") == input.PRESSED then --or player:control("enter") == input.HELD then
 				local nonElites = enemies:findMatching("prefix_type", 0)
+				for a, i in pairs(nonElites) do
+					if i:get("team") == "player" or i:get("ghost") == 1 or i:get("show_boss_health") == 1 or i:getObject() == Object.find("LizardF") or i:getObject() == Object.find("LizardFG") then
+						table.remove(nonElites, a)
+					end
+				end
 				local diffBonus = math.round(misc.director:get("stages_passed") * 0.4)
 				if #nonElites < (3 + diffBonus) then
 					local pickedShrine = shrine:findNearest(player.x, player.y)
@@ -144,7 +163,7 @@ shrine:addCallback("step", function(self)
 			end
 		end
 	end
-	if sD.childrenkilled >= 3 and sD.item == false then
+	if sD.childrenkilled >= 3 + diffBonus and sD.item == false then
 		local p = Object.findInstance(sD.activator)
 		local chestMath = math.random(0,100)
 		if Artifact.find("Command").active == true then
@@ -178,6 +197,7 @@ registercallback("onNPCDeath", function(npc)
 		local sA = Object.findInstance(nD.shrineborn):getAccessor()
 		sD.childrenkilled = sD.childrenkilled + 1
 		dD.shrineBabies[npc.id] = nil
+		sD.shrineBabies[npc.id] = nil
 	end
 end)
 
