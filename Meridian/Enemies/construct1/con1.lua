@@ -29,7 +29,7 @@ con1:addCallback("create", function(actor)
     actorAc.name = "Beta Construct"
     actorAc.maxhp = 90 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
-    actorAc.damage = 9 * Difficulty.getScaling("damage")
+    actorAc.damage = 12 * Difficulty.getScaling("damage")
     actorAc.pHmax = 1.2
 	actorAc.walk_speed_coeff = 1.1
     actor:setAnimations{
@@ -71,7 +71,7 @@ end)]]
 registercallback("onStep", function()
 	for _, i in ipairs(Object.find("Spawn"):findAll()) do
 		if i:get("child") == con1.id and not i:getData().twinned then
-			local twin = Object.find("Spawn"):create(i.x, i.y)
+			local twin = Object.find("Spawn"):create(i.x, i.y - 4)
 			twin:getData().twinned = true
 			twin:set("child", Object.find("Beta Construct2").id)
 			twin:set("prefix_type", i:get("prefix_type"))
