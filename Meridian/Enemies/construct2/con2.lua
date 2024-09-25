@@ -72,7 +72,7 @@ head:addCallback("step", function(self)
 	local sD = self:getData()
 	local actorAc = self:getAccessor()
 	self:setAlarm(6, -1)
-	if not sD.body or not sD.body:isValid() then self:destroy() return end
+	if not sD.body or not sD.body:isValid() then self:delete() return end
 	if self:get("prefix_type") ~= sD.body:get("prefix_type") then
 		if sD.body:get("prefix_type") == 1 then
 			self:set("prefix_type", sD.body:get("prefix_type"))
@@ -95,6 +95,10 @@ head:addCallback("step", function(self)
 	self.x = sD.body.x
 	self.y = sD.body.y
 	self.depth = sD.body.depth - 1
+	actorAc.ghost = sD.body:get("ghost")
+	if sD.body:get("target") == self.id then
+		sD.body:set("target", -4)
+	end
 	local targ = Object.findInstance(sD.body:get("target"))
 	if sD.angleLocked == false then
 	if targ ~= nil and targ.y < self.y then
@@ -173,7 +177,7 @@ con2:addCallback("create", function(actor)
     actorAc.name = "Beta Construct"
     actorAc.maxhp = 70 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
-    actorAc.damage = 12 * Difficulty.getScaling("damage")
+    actorAc.damage = 9 * Difficulty.getScaling("damage")
     actorAc.pHmax = 1.3
 	actorAc.walk_speed_coeff = 1.1
     actor:setAnimations{
@@ -217,7 +221,7 @@ end)]]
 registercallback("onStep", function()
 	for _, i in ipairs(Object.find("Spawn"):findAll()) do
 		if i:get("child") == con2.id and not i:getData().twinned then
-			local twin = Object.find("Spawn"):create(i.x, i.y)
+			local twin = Object.find("Spawn"):create(i.x, i.y + 4)
 			twin:getData().twinned = true
 			twin:set("child", Object.find("Beta Construct1").id)
 			twin:set("prefix_type", i:get("prefix_type"))
