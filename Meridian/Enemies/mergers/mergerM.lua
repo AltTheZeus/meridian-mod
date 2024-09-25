@@ -46,7 +46,7 @@ m2:addCallback("create", function(self)
     actorAc.name = "Dewdrop"
     actorAc.maxhp = 100 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
-    actorAc.damage = 10 * Difficulty.getScaling("damage")
+    actorAc.damage = 12 * Difficulty.getScaling("damage")
     actorAc.pHmax = 1.2
 	actorAc.walk_speed_coeff = 1.1
     self:setAnimations{

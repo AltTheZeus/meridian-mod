@@ -108,7 +108,7 @@ m3:addCallback("create", function(self)
     self.mask = sprites.mask
     actorAc.health_tier_threshold = 3
     actorAc.knockback_cap = 15 * Difficulty.getScaling("hp")
-    actorAc.exp_worth = 5 * Difficulty.getScaling()
+    actorAc.exp_worth = 12 * Difficulty.getScaling()
     actorAc.can_drop = 1
     actorAc.can_jump = 1
     data.mergeTime = 0

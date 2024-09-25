@@ -76,7 +76,7 @@ m1:addCallback("step", function(self)
 	local sD = self:getData()
 	if sD.partnered == false then
 		sD.partner = table.random(misc.director:getData().mergins1)
-		print(sD.partner)
+--		print(sD.partner)
 		if sD.partner == self.id then
 			sD.partner = "none"
 		elseif sD.partner ~= nil and sD.partner ~= self and sD.partner ~= "none" then
