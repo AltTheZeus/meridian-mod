@@ -101,6 +101,23 @@ end)
 --SORROWFUL
 local shieldEf = Object.find("sorrowShield")
 local shieldBlessed = Sprite.find("sorrowEfBlessed")
+
+registercallback("onPlayerStep", function(player)
+	if player.useItem == item then
+		local sD = player:getData()
+		if not sD.sorrowArmorTimer then sD.sorrowArmorTimer = 0 end
+		if not sD.sorrowArmor then sD.sorrowArmor = 0 end
+		if sD.sorrowArmorTimer < 20 then
+			sD.sorrowArmorTimer = sD.sorrowArmorTimer + 1
+		elseif sD.sorrowArmorTimer >= 20 then
+			sD.sorrowArmorTimer = 0
+			if sD.sorrowArmor > 0 then
+				sD.sorrowArmor = sD.sorrowArmor - 1
+			end
+		end
+	end
+end)
+
 registercallback("preHit", function(damager, hit)
 	if hit:isValid() and hit:getObject() == playa and hit.useItem == item then
 		if damager:get("damage") > math.round(hit:get("maxhp") * 0.4) then
@@ -112,6 +129,12 @@ registercallback("preHit", function(damager, hit)
 			shield.blendColor = Color.fromRGB(255, 237, 187)
 			local bShield = shieldEf:create(hit.x, hit.y - 20)
 			bShield.sprite = shieldBlessed
+		end
+		damager:set("damage", damager:get("damage") * (100 / (100 + hit:getData().sorrowArmor)))
+		damager:set("damage_fake", damager:get("damage_fake") * (100 / (100 + hit:getData().sorrowArmor))) 
+		hit:getData().sorrowArmor = hit:getData().sorrowArmor + 5
+		if hit:getData().sorrowArmor >= 30 then
+			hit:getData().sorrowArmor = 30
 		end
 	end
 end)
@@ -238,5 +261,32 @@ registercallback("onStageEntry", function()
 		if i.useItem == item then
 			i:setAlarm(0, 30)
 		end
+	end
+end)
+
+isGilded = false
+
+registercallback("onItemPickup", function(thisItem, thisPlayer)
+	local temp = false
+	for _, i in ipairs(misc.players) do
+		if i.useItem == item then
+			temp = true
+		end
+	end
+	isGilded = temp
+end)
+
+registercallback("onGameStart", function()
+	isGilded = false
+end)
+
+local boxArt = Sprite.load("Elites/gildedBox.png", 1, 0, 0)
+local box = Object.new("gildedCredits")
+box.sprite = boxArt
+box.depth = -10000
+
+registercallback("globalRoomStart", function(room)
+	if room == Room.find("Credits") and isGilded == true then
+		box:create(35, 2)
 	end
 end)
