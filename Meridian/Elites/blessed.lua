@@ -67,17 +67,8 @@ end)
 
 registercallback("onGameStart", function()
 	local dD = misc.director:getData()
-	for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-		if i.isBoss == false then
-			i.eliteTypes:remove(elite)
-		end
-	end
-	for _, m in ipairs(modloader.getMods()) do
-		for _, i in ipairs(MonsterCard.findAll(m)) do
-			if i.isBoss == false then
-				i.eliteTypes:remove(elite)
-			end
-		end
+	for _, i in ipairs(MonsterCard.findAll()) do
+		i.eliteTypes:remove(elite)
 	end
 end)
 
@@ -94,16 +85,19 @@ registercallback("onEliteInit", function(actor)
 		actor:set("exp_worth", actor:get("exp_worth") * 2.5)
 		actor:set("show_boss_health", 1)
 		actor:set("name2", "Divine Creation")
-		local blesseddudes = 0
-		for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
-			blesseddudes = blesseddudes + 1
+		aD.eliteVar = 1
+		local checks = enemies:findMatching("elite_type", ID)
+		for a, i in pairs(checks) do
+			if not i:getData().eliteVar then
+				table.remove(checks, a)
+			end
 		end
-		if blesseddudes > dD.blessedLimit then
+		if #checks > dD.blessedLimit then
 			local replacement = actor:getObject():create(actor.x, actor.y)
 			replacement:makeElite()
 			actor:delete()
 		end
-		aD.eliteVar = 1
+--		print(checks)
 	end
 end, -10)
 
