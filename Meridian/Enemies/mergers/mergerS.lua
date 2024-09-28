@@ -74,12 +74,13 @@ end)
 
 m1:addCallback("step", function(self)
 	local sD = self:getData()
+	local actorAc = self:getAccessor()
 	if sD.partnered == false then
 		sD.partner = table.random(misc.director:getData().mergins1)
 --		print(sD.partner)
 		if sD.partner == self.id then
 			sD.partner = "none"
-		elseif sD.partner ~= nil and sD.partner ~= self and sD.partner ~= "none" then
+		elseif sD.partner ~= nil and sD.partner ~= self and sD.partner ~= "none" and Object.findInstance(sD.partner):get("team") == actorAc.team and Object.findInstance(sD.partner):get("ghost") == actorAc.ghost then
 			sD.partnered = true
 			self:set("target", sD.partner)
 			Object.findInstance(sD.partner):getData().partner = self.id
@@ -93,9 +94,16 @@ m1:addCallback("step", function(self)
 			self:set("pHmax", self:get("pHmax") - 1.25)
 		end
 		sD.mergeSlowed = 1
-		sD.mergeTime = sD.mergeTime + 1
+		if self:get("stunned") == 0 then
+			sD.mergeTime = sD.mergeTime + 1
+		else
+			sD.mergeTime = 0
+			Object.findInstance(sD.partner):getData().mergeTime = 0
+		end
 		if sD.mergeTime >= 180 then
 			local combo = Object.find("mergerM"):create(self.x, self.y - 10)
+			combo:set("team", actorAc.team)
+			combo:set("ghost", actorAc.ghost)
 			if self.id > sD.partner then
 				combo:getData().spawnedFrom = self.id
 			else

@@ -134,6 +134,7 @@ end)
 
 m3:addCallback("step", function(self)
 	local sD = self:getData()
+	local actorAc = self:getAccessor()
 	local dD = misc.director:getData()
 	if self.sprite == sprites.death then
 		self.spriteSpeed = 0.2
@@ -159,19 +160,19 @@ m3:addCallback("step", function(self)
 	end
 	if sD.DNA == 1 then
 		for i, id in pairs(dD.mergins3_2) do
-			if sD.partner2 == "none" and i:getData().family == 0 then
+			if sD.partner2 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner2 = i
 				i:getData().family = sD.family
 			end
 		end
 		for i, id in pairs(dD.mergins3_3) do
-			if sD.partner3 == "none" and i:getData().family == 0 then
+			if sD.partner3 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner3 = i
 				i:getData().family = sD.family
 			end
 		end
 		for i, id in pairs(dD.mergins3_4) do
-			if sD.partner4 == "none" and i:getData().family == 0 then
+			if sD.partner4 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner4 = i
 				i:getData().family = sD.family
 			end
@@ -194,9 +195,20 @@ m3:addCallback("step", function(self)
 				self:set("pHmax", self:get("pHmax") - 1.1)
 			end
 			sD.mergeSlowed = 1
-			sD.mergeTime = sD.mergeTime + 1
+			if self:get("stunned") == 0 then
+				sD.mergeTime = sD.mergeTime + 1
+			else
+				for _, reset in ipairs(m3:findAll()) do
+					local rD = reset:getData()
+					if rD.family == sD.family then
+						rD.mergeTime = 0
+					end
+				end
+			end
 			if sD.mergeTime >= 180 then
-				local combo = Object.find("GiantJelly"):create(self.x, self.y - 10)
+				local combo = Object.find("mergerG"):create(self.x, self.y - 10)
+				combo:set("team", actorAc.team)
+				combo:set("ghost", actorAc.ghost)
 				for _, killme in ipairs(m3:findAll()) do
 					local kD = killme:getData()
 					if kD.family == sD.family then
@@ -252,11 +264,11 @@ m3:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 15) + math.random(-2, 2))
 	end
 end)
 
@@ -295,7 +307,7 @@ Monster.giveAI(m3)
 
 Monster.setSkill(m3, 1, 30, 1.3 * 60, function(actor)
 	local sD = actor:getData()
-	if actor:get("target") and actor:get("target") ~= nil and Object.findInstance(actor:get("target")):getObject() ~= m3 and Object.findInstance(actor:get("target")):get("team") ~= "enemy" then
+	if actor:get("target") and actor:get("target") ~= nil and Object.findInstance(actor:get("target")):get("team") ~= actor:get("team") then
 		Monster.setActivityState(actor, 1, actor:getAnimation("shoot"), 0.2, true, true)
 		Monster.activateSkillCooldown(actor, 1)
 	end

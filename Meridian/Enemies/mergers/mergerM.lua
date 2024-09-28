@@ -75,12 +75,13 @@ end)
 
 m2:addCallback("step", function(self)
 	local sD = self:getData()
+	local actorAc = self:getAccessor()
 	if sD.partnered == false then
 		sD.partner = table.random(misc.director:getData().mergins2)
 --		print(sD.partner)
 		if sD.partner == self.id then
 			sD.partner = "none"
-		elseif sD.partner ~= nil and sD.partner ~= self and sD.partner ~= "none" then
+		elseif sD.partner ~= nil and sD.partner ~= self and sD.partner ~= "none" and Object.findInstance(sD.partner):get("team") == actorAc.team and Object.findInstance(sD.partner):get("ghost") == actorAc.ghost then
 			sD.partnered = true
 			self:set("target", sD.partner)
 			Object.findInstance(sD.partner):getData().partner = self.id
@@ -94,9 +95,16 @@ m2:addCallback("step", function(self)
 			self:set("pHmax", self:get("pHmax") - 1.25)
 		end
 		sD.mergeSlowed = 1
-		sD.mergeTime = sD.mergeTime + 1
+		if self:get("stunned") == 0 then
+			sD.mergeTime = sD.mergeTime + 1
+		else
+			sD.mergeTime = 0
+			Object.findInstance(sD.partner):getData().mergeTime = 0
+		end
 		if sD.mergeTime >= 180 then
 			local combo = Object.find("merger"):create(self.x, self.y - 10)
+			combo:set("team", actorAc.team)
+			combo:set("ghost", actorAc.ghost)
 			if self.id > sD.partner then
 				combo:getData().spawnedFrom = self.id
 			else
@@ -163,7 +171,7 @@ Monster.giveAI(m2)
 
 Monster.setSkill(m2, 1, 30, 1.3 * 60, function(actor)
 	local sD = actor:getData()
-	if Object.findInstance(actor:get("target")):getObject() ~= m2 and Object.findInstance(actor:get("target")):get("team") ~= "enemy" then
+	if Object.findInstance(actor:get("target")):get("team") ~= actor:get("team") then
 		Monster.setActivityState(actor, 1, actor:getAnimation("shoot"), 0.2, true, true)
 		Monster.activateSkillCooldown(actor, 1)
 	end
