@@ -2,13 +2,20 @@ require("Items/battery")
 require("Items/berries")
 require("Items/cable")
 require("Items/cards")
+require("Items/chaos")
 require("Items/chrome")
+require("Items/emberfly")
 require("Items/gas")
+require("Items/homunculus")
 require("Items/iron")
 require("Items/lacertianfang")
+require("Items/misshapenflesh")
+require("Items/opal")
 require("Items/paddle")
-require("Items/homunculus")
+require("Items/pen")
+require("Items/pendant")
 require("Items/snowball")
+
 
 --Starstorm tab menu stuff
 if modloader.checkMod("Starstorm") then
@@ -25,3 +32,4 @@ if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(Item.find("Bidder's Paddle"), 50, "Picking up an item reduces the cost of all chests on the stage by 2%.", "+2% per stack.")
 	TabMenu.setItemInfo(Item.find("Snowball"), nil, "Multiplicitavely increase damage of all attacks, based on the attack's base damage.", "Multiplicative damage increase stacks multiplicatively.")
 end
+
