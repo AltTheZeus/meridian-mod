@@ -201,6 +201,15 @@ registercallback("onNPCDeath", function(npc)
 	end
 end)
 
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	for a, i in pairs(dD.shrineBabies) do
+		if not i or not i:isValid() then
+			dD.shrineBabies[a] = nil
+		end
+	end
+end)
+
 function distance(x1, y1, x2, y2)
 	local distance = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
 	return distance
