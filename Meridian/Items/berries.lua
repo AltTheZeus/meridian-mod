@@ -12,10 +12,11 @@ local itemAssignments = {
 	WispB = Item.find("Legendary Spark"),
 	ImpG = Item.find("Imp Overlord's Tentacle"),
 	ImpGS = Item.find("Imp Overlord's Tentacle"),
-	Ifrit = Item.find("Ifrit's Horn"),
-	Lacertian = Item.find("Relentless Fang")
+	Ifrit = Item.find("Ifrit's Horn")
 	}
 registercallback("postLoad", function()
+	itemAssignments["Lacertian"] = Item.find("Relentless Fang")
+	itemAssignments["doomdrop"] = Item.find("Misshapen Flesh")
 	if modloader.checkMod("Starstorm") then
 		itemAssignments["Boar"] = Item.find("Toxic Tail")
 		itemAssignments["Turtle"] = Item.find("Scalding Scale")
@@ -82,6 +83,7 @@ end)
 registercallback("onNPCDeathProc", function(npc, player)
 	if player:countItem(item) > 0 then
 		for a, b in pairs(itemAssignments) do
+--			print(a)
 			if a == "SquallEel" then
 				if npc:getObject() == Object.find("Squall Eel") then
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
@@ -104,6 +106,17 @@ registercallback("onNPCDeathProc", function(npc, player)
 				if npc:getObject() == Object.find("Worm") or npc:getObject() == Object.find("WormBody") or npc:getObject() == Object.find("WormController") or npc:getObject() == Object.find("WormHead") then
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
 						local bush = berryBush:create(player.x, player.y - 20)
+						local bD = bush:getData()
+						bD.payload = b
+					end
+				end
+			end
+			if a == "doomdrop" then
+				if npc:getObject() == Object.find("mergerG") then
+					print("hi")
+					local aD = npc:getData()
+					if aD.bossedUp ~= nil and math.chance(2.5 + (player:countItem(item) * 2.5)) then
+						local bush = berryBush:create(npc.x, npc.y - 20)
 						local bD = bush:getData()
 						bD.payload = b
 					end
