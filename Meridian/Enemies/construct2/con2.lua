@@ -86,7 +86,7 @@ head:addCallback("step", function(self)
 	end
 	actorAc.team = sD.body:get("team")
 	actorAc.maxhp = sD.body:get("maxhp")
-	actorAc.hp = sD.body:get("maxhp")
+	actorAc.hp = sD.body:get("hp")
 	actorAc.damage = sD.body:get("damage")
 	self.sprite = Sprite.find(sD.body.sprite:getName() .. "_B")
 	self.subimage = sD.body.subimage
