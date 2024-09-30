@@ -167,7 +167,7 @@ registercallback("onGameEnd", function()
 	end
 end)
 
-local monsLog = MonsterLog.new("Temple Marauder")
+local monsLog = MonsterLog.find("Temple Marauder")
 MonsterLog.map[dog] = monsLog
 
 monsLog.displayName = "Temple Marauder"
