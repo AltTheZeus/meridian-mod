@@ -1,4 +1,13 @@
 local path = "Enemies/"
+--logs
+MonsterLog.new("Beta Construct1")
+MonsterLog.new("Beta Construct2")
+MonsterLog.new("Dewdrop")
+MonsterLog.new("Stone Giant")
+MonsterLog.new("Temple Marauder")
+MonsterLog.new("Basalt Crab")
+MonsterLog.new("Doomdrop")
+MonsterLog.new("Lacertian")
 
 -- enemies
 require(path.."BasaltCrab.basaltCrab")
@@ -6,12 +15,10 @@ require(path.."construct1.con1")
 require(path.."construct2.con2")
 require(path.."guardDog.dog")
 require(path.."stoneGiant.giant")
-if modloader.checkFlag("enable_mergers") then
-	require(path.."mergers.mergerG")
-	require(path.."mergers.merger")
-	require(path.."mergers.mergerM")
-	require(path.."mergers.mergerS")
-end
+require(path.."mergers.mergerG")
+require(path.."mergers.merger")
+require(path.."mergers.mergerM")
+require(path.."mergers.mergerS")
 
 -- bosses
 require(path.."Lacertian.lacertian")
