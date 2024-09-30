@@ -148,7 +148,7 @@ registercallback("onGameEnd", function()
 	end
 end)
 
-local monsLog = MonsterLog.new("Beta Construct1")
+local monsLog = MonsterLog.find("Beta Construct1")
 MonsterLog.map[con1] = monsLog
 
 monsLog.displayName = "Beta Construct"
