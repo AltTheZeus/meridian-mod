@@ -67,7 +67,7 @@ item:setLog{
     group = "common",
     description = "Gain &b&8% speed&!& every minute you spend on a stage.",
     priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "7 Galon lane,\nLittleroot Town,\nHoenn",
+    date = "4/4/2055",
+    story = "check THIS one out!!! i didnt dig it up or anything but its a bona fide opal! look at the sheen look at the opalescence!! ohhh its so marvelous :D it cost me a litttttle bit but it was SO worth it. put it on the shelf next to the tv!! i cant wait to see it when im back ^_^ its gonna fit right there, so homely and welcoming...!"
 }

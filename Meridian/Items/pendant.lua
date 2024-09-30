@@ -5,11 +5,13 @@ item.pickupText = "Seems to do nothing..."
 
 item.sprite = Sprite.load("Items/pendant.png", 1, 16, 16)
 
+registercallback("postLoad", function()
 item:setLog{
-    group = "boss",
-    description = "&y&15% chance&!& to inflict a stacking debuff on enemies. At &y&3 stacks&!&, explodes in a small area for &y&300% damage&!&.",
-    priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
+    group = "end",
+    description = "--",
+    priority = "&p&Field-Found&!&",
+    destination = "Unknown,\nUnknown,\nUnknown",
     date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    story = "At first, I thought the symbol was rigid. The ways I saw it engraved on those dilapidated halls, towering pillars, and the beacon. But when it clattered into my still-shaking hand, I felt it... shift. Reconfigure, its rings and moons rotating in impossible ways around its center, a response to my grasp.\n\nAs I tilted it, its directions changed in ways I could not parse. Its motion reminded me of the navigation tools that I fear I may never hold again. Its twisting shape reminding me that I am alien to this world, and could never belong to it.\n\nIn this... I feel that it guides me. In my satchel, and occasionally around my neck, a step closer to... my destination. Beyond this plain, towards something still waiting for me."
 }
+end)

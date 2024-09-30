@@ -42,7 +42,7 @@ end)
 
 item:setLog{
     group = "common_locked",
-    description = "When picking up an item, decrease the cost of all chests on the stage by &y&2%&!& &dg&(+2% per stack)&!&.",
+    description = "When picking up an item, decrease the cost of all chests on the stage by &y&2%&!&.",
     priority = "&w&Standard&!&",
     destination = "Lot 2,\nEx-Shipping District,\nStorage Planet",
     date = "6/25/2056",

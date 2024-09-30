@@ -38,7 +38,7 @@ end)
 
 item:setLog{
     group = "uncommon",
-    description = "Increase damage against stunned enemies by &y&10%&!& &dg&(+0.3 per stack)&!&.",
+    description = "Increase damage against stunned enemies by &y&10%&!&.",
     priority = "&g&MILITARY&!&",
     destination = "Militia Operations,\n[REDACTED],\nNewcorps",
     date = "[REDACTED]",

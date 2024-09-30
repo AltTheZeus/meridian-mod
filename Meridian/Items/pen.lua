@@ -13,6 +13,11 @@ penBuff.sprite = Sprite.load("Items/penBuff.png", 1, 10, 0)
 local penBuff2 = Buff.new("Very Shocked")
 penBuff2.sprite = Sprite.load("Items/penBuff2.png", 1, 10, 0)
 
+if modloader.checkMod("Starstorm") then
+	table.insert(ss.whitelist.vaccine, penBuff)
+	table.insert(ss.whitelist.vaccine, penBuff2)
+end
+
 penBuff:addCallback("start", function(self)
 	local sD = self:getData()
 	sD.penStorage = self:get("pHmax")*0.2

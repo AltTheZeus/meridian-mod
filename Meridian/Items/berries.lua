@@ -14,6 +14,7 @@ local itemAssignments = {
 	ImpGS = Item.find("Imp Overlord's Tentacle"),
 	Ifrit = Item.find("Ifrit's Horn")
 	}
+local mysticAssignments = {}
 registercallback("postLoad", function()
 	itemAssignments["Lacertian"] = Item.find("Relentless Fang")
 	itemAssignments["doomdrop"] = Item.find("Misshapen Flesh")
@@ -30,6 +31,12 @@ registercallback("postLoad", function()
 	end
 	if modloader.checkMod("MysticsExtras") then
 		itemAssignments["CosmicVanguard"] = Item.find("Stardust Shield")
+		mysticAssignments["GolemG"] = Item.find("Earth Essence")
+		mysticAssignments["GiantJelly"] = Item.find("Tentacle Branch")
+		mysticAssignments["WispB"] = Item.find("Archaic Mask")
+		mysticAssignments["ImpG"] = Item.find("Ghastly Eye")
+		mysticAssignments["ImpGS"] = Item.find("Ghastly Eye")
+		mysticAssignments["Ifrit"] = Item.find("Ifrit's Tail")
 	end
 end)
 
@@ -66,14 +73,24 @@ berryBush:addCallback("draw", function(self)
 			local offset = graphics.textWidth("Press '" .. input.getControlString("enter", i) .. "' to forage.", graphics.FONT_DEFAULT) / 2
 			graphics.printColor("&w&Press &y&'" .. input.getControlString("enter", i) .. "'&w& to forage.&!&", self.x - offset + 5, self.y - 30, graphics.FONT_DEFAULT)
 			if input.checkControl("enter", i) == 2 or input.checkControl("enter", i) == 3 then
-				if sD.payload then
-					sD.payload:create(self.x, self.y - 16)
-					berrySplash:burst("above", self.x, self.y - 6, 20)
-					self:destroy()
+				if Artifact.find("Command").active == true then
+					if modloader.checkMod("Starstorm") then
+						ItemPool.find("legendary"):getCrate():create(self.x, self.y)
+						berrySplash:burst("above", self.x, self.y - 6, 20)
+					else
+						ItemPool.find("uncommon"):getCrate():create(self.x, self.y)
+						berrySplash:burst("above", self.x, self.y - 6, 20)
+					end
 				else
-					item:create(self.x, self.y - 16)
-					berrySplash:burst("above", self.x, self.y - 6, 20)
-					self:destroy()
+					if sD.payload then
+						sD.payload:create(self.x, self.y - 16)
+						berrySplash:burst("above", self.x, self.y - 6, 20)
+						self:destroy()
+					else
+						item:create(self.x, self.y - 16)
+						berrySplash:burst("above", self.x, self.y - 6, 20)
+						self:destroy()
+					end
 				end
 			end
 		end
@@ -82,6 +99,13 @@ end)
 
 registercallback("onNPCDeathProc", function(npc, player)
 	if player:countItem(item) > 0 then
+		if modloader.checkMod("Starstorm") and Artifact.find("Command").active == true then 
+				if math.chance(2.5 + (player:countItem(item) * 2.5)) then
+					local bush = berryBush:create(npc.x, npc.y - 20)
+					local bD = bush:getData()
+					bD.payload = "nothing"
+				end
+		else
 		for a, b in pairs(itemAssignments) do
 --			print(a)
 			if a == "SquallEel" then
@@ -107,7 +131,11 @@ registercallback("onNPCDeathProc", function(npc, player)
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
 						local bush = berryBush:create(player.x, player.y - 20)
 						local bD = bush:getData()
-						bD.payload = b
+						if modloader.checkMod("MysticsExtras") and math.random(100) <= 50 then
+							bD.payload = Item.find("Fiery Gland")
+						else
+							bD.payload = b
+						end
 					end
 				end
 			end
@@ -129,22 +157,30 @@ registercallback("onNPCDeathProc", function(npc, player)
 						local bD = bush:getData()
 						bD.payload = b
 					else
-						local bush = berryBush:create(npc.x, npc.y - 20)
-						local bD = bush:getData()
-						bD.payload = b
+						if modloader.checkMod("MysticsExtras") and math.random(100) <= 50 and (a == "WispB" or a == "GolemG" or a == "ImpG" or a == "ImpGS" or a == "Ifrit" or a == "GiantJelly") then
+							for c, d in pairs(mysticAssignments) do
+								if npc:getObject():getName() == c then
+									local bush = berryBush:create(npc.x, npc.y - 20)
+									local bD = bush:getData()
+									bD.payload = d
+								end
+							end
+						else
+							local bush = berryBush:create(npc.x, npc.y - 20)
+							local bD = bush:getData()
+							bD.payload = b
+						end
 					end
 				end
 			end
 		end
+		end
 	end
 end)
 
---TODO: add mystic's extras alternate drop compat
---TODO: blacklist from command runs?
-
 item:setLog{
     group = "uncommon",
-    description = "Bosses have a 5% &dg&(+2.5% per stack)&!& chance to drop a &r&unique item&!&.",
+    description = "Bosses have a 5% chance to drop a &r&unique item&!&.",
     priority = "&g&Field-Found&!&",
     destination = "Bio-Analysis Lab,\nCaledew,\n25 and 4th Quadrant",
     date = "6/5/2056",

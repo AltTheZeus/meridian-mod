@@ -54,7 +54,7 @@ end)
 
 item:setLog{
     group = "common_locked",
-    description = "While your equipment is off cooldown, increase &g&health regen&!& by &g&0.3&!& &dg&(+0.3 per stack)&!& per second.",
+    description = "While your equipment is off cooldown, increase &g&health regen&!& by &g&0.3&!& per second.",
     priority = "&w&Standard&!&",
     destination = "Stepped Terraces,\n3rd Colony,\nMars",
     date = "8/12/2056",

@@ -21,6 +21,10 @@ shackled:addCallback("start", function(victim)
 	end
 end)
 
+if modloader.checkMod("Starstorm") then
+	table.insert(ss.whitelist.vaccine, shackled)
+end
+
 shackled:addCallback("step", function(victim)
 	local vD = victim:getData()
 	if victim:get("direction") ~= (0 or 1) then

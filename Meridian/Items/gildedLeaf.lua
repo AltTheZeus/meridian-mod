@@ -218,6 +218,7 @@ registercallback("onStep", function()
 			aD.points = aD.points - aD.timer
 			local height = aD.card.object.sprite.height
 			height = height + i.sprite.yorigin
+			aD.card.eliteTypes:add(eliteBabyBlessed)
 			local newGuy = aD.card.object:create(i.x, i.y - height)
 			newGuy:set("team", "player")
 			local nD = newGuy:getData()
@@ -225,10 +226,12 @@ registercallback("onStep", function()
 			nD.evoker = i.id
 			aD.minionCount = aD.minionCount + 1
 			newGuy:makeElite(eliteBabyBlessed)
+			aD.card.eliteTypes:remove(eliteBabyBlessed)
 				newGuy:set("maxhp", (math.round(((newGuy:get("maxhp") / 2.6) * 0.75))))
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
+				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
 			repeat

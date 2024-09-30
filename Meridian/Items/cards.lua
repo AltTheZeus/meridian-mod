@@ -47,7 +47,7 @@ end)
 
 item:setLog{
     group = "uncommon_locked",
-    description = "Every 5 seconds, enemies become worth &y&1&!& &dg&(+1 per stack)&!& more gold, scaling with time.",
+    description = "Every 5 seconds, enemies become worth &y&1&!& more gold, scaling with time.",
     priority = "&g&High Priority&!&",
     destination = "12 Cherish Place,\nThe Landing Strip,\nJupiter",
     date = "12/28/2056",

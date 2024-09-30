@@ -111,7 +111,7 @@ end)
 
 item:setLog{
     group = "uncommon",
-    description = "Gain &g&10 shield&!&. Your drones gain &g&20 shield&!& &dg&(+5 per stack)&!&. You and your drones gain &g&10 armor&!& while you have shield.",
+    description = "Gain &g&10 shield&!&. Your drones gain &g&20 shield&!&. You and your drones gain &g&10 armor&!& while you have shield.",
     priority = "&g&Priority&!&",
     destination = "Cutting Edge Robotics\n& Technologies,\nAzure Fields,\nVenus",
     date = "2/4/2056",

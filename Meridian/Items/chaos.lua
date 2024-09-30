@@ -52,9 +52,9 @@ end)
 
 item:setLog{
     group = "common",
-    description = "Heal faster at low health.",
+    description = "Build up a &g&healing charge&!& while attacking. At low health, the charge is used to &g&rapidly heal&!&.",
     priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "Hungry Crates,\nDansine,\nHautilon",
+    date = "3/4/2056",
+    story = "I'm just dumping this one into storage too. Should be the last of my trinkets coming your way for a while. This one is real interesting though, I'll tell you what! When I carry it around with me, it seems to build up some type of charge. Like static electricity. Heh, but this one shocks a lot harder than that. Thanks again for stowing all this junk for me, Craig."
 }

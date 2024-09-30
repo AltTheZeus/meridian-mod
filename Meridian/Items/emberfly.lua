@@ -40,7 +40,7 @@ cloud:addCallback("step", function(self)
 	end
 	sD.timer = sD.timer + 1
 	if sD.timer >= 30 then
-		sD.owner:fireExplosion(self.x, self.y + 20, 24/19, 20/4, 0.5 * sD.mult, nil, nil, DAMAGER_NO_PROC, DAMAGER_NO_RECALC)
+		sD.owner:fireExplosion(self.x - 8, self.y + 20, 24/19, 20/4, 0.5 * sD.mult, nil, nil, DAMAGER_NO_PROC, DAMAGER_NO_RECALC)
 		sD.timer = 0
 	end
 	sD.life = sD.life + 1
@@ -51,7 +51,7 @@ end)
 
 registercallback("onHit", function(damager, hit, x, y)
 	if hit:getObject() == Object.find("p") and hit:countItem(item) > 0 and math.random(100) <= 20 then
-		local cD = cloud:create(x, y - 40):getData()
+		local cD = cloud:create(x + 8, y - 40):getData()
 		cD.owner = hit
 		cD.mult = hit:countItem(item)
 	end
@@ -59,9 +59,9 @@ end)
 
 item:setLog{
     group = "rare",
-    description = "Spawn 4 &r&chunks of flesh&!& around the map. Collecting all 4 will summon a &r&Flesh Amalgamate&!& near the Teleporter. While the Telporter is active, killing an enemy near the &r&Flesh Amalgamate&!& will create an explosion for &y&800% damage&!&.",
+    description = "20% chance on being hit to spawn an &y&Embercloud&!& which deals &y&100% damage per second&!&.",
     priority = "&r&High Priority/Biological?&!&",
     destination = "Caroline Williams,\nRare/Extinct\nStudy Center,\nVenus",
-    date = "8/4/2056",
+    date = "4/19/2056",
     story = "Hey Car, me again. I know it's not your usual thing and all, but this little freak of nature was too cute! It was all whining and begging at me in the alleyway- Stop asking me where I find them -and I just *need* you to look at it! At least let me know how long it's gonna last... I wanna keep it!"
 }

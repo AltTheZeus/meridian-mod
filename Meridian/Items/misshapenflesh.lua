@@ -73,9 +73,9 @@ end)
 
 item:setLog{
     group = "boss",
-    description = "For every skill on cooldown, reduce skill cooldowns by &y&7%&!&.",
+    description = "Deal an extra &y&10% damage&!& to enemies in contact with one another.",
     priority = "&b&Field-Found&!&",
-    destination = "8009,\nImperceptible Fields,\nUnknown",
+    destination = "Solitary Confinement,\nHealth & Safety Division,\nNewcorps",
     date = "--",
-    story = "Through every environment this beast tailed me. Always moving, always chasing.\n\nIt's said humans were as prevalent as we were because of our persistence hunting style.\n\nThis tooth is evidence that we can outhunt the hunter itself."
+    story = "When I thought they couldn't get any worse... Two of those hulking masses coalesced further. Great dripping arms, mottled and twisted body, riddled with blemishes. It's pulsating and rearranging constantly. If the sight of it wasn't already enough to turn my stomach, watching it belch out countless spawn would have done it.\n\nThe only thing that let me escape the growing crowd of tangled limbs and melding matter was the same thing that caused them to be so vile in the first place. Their gathering and combining gives them more vital organs in worse places... Lining up one good shot buys me time until...\n\n...Until it grows bigger."
 }
