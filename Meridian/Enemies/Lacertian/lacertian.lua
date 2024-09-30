@@ -9,9 +9,9 @@ local sprites = {
 	burrow = Sprite.load("LacertianBurrow", path.."burrow", 10, 85, 51),
 	shoot2 = Sprite.load("LacertianShoot2", path.."shoot2", 7, 90, 80), -- 
 	shoot2neutral = Sprite.load("LacertianShoot2Neutral", path.."shoot2neutral", 7, 90, 80),
-	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51 - 6),
-	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51 - 6),
-	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31 - 6),
+	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51),
+	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51),
+	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31),
 	maskNone = Sprite.load("LacertianMaskNone", path.."maskNone", 1, 0, 50),
 	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 90, 51),
 	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 90, 51),
@@ -205,7 +205,7 @@ findLacertianGround = function(actor, x, y)
 	return x2, x1]]
 	
 	actor.mask = sprites.mask2
-	local checkDown = actor:collidesMap(x, y + 6)
+	local checkDown = actor:collidesMap(x, y + 12)
 	actor.mask = sprites.mask3
 	local checkUp = not actor:collidesMap(x, y - 12)
 	actor.mask = sprites.mask
@@ -410,7 +410,7 @@ lacertian:addCallback("step", function(actor)
 			
 			if actorAc.state == "idle" or actorAc.state == "chase" then
 				local n = actorAc.moveRight - actorAc.moveLeft
-				if n ~= 0 and findLacertianGround(actor, actor.x + sprites.mask.width / 2 * n, actor.y) and actorAc.pHmax > 0 then 
+				if n ~= 0 and findLacertianGround(actor, actor.x + sprites.mask.width / 2 * n, actor.y) then 
 					n = actorAc.moveRight - actorAc.moveLeft
 					actor.x = actor.x + n * actorAc.pHmax 
 					actor.xscale = n 
@@ -488,37 +488,35 @@ lacertian:addCallback("step", function(actor)
 						actor.xscale = math.sign(trg.x - actor.x)
 						local n
 						local minDis
-						local ground = obj.B:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.B:findNearest(trg.x, trg.y)
+						local ground = obj.B:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.B:findNearest(trg.x, trg.y)
 						if not ground then 
-							ground = obj.BossSpawn:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.BossSpawn:findNearest(trg.x, trg.y)
+							ground = obj.BossSpawn:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.BossSpawn:findNearest(trg.x, trg.y)
 						end 
 						if not ground then 
-							ground = obj.BossSpawn2:findLine(trg.x, trg.y, trg.x, trg.y + 12) --or obj.BossSpawn2:findNearest(trg.x, trg.y)
+							ground = obj.BossSpawn2:findLine(trg.x, trg.y, trg.x, trg.y + 12) or obj.BossSpawn2:findNearest(trg.x, trg.y)
 						end
-						if ground then
-							local yy = ground.y 
-							for i = x1, x2, 16 do 
-								local groundCheck = findLacertianGround(actor, i, yy)
-								local dis = distance(i, trg.y, trg.x, trg.y) 
-								if (not minDis or (minDis > dis and dis > 5)) and groundCheck then 
-									minDis = dis 
-									n = i 
-								end
+						local yy = ground.y 
+						for i = x1, x2, 16 do 
+							local groundCheck = findLacertianGround(actor, i, yy)
+							local dis = distance(i, trg.y, trg.x, trg.y) 
+							if (not minDis or (minDis > dis and dis > 5)) and groundCheck then 
+								minDis = dis 
+								n = i 
 							end
-							if n then 
-								actor.x = n
-								actor.y = yy
-								actorAc.ghost_x = actor.x
-								actorAc.ghost_y = actor.y
-								actorData.animLoop = 2
-								actorData.shoot2Atk = nil
-								if actor:getAlarm(3) == -1 then 
-									actorData.animLoop = 3
-									actorData.shoot2Atk = true
-								end
-								actorAc.state = "unburrow"
-								actor.subimage = 1
+						end
+						if n then 
+							actor.x = n
+							actor.y = yy
+							actorAc.ghost_x = actor.x
+							actorAc.ghost_y = actor.y
+							actorData.animLoop = 2
+							actorData.shoot2Atk = nil
+							if actor:getAlarm(3) == -1 then 
+								actorData.animLoop = 3
+								actorData.shoot2Atk = true
 							end
+							actorAc.state = "unburrow"
+							actor.subimage = 1
 						end
 					end
 				end
@@ -865,7 +863,7 @@ if not modloader.checkFlag("mn_disable_elites") then
 	card.eliteTypes:add(EliteType.find("sorrow", "meridian"))
 end
 
-local monsLog = MonsterLog.new("Lacertian")
+local monsLog = MonsterLog.find("Lacertian")
 MonsterLog.map[lacertian] = monsLog
 
 monsLog.displayName = "Lacertian"
