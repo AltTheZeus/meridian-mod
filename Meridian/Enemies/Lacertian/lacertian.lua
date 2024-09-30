@@ -708,6 +708,7 @@ lacertian:addCallback("step", function(actor)
 				if math.floor(actor.subimage) == 1 and actorData.shoot2frame1 then 
 					actorData.shoot2frame1 = false
 					if actorData.shoot2Atk then 
+						misc.shakeScreen(5)
 						actor:fireExplosion(actor.x - actor.xscale * 30, actor.y - 30, (actor.sprite.width / 2 - 20)/19, 30/4, 2)
 					end
 					sounds.unburrow:play(1, 1)
