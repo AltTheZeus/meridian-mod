@@ -26,27 +26,6 @@ eliteBabyBlessed.displayName = "Gold-Leafed Creation:"
 eliteBabyBlessed.color = Color.fromRGB(152, 171, 192)
 eliteBabyBlessed.palette = sprPalBabyBlessed
 
-
-for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-	if i.isBoss == false and i.type == "classic" then
-		i.eliteTypes:add(elite)
---		i.eliteTypes:add(eliteBaby)
---		i.eliteTypes:add(eliteBabyBlessed)
-	end
-end
-
-registercallback("postLoad", function()
-for _, m in ipairs(modloader.getMods()) do
-	for _, i in ipairs(MonsterCard.findAll(m)) do
-		if i.isBoss == false and i.type == "classic" then
-			i.eliteTypes:add(elite)
---			i.eliteTypes:add(eliteBaby)
---			i.eliteTypes:add(eliteBabyBlessed)
-		end
-	end
-end
-end)
-
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
 	if actor:get("elite_type") == ID or actor:get("elite_type") == bID then
@@ -146,6 +125,7 @@ if aD.card.object.sprite.height < heightLevel then
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
+				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
 				nD.terezi = 1
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
 			repeat
@@ -223,6 +203,7 @@ if aD.card.object.sprite.height < heightLevel then
 				newGuy:set("hp", newGuy:get("maxhp"))
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
+				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
 				nD.terezi = 1
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()

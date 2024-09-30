@@ -7,20 +7,6 @@ elite.displayName = "Sorrowful"
 elite.color = Color.fromRGB(146, 66, 63)
 elite.palette = sprPal
 
-for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-	if i ~= MonsterCard.find("Magma Worm", "vanilla") then
-		i.eliteTypes:add(elite)
-	end
-end
-
-registercallback("postLoad", function()
-for _, m in ipairs(modloader.getMods()) do
-	for _, i in ipairs(MonsterCard.findAll(m)) do
-		i.eliteTypes:add(elite)
-	end
-end
-end)
-
 local enemies = ParentObject.find("enemies")
 local shat1 = Buff.find("sunder1", "vanilla")
 
@@ -78,9 +64,28 @@ end)
 registercallback("preHit", function(damager, hit)
 	if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
 		if hit:isValid() and (hit:get("elite_type") == ID or hit:get("elite_type") == bID) and hit:getData().eliteVar == 1 then
+			hit:set("armor", hit:get("armor") + 5)
+			hit:getData().sorrowArmor = hit:getData().sorrowArmor + 5
+			if hit:getData().sorrowArmor > 100 then
+				local dif = hit:getData().sorrowArmor - 100
+				hit:set("armor", hit:get("armor") - dif)
+				hit:getData().sorrowArmor = hit:getData().sorrowArmor - dif
+			end
+		end
+	end
+end)
+
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.sorrowRevert = {}
+end)
+
+registercallback("onHit", function(damager, hit)
+	if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
+		if hit:isValid() and (hit:get("elite_type") == ID or hit:get("elite_type") == bID) and hit:getData().eliteVar == 1 then
 			if damager:get("damage") > math.round(hit:get("maxhp") * 0.05) then
-				damager:set("damage", math.round(hit:get("maxhp") * 0.05))
-				damager:set("damage_fake", math.round(hit:get("maxhp") * 0.05))
+				local dD = misc.director:getData()
+				dD.sorrowRevert[hit] = hit:get("hp") - math.round(hit:get("maxhp") * 0.05)
 				Sound.find("Crit"):play(0.4, 1.2)
 				local shield = Object.find("EfOutline"):create(hit.x, hit.y)
 				shield:set("parent", hit.id)
@@ -93,13 +98,15 @@ registercallback("preHit", function(damager, hit)
 					bShield.sprite = shieldBlessed
 				end
 			end
-			damager:set("damage", damager:get("damage") * (100 / (100 + hit:getData().sorrowArmor)))
-			damager:set("damage_fake", damager:get("damage_fake") * (100 / (100 + hit:getData().sorrowArmor))) 
-			hit:getData().sorrowArmor = hit:getData().sorrowArmor + 5
-			if hit:getData().sorrowArmor >= 100 then
-				hit:getData().sorrowArmor = 100
-			end
 		end
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	for i, hp in pairs(dD.sorrowRevert) do
+		i:set("hp", hp)
+		dD.sorrowRevert[i] = nil
 	end
 end)
 
@@ -113,6 +120,7 @@ registercallback("onStep", function()
 			sD.sorrowArmorTimer = 0
 			if sD.sorrowArmor > 0 then
 				sD.sorrowArmor = sD.sorrowArmor - 1
+				i:set("armor", i:get("armor") - 1)
 			end
 		end
 --		print(sD.sorrowArmor)

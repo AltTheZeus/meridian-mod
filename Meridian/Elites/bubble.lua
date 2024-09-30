@@ -7,20 +7,6 @@ elite.displayName = "Rippling"
 elite.color = Color.fromRGB(87, 70, 168)
 elite.palette = sprPal
 
-for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-	if i ~= MonsterCard.find("Magma Worm", "vanilla") then
-		i.eliteTypes:add(elite)
-	end
-end
-
-registercallback("postLoad", function()
-for _, m in ipairs(modloader.getMods()) do
-	for _, i in ipairs(MonsterCard.findAll(m)) do
-		i.eliteTypes:add(elite)
-	end
-end
-end)
-
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
 	if actor:get("elite_type") == ID or actor:get("elite_type") == bID then

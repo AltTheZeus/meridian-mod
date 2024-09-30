@@ -7,24 +7,6 @@ elite.displayName = "Forsaken"
 elite.color = Color.fromRGB(228, 205, 123)
 elite.palette = sprPal
 
-for _, i in ipairs(MonsterCard.findAll("vanilla")) do
-	i.eliteTypes:add(elite)
-end
-
-registercallback("postLoad", function()
-for _, m in ipairs(modloader.getMods()) do
-	for _, i in ipairs(MonsterCard.findAll(m)) do
-		if m == "Starstorm" then
-			if i ~= MonsterCard.find("Squall Elver") then
-				i.eliteTypes:add(elite)
-			end
-		else
-			i.eliteTypes:add(elite)
-		end
-	end
-end
-end)
-
 registercallback("onEliteInit", function(actor)
 	local aD = actor:getData()
 	if actor:get("elite_type") == ID or actor:get("elite_type") == bID then
@@ -36,7 +18,9 @@ local enemies = ParentObject.find("enemies")
 
 registercallback("onPlayerInit", function(player)
 	local pD = player:getData()
+	pD.lockCountdown = 0
 	pD.lockTimer = {0,0,0,0,0}
+	pD.lockEfTimer = 0
 end)
 
 --manifreakinglovethemacrobestheyreliterallythebest
@@ -49,7 +33,7 @@ local chainsEf = Object.new("forsakenChains")
 chainsEf.sprite = Sprite.load("Elites/forsakenEf.png", 13, 23, 60)
 local chainsBlessed = Sprite.load("Elites/forsakenEfBlessed.png", 13, 23, 60)
 local clang = Sound.load("Elites/ForsakenChains")
-chainsEf.depth = -12
+chainsEf.depth = -14
 
 chainsEf:addCallback("create", function(self)
 	local sD = self:getData()
@@ -84,23 +68,16 @@ if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_p
 	if target:isValid() and isa(target, "PlayerInstance") then
 		if (source:get("elite_type") == ID and (source:getData().eliteVar == 1 or source:getObject() == Object.find("Worm") or source:getObject() == Object.find("WormHead") or source:getObject() == Object.find("WormBody"))) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) and (source:getParent():getData().eliteVar == 1 or source:getParent():getObject() == Object.find("Worm") or source:getParent():getObject() == Object.find("WormHead") or source:getParent():getObject() == Object.find("WormBody"))) then
 			local tD = target:getData()
-			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
-				local lockedSkill = math.random(2,5)
-				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
-				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
-				chainsEf:create(target.x, target.y)
-				clang:play(1, 0.6)
+			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 and tD.lockCountdown <= 1 then 
+				tD.lockCountdown = 60
+				tD.nextChains = nil
 			end
 		end
 		if (source:get("elite_type") == bID and source:getData().eliteVar == 1) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) and source:getParent():getData().eliteVar == 1) then
 			local tD = target:getData()
-			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 then 
-				local lockedSkill = math.random(2,5)
-				target:setAlarm(lockedSkill, target:getAlarm(lockedSkill) + 120)
-				tD.lockTimer[lockedSkill] = tD.lockTimer[lockedSkill] + 120
-				local chainsYay = chainsEf:create(target.x, target.y)
-				chainsYay.sprite = chainsBlessed
-				clang:play(1, 0.6)
+			if tD.lockTimer[1] < 1 and tD.lockTimer[2] < 1 and tD.lockTimer[3] < 1 and tD.lockTimer[4] < 1 and tD.lockCountdown <= 1 then
+				tD.lockCountdown = 60
+				tD.nextChains = chainsBlessed
 			end
 		end
 	end
@@ -135,12 +112,45 @@ registercallback("onPlayerStep", function(player)
 	end
 end)
 
-local lockSprite = Sprite.find("mobSkills")
+local warnLock = Sprite.load("Elites/forsakenEf3", 0, 0, 0)
+local lockSprite = Sprite.load("Elites/forsakenEf2", 4, 0, 0)
+registercallback("onPlayerDrawAbove", function(player)
+	local pD = player:getData()
+	if pD.lockCountdown > 0 then
+		pD.lockCountdown = pD.lockCountdown - 1
+	end
+	if pD.lockCountdown == 1 then
+		local lockedSkill = math.random(2,5)
+		player:setAlarm(lockedSkill, player:getAlarm(lockedSkill) + 120)
+		pD.lockTimer[lockedSkill] = pD.lockTimer[lockedSkill] + 120
+		pD.lockEfTimer = 0
+		local chainsYay = chainsEf:create(player.x, player.y)
+		if pD.nextChains and pD.nextChains == chainsBlessed then
+			chainsYay.sprite = chainsBlessed
+		end
+		clang:play(1, 0.6)
+	end
+	if pD.lockCountdown >= 1 then
+		graphics.drawImage{warnLock, player.x + 9, player.y - 5, alpha = 1 - (pD.lockCountdown/100)}
+	end
+end)
+
 registercallback("onPlayerHUDDraw", function(player, x, y)
 	local pD = player:getData()
 	for i, k in pairs(pD.lockTimer) do
 		if pD.lockTimer[i] > 0 then
-			graphics.drawImage{lockSprite, x + ((23 * i) - 46), y, 2}
+			local sub
+			if pD.lockEfTimer <= 9 then
+				sub = 1
+			elseif pD.lockEfTimer <= 19 then
+				sub = 2
+			elseif pD.lockEfTimer <= 29 then
+				sub = 3
+			else
+				sub = 4
+			end
+			graphics.drawImage{lockSprite, x + ((23 * i) - 46), y, sub}
+			pD.lockEfTimer = pD.lockEfTimer + 1
 		end
 	end
 end)
@@ -260,18 +270,21 @@ registercallback("onStep", function()
 		if i:get("elite_type") == ID and not i:getData().changed then
 			i:set("name", "Forsaken Worm")
 			i:set("name2", "The Great Inhibitor")
+			i.blendColor = Color.WHITE
 			i:getData().changed = 1
 		end
 	end
 	for _, i in ipairs(Object.find("WormBody"):findAll()) do
 		if i:get("elite_type") == ID and not i:getData().changed then
 			i.sprite = bodySpr
+			i.blendColor = Color.WHITE
 			i:getData().changed = 1
 		end
 	end
 	for _, i in ipairs(Object.find("WormHead"):findAll()) do
 		if i:get("elite_type") == ID and not i:getData().changed then
 			i.sprite = headSpr
+			i.blendColor = Color.WHITE
 			i:getData().changed = 1
 		end
 	end
