@@ -218,7 +218,7 @@ registercallback("onGameEnd", function()
 	end
 end)
 
-local monsLog = MonsterLog.new("Stone Giant")
+local monsLog = MonsterLog.find("Stone Giant")
 MonsterLog.map[giant] = monsLog
 
 monsLog.displayName = "Stone Giant"
