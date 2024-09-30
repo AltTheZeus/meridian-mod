@@ -89,14 +89,17 @@ m1:addCallback("step", function(self)
 		end
 	end
 
-	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
+	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
 		if sD.mergeSlowed == 0 then
 			self:set("pHmax", self:get("pHmax") - 1.25)
 		end
 		sD.mergeSlowed = 1
-		if self:get("stunned") == 0 then
+		if self:get("stunned") == 0 and misc.getTimeStop() == 0 then
 			sD.mergeTime = sD.mergeTime + 1
-		else
+			if math.random(100) <= 2 then
+				ParticleType.find("merge"):burst("above", self.x, self.y + 1, 1)
+			end
+		elseif (misc.getTimeStop() > 0 and self:get("stunned") > 0) or self:get("stunned") > 0 then
 			sD.mergeTime = 0
 			Object.findInstance(sD.partner):getData().mergeTime = 0
 		end
@@ -145,17 +148,17 @@ m1:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y + 1, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y + 1, (sD.mergeTime / 15) + math.random(-2, 2))
 	end
 end)
 
 m1:addCallback("destroy", function(self)
 	local sD = self:getData()
-	if sD.partnered == true then
+	if sD.partnered == true and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() then
 		Object.findInstance(sD.partner):getData().partnered = false
 		Object.findInstance(sD.partner):getData().partner = "none"
 		Object.findInstance(sD.partner):set("target", -4)
@@ -166,17 +169,6 @@ end)
 
 Monster.giveAI(m1)
 
---[[Monster.setSkill(con1, 1, 30, 1.3 * 60, function(actor)
-	Monster.setActivityState(actor, 1, actor:getAnimation("shoot"), 0.2, true, true)
-	Monster.activateSkillCooldown(actor, 1)
-end)
-Monster.skillCallback(con1, 1, function(actor, relevantFrame)
-	if relevantFrame == 6 then
-		sounds.attack:play(1 + 1)
-		actor:fireExplosion(actor.x + actor.xscale * 15, actor.y - 4, 15/19, 8/4, 1, nil)
-	end
-end)]]
-
 --------------------------------------
 
 local card = MonsterCard.new("m1", m1)
@@ -186,17 +178,5 @@ card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
 card.cost = 6
---[[for _, elite in ipairs(EliteType.findAll("vanilla")) do
-    card.eliteTypes:add(elite)
-end]]
 
-local monsLog = MonsterLog.new("Dewdrop")
-MonsterLog.map[m1] = monsLog
-
-monsLog.displayName = "Dewdrop"
-monsLog.story = "These 'creatures' are many, but weak. I can find no trace of biological components within them, but they act on their own, as if they were individuals. Every instance of the small constructs seems to be damaged and scuffed, abandoned in the environment. My compassion for them ends there, as their ferocity is not dampened by their hindrances."
-monsLog.statHP = 20
-monsLog.statDamage = 0
-monsLog.statSpeed = 1.3
-monsLog.sprite = sprites.idle
---monsLog.portrait = sprites.portrait
+MonsterLog.map[m1] = MonsterLog.find("Dewdrop")

@@ -7,8 +7,8 @@ local sprites = {
     shoot = Sprite.load("mergerShoot", path.."mergerShoot", 8, 34, 27),
     mask = Sprite.load("mergerMask", path.."mergerMask", 1, 11, 18),
     palette = Sprite.load("mergerPal", path.."mergerPal", 1, 0, 0),
-    jump = Sprite.load("mergerJump", path.."mergerJump", 1, 14, 21)--,
---    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
+    jump = Sprite.load("mergerJump", path.."mergerJump", 1, 14, 21),
+    portrait = Sprite.load("mergerPortrait", path.."mergerPortrait", 1, 119, 119)
 }
 
 local sounds = {
@@ -160,19 +160,19 @@ m3:addCallback("step", function(self)
 	end
 	if sD.DNA == 1 then
 		for i, id in pairs(dD.mergins3_2) do
-			if sD.partner2 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
+			if i and i:isValid() and sD.partner2 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner2 = i
 				i:getData().family = sD.family
 			end
 		end
 		for i, id in pairs(dD.mergins3_3) do
-			if sD.partner3 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
+			if i and i:isValid() and sD.partner3 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner3 = i
 				i:getData().family = sD.family
 			end
 		end
 		for i, id in pairs(dD.mergins3_4) do
-			if sD.partner4 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
+			if i and i:isValid() and sD.partner4 == "none" and i:getData().family == 0 and i:get("team") == actorAc.team and i:get("ghost") == actorAc.ghost then
 				sD.partner4 = i
 				i:getData().family = sD.family
 			end
@@ -195,9 +195,12 @@ m3:addCallback("step", function(self)
 				self:set("pHmax", self:get("pHmax") - 1.1)
 			end
 			sD.mergeSlowed = 1
-			if self:get("stunned") == 0 then
+			if self:get("stunned") == 0 and misc.getTimeStop() == 0 then
 				sD.mergeTime = sD.mergeTime + 1
-			else
+				if math.random(100) <= 2 then
+					ParticleType.find("merge"):burst("above", self.x, self.y - 3, 1)
+				end
+			elseif (misc.getTimeStop() > 0 and self:get("stunned") > 0) or self:get("stunned") > 0 then
 				for _, reset in ipairs(m3:findAll()) do
 					local rD = reset:getData()
 					if rD.family == sD.family then
@@ -264,11 +267,11 @@ m3:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 11) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y - 3, (sD.mergeTime / 9.5) + math.random(-2, 2))
 	end
 end)
 
@@ -328,17 +331,14 @@ card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
 card.cost = 50
---[[for _, elite in ipairs(EliteType.findAll("vanilla")) do
-    card.eliteTypes:add(elite)
-end]]
 
-local monsLog = MonsterLog.new("Dewdrop3")
+local monsLog = MonsterLog.find("Dewdrop")
 MonsterLog.map[m3] = monsLog
 
 monsLog.displayName = "Dewdrop"
-monsLog.story = "These 'creatures' are many, but weak. I can find no trace of biological components within them, but they act on their own, as if they were individuals. Every instance of the small constructs seems to be damaged and scuffed, abandoned in the environment. My compassion for them ends there, as their ferocity is not dampened by their hindrances."
+monsLog.story = "Harmless at first, they gathered around my feet. Two of them, four of them, dozens. All squelching and shifting against me. Fearing the worst, I retaliated. Shaking them off, punching them, eventually resorting to using precious ammunition on them as the horde grew. Angered but unphased they- They began melding into one another. Coalescing into forms more capable.\n\nThey started using their increased mass at tools of bludgeoning, battering me with their amalgamated mass. From there they continued; tails, claws, eyes. Eyes. Everywhere. I couldn't outpace their seemingly exponential ascension. Their freshly-formed bodies were still maturing, and their unstable legs were not enough to keep up.\n\nI can only hope they halted their restructuring once they lost sight of me."
 monsLog.statHP = 250
 monsLog.statDamage = 22
 monsLog.statSpeed = 1.2
-monsLog.sprite = sprites.idle
---monsLog.portrait = sprites.portrait
+monsLog.sprite = sprites.shoot
+monsLog.portrait = sprites.portrait

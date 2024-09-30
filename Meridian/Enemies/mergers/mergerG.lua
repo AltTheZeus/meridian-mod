@@ -3,18 +3,41 @@ local sprites = {
     idle = Sprite.load("mergerGIdle", path.."mergerGIdle", 1, 37, 22),
     walk = Sprite.load("mergerGWalk", path.."mergerGWalk", 8, 42, 28),
 --    spawn = Sprite.load("mergerGSpawn", path.."mergerGSpawn", 7, 7, 6),
---    death = Sprite.load("mergerGDeath", path.."mergerGDeath", 5, 10, 9),
+    death = Sprite.load("mergerGDeath", path.."mergerGDeath", 2, 40, 25),
     shoot1 = Sprite.load("mergerGShoot1", path.."mergerGShoot1", 13, 40, 42),
     shoot2 = Sprite.load("mergerGShoot2", path.."mergerGShoot2", 6, 41, 33),
     mask = Sprite.load("mergerGMask", path.."mergerGMask", 1, 37, 22),
     palette = Sprite.load("mergerGPal", path.."mergerGPal", 1, 0, 0),
---    jump = Sprite.load("mergerGJump", path.."mergerGJump", 1, 4, 1)--,
---    portrait = Sprite.load("con1Portrait", path.."con1Portrait", 1, 119, 119)
+    jump = Sprite.load("mergerGJump", path.."mergerGJump", 1, 36, 26),
+    portrait = Sprite.load("mergerGPortrait", path.."mergerGPortrait", 1, 119, 119)
 }
+
+local mergeBit = ParticleType.new("merge")
+local mergeSpr = Sprite.load(path.."mergeEf", 1, 2, 2)
+--mergeBit:shape("pixel")
+mergeBit:sprite(mergeSpr, false, false, false)
+mergeBit:color(Color.BLACK, Color.fromRGB(96, 71, 207))
+mergeBit:alpha(1)
+mergeBit:scale(1, 1)
+mergeBit:size(1, 1, 0, 0)
+mergeBit:angle(0, 360, 0, 30, false)
+mergeBit:speed(1, 3, -0.01, 0.01)
+mergeBit:direction(0, 360, 0, 30)
+mergeBit:gravity(0, 0)
+mergeBit:life(60, 80)
+
+local mTrail = ParticleType.new("mergeTrail")
+mTrail:sprite(mergeSpr, false, false, false)
+mTrail:size(0.7, 0.7, 0, 0.1)
+mTrail:color(Color.BLACK)
+mTrail:alpha(1, 0)
+mTrail:life(14, 14)
+
+mergeBit:createOnStep(mTrail, -4)
 
 local blood = ParticleType.find("Blood2")
 local bit = ParticleType.new("Doomdroplets")
-local bitSpr = Sprite.load(path.."mergerGDeath", 3, 4, 3)
+local bitSpr = Sprite.load(path.."mergerGDeathEf", 3, 4, 3)
 bit:sprite(bitSpr, false, false, true)
 bit:size(0.9, 2.5, 0, 0)
 bit:angle(0, 360, 1, 0, true)
@@ -107,7 +130,8 @@ mG:addCallback("create", function(self)
         walk = sprites.walk,
         shoot1 = sprites.shoot1,
         shoot2 = sprites.shoot2,
---        death = sprites.death,
+        jump = sprites.jump,
+        death = sprites.death,
 	palette = sprites.palette
     }
     actorAc.sound_hit = Sound.find("MushHit","vanilla").id
@@ -159,18 +183,22 @@ mG:addCallback("step", function(self)
 		end
 	end
 
-	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
+	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
 		if sD.mergeSlowed == 0 then
 			self:set("pHmax", self:get("pHmax") - 0.95)
 		end
 		sD.mergeSlowed = 1
-		if self:get("stunned") == 0 then
+		if self:get("stunned") == 0 and misc.getTimeStop() == 0 then
 			sD.mergeTime = sD.mergeTime + 1
-		else
+			if math.random(100) <= 2 then
+				mergeBit:burst("above", self.x, self.y - 5, 1)
+			end
+		elseif (misc.getTimeStop() > 0 and self:get("stunned") > 0) or self:get("stunned") > 0 then
 			sD.mergeTime = 0
 			Object.findInstance(sD.partner):getData().mergeTime = 0
 		end
 		if sD.mergeTime >= 180 then
+			misc.shakeScreen(10)
 			local combo = mG:create(self.x, self.y - 10)
 			combo:getData().bossedUp = true
 			combo:set("team", actorAc.team)
@@ -216,11 +244,11 @@ mG:addCallback("draw", function(self)
 		graphics.setBlendMode("subtract")
 		graphics.color(Color.BLACK)
 		graphics.alpha(0.7 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 18) + math.random(-3, 3) - 15)
+		graphics.circle(self.x, self.y - 5, (sD.mergeTime * 0.14) + math.random(-3, 3) - 15)
 		graphics.setBlendMode("normal")
 		graphics.color(Color.fromRGB(96 - (sD.mergeTime/2), 71 - (sD.mergeTime/3), 207 - (sD.mergeTime)))
 		graphics.alpha(0.5 - (1/sD.mergeTime))
-		graphics.circle(self.x, self.y, (sD.mergeTime / 15) + math.random(-2, 2))
+		graphics.circle(self.x, self.y - 5, (sD.mergeTime * 0.17) + math.random(-2, 2))
 	end
 end)
 
@@ -230,7 +258,7 @@ mG:addCallback("destroy", function(self)
 	if sD.bossedUp ~= nil then --== true or sD.bossedUp == false then
 		dD.doomItem[self.x] = self.y
 	end
-	if sD.partnered == true then
+	if sD.partnered == true and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() then
 		Object.findInstance(sD.partner):getData().partnered = false
 		Object.findInstance(sD.partner):getData().partner = "none"
 		Object.findInstance(sD.partner):set("target", -4)
@@ -308,13 +336,13 @@ card.cost = 800
     card.eliteTypes:add(elite)
 end]]
 
-local monsLog = MonsterLog.new("Dreadnought")
+local monsLog = MonsterLog.find("Doomdrop")
 MonsterLog.map[mG] = monsLog
 
 monsLog.displayName = "Doomdrop"
-monsLog.story = "These 'creatures' are many, but weak. I can find no trace of biological components within them, but they act on their own, as if they were individuals. Every instance of the small constructs seems to be damaged and scuffed, abandoned in the environment. My compassion for them ends there, as their ferocity is not dampened by their hindrances."
+monsLog.story = "As fortune would have it, the grotesque creatures do have a peak. A monstrosity, it must be composed of hundreds of smaller Dewdrops. Every direction has an eye. And if it has a blind spot, it will rearrange its sliding flesh to compensate for this flaw. Ever-changing, the fluidity of its composition makes it impossible to ambush, impossible to hide from..\n\nAnd what they lack in mobility, in this unstable and trembling apex, they make up for with.. Projectile vomit. From meters away, it gargles and spits- like it's brushing it's teeth. If only it was saliva. A new dewdrop, composited from mass redistributed.\n\nIn any situation other than this, there might be a humor in seeing the way they splatter when they hit the ground in front of me."
 monsLog.statHP = 1200
 monsLog.statDamage = 50
 monsLog.statSpeed = 1
-monsLog.sprite = sprites.idle
---monsLog.portrait = sprites.portrait
+monsLog.sprite = sprites.walk
+monsLog.portrait = sprites.portrait
