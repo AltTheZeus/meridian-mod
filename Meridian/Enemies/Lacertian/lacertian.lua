@@ -27,7 +27,8 @@ local sounds = {
 	unburrow = Sound.load("LacertianUnburrowSound", path.."LacertianUnburrow"),
 	shoot = Sound.load("LacertianShootSound", path.."LacertianShoot"),
 	stun = Sound.load("LacertianStunSound", path.."LacertianStun"),
-	recover = Sound.load("LacertianRecoverSound", path.."LacertianRecover")
+	recover = Sound.load("LacertianRecoverSound", path.."LacertianRecover"),
+	rumble = Sound.load("LacertianRumbleSound", path.."LacertianRumble")
 }
 
 local lacertian = Object.base("Boss", "Lacertian")
@@ -517,6 +518,7 @@ lacertian:addCallback("step", function(actor)
 							end
 							actorAc.state = "unburrow"
 							actor.subimage = 1
+							actorData.unburrowSound = true
 						end
 					end
 				end
@@ -530,9 +532,17 @@ lacertian:addCallback("step", function(actor)
 				if actorData.shoot2Atk then 
 					actor.sprite = sprites.warn1
 					actor.spriteSpeed = 0.2 
+					if actorData.unburrowSound then 
+						sounds.rumble:play(2.1, 1.6)
+						actorData.unburrowSound = nil
+					end
 				else 
 					actor.sprite = sprites.warn2
-					actor.spriteSpeed = 0.2 			
+					actor.spriteSpeed = 0.2 	
+					if actorData.unburrowSound then 
+						sounds.rumble:play(2.3, 1)
+						actorData.unburrowSound = nil
+					end					
 				end
 				if math.floor(actor.subimage) == actor.sprite.frames - 1 and actorData.animLoop > 0 then 
 					actor.subimage = 1
