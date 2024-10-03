@@ -119,7 +119,7 @@ end)
 mG:addCallback("create", function(self)
     local actorAc = self:getAccessor()
     local data = self:getData()
-    actorAc.name = "Dreadnought"
+    actorAc.name = "Doomdrop"
     actorAc.maxhp = 1200 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
     actorAc.damage = 50
