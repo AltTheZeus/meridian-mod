@@ -15,13 +15,14 @@ local itemAssignments = {
 	Ifrit = Item.find("Ifrit's Horn")
 	}
 local mysticAssignments = {}
+local sdAssignments = {}
 registercallback("postLoad", function()
 	itemAssignments["Lacertian"] = Item.find("Relentless Fang")
 	itemAssignments["doomdrop"] = Item.find("Misshapen Flesh")
 	if modloader.checkMod("Starstorm") then
 		itemAssignments["Boar"] = Item.find("Toxic Tail")
 		itemAssignments["Turtle"] = Item.find("Scalding Scale")
-		itemAssignments["Scavenger"] = Item.find("Scavenger's Fortune")
+		itemAssignments["Scavenger"] = Item.find("Lifetime Fortune")
 		itemAssignments["SandCrabKing"] = Item.find("Shell Piece")
 		itemAssignments["Post"] = Item.find("Unearthly Lamp")
 		itemAssignments["TotemController"] = Item.find("Animated Mechanism")
@@ -37,6 +38,10 @@ registercallback("postLoad", function()
 		mysticAssignments["ImpG"] = Item.find("Ghastly Eye")
 		mysticAssignments["ImpGS"] = Item.find("Ghastly Eye")
 		mysticAssignments["Ifrit"] = Item.find("Ifrit's Tail")
+	end
+	if modloader.checkMod("rorsd") then
+		sdAssignments["Scavenger"] = Item.find("Freebee Membership")
+		itemAssignments["ImpGS"] = Item.find("All Seer")
 	end
 end)
 
@@ -77,9 +82,11 @@ berryBush:addCallback("draw", function(self)
 					if modloader.checkMod("Starstorm") then
 						ItemPool.find("legendary"):getCrate():create(self.x, self.y)
 						berrySplash:burst("above", self.x, self.y - 6, 20)
+						self:destroy()
 					else
 						ItemPool.find("uncommon"):getCrate():create(self.x, self.y)
 						berrySplash:burst("above", self.x, self.y - 6, 20)
+						self:destroy()
 					end
 				else
 					if sD.payload then
@@ -97,13 +104,21 @@ berryBush:addCallback("draw", function(self)
 	end
 end)
 
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.bushTableX = {}
+	dD.bushTableY = {}
+	dD.bushTableI = {}
+end)
+
 registercallback("onNPCDeathProc", function(npc, player)
 	if player:countItem(item) > 0 then
+		local dD = misc.director:getData()
 		if modloader.checkMod("Starstorm") and Artifact.find("Command").active == true then 
 				if math.chance(2.5 + (player:countItem(item) * 2.5)) then
-					local bush = berryBush:create(npc.x, npc.y - 20)
-					local bD = bush:getData()
-					bD.payload = "nothing"
+					dD.bushTableX[npc.id] = npc.x
+					dD.bushTableY[npc.id] = npc.y - 20
+					dD.bushTableI[npc.id] = "nothing"
 				end
 		else
 		for a, b in pairs(itemAssignments) do
@@ -111,70 +126,97 @@ registercallback("onNPCDeathProc", function(npc, player)
 			if a == "SquallEel" then
 				if npc:getObject() == Object.find("Squall Eel") then
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
-						local bush = berryBush:create(npc.x, npc.y - 20)
-						local bD = bush:getData()
-						bD.payload = b
+						dD.bushTableX[npc.id] = npc.x
+						dD.bushTableY[npc.id] = npc.y - 20
+						dD.bushTableI[npc.id] = b
 					end
 				end
 			end
 			if a == "CosmicVanguard" then
 				if npc:getObject() == Object.find("Cosmic Vanguard") then
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
-						local bush = berryBush:create(npc.x, npc.y - 20)
-						local bD = bush:getData()
-						bD.payload = b
+						dD.bushTableX[npc.id] = npc.x
+						dD.bushTableY[npc.id] = npc.y - 20
+						dD.bushTableI[npc.id] = b
 					end
 				end
 			end
 			if a == "Worm" then
 				if npc:getObject() == Object.find("Worm") or npc:getObject() == Object.find("WormBody") or npc:getObject() == Object.find("WormController") or npc:getObject() == Object.find("WormHead") then
 					if math.chance(2.5 + (player:countItem(item) * 2.5)) then
-						local bush = berryBush:create(player.x, player.y - 20)
-						local bD = bush:getData()
+						dD.bushTableX[npc.id] = npc.x
+						dD.bushTableY[npc.id] = npc.y - 20
 						if modloader.checkMod("MysticsExtras") and math.random(100) <= 50 then
-							bD.payload = Item.find("Fiery Gland")
+							dD.bushTableI[npc.id] = Item.find("Fiery Gland")
 						else
-							bD.payload = b
+							dD.bushTableI[npc.id] = b
 						end
 					end
 				end
 			end
 			if a == "doomdrop" then
 				if npc:getObject() == Object.find("mergerG") then
-					print("hi")
 					local aD = npc:getData()
 					if aD.bossedUp ~= nil and math.chance(2.5 + (player:countItem(item) * 2.5)) then
-						local bush = berryBush:create(npc.x, npc.y - 20)
-						local bD = bush:getData()
-						bD.payload = b
+						dD.bushTableX[npc.id] = npc.x
+						dD.bushTableY[npc.id] = npc.y - 20
+						dD.bushTableI[npc.id] = b
 					end
 				end
 			end
 			if npc:getObject():getName() == a then
 				if math.random(100) <= (2.5 + (player:countItem(item) * 2.5)) then
 					if a == "Wyvern" then
-						local bush = berryBush:create(player.x, player.y - 20)
-						local bD = bush:getData()
-						bD.payload = b
+						dD.bushTableX[npc.id] = npc.x
+						dD.bushTableY[npc.id] = npc.y - 20
+						dD.bushTableI[npc.id] = b
 					else
-						if modloader.checkMod("MysticsExtras") and math.random(100) <= 50 and (a == "WispB" or a == "GolemG" or a == "ImpG" or a == "ImpGS" or a == "Ifrit" or a == "GiantJelly") then
+						if modloader.checkMod("rorsd") and modloader.checkMod("Starstorm") and math.random(100) <= 50 and a == "Scavenger" then
+							for i, j in pairs(sdAssignments) do
+								if npc:getObject():getName() == i then
+									dD.bushTableX[npc.id] = npc.x
+									dD.bushTableY[npc.id] = npc.y - 20
+									dD.bushTableI[npc.id] = j
+								end
+							end
+						elseif modloader.checkMod("rorsd") and not modloader.checkMod("Starstorm") and a == "Scavenger" then
+							for g, h in pairs(sdAssignments) do
+								if npc:getObject():getName() == g then
+									dD.bushTableX[npc.id] = npc.x
+									dD.bushTableY[npc.id] = npc.y - 20
+									dD.bushTableI[npc.id] = h
+								end
+							end
+						elseif modloader.checkMod("MysticsExtras") and math.random(100) <= 50 and (a == "WispB" or a == "GolemG" or a == "ImpG" or a == "ImpGS" or a == "Ifrit" or a == "GiantJelly") then
 							for c, d in pairs(mysticAssignments) do
 								if npc:getObject():getName() == c then
-									local bush = berryBush:create(npc.x, npc.y - 20)
-									local bD = bush:getData()
-									bD.payload = d
+									dD.bushTableX[npc.id] = npc.x
+									dD.bushTableY[npc.id] = npc.y - 20
+									dD.bushTableI[npc.id] = d
 								end
 							end
 						else
-							local bush = berryBush:create(npc.x, npc.y - 20)
-							local bD = bush:getData()
-							bD.payload = b
+							dD.bushTableX[npc.id] = npc.x
+							dD.bushTableY[npc.id] = npc.y - 20
+							dD.bushTableI[npc.id] = b
 						end
 					end
 				end
 			end
 		end
 		end
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	for id, x in pairs(dD.bushTableX) do
+		local bush = berryBush:create(dD.bushTableX[id], dD.bushTableY[id])
+		local bD = bush:getData()
+		bD.payload = dD.bushTableI[id]
+		dD.bushTableX[id] = nil
+		dD.bushTableY[id] = nil
+		dD.bushTableI[id] = nil
 	end
 end)
 

@@ -1,6 +1,6 @@
 local item = Item("Arc Pen")
 
-item.pickupText = "Chance to write something electric." 
+item.pickupText = "...and that's all she wrote." 
 
 item.sprite = Sprite.load("Items/pen.png", 1, 16, 16)
 local itemEf = Sprite.load("Items/penEf.png", 3, 27, 23)
@@ -81,7 +81,7 @@ item:setLog{
     group = "uncommon",
     description = "&y&15% chance&!& to inflict a stacking debuff on enemies. At &y&3 stacks&!&, explodes in a small area for &y&300% damage&!&.",
     priority = "&w&Standard&!&",
-    destination = "The Great Furnace,\nDying Star,\nDeep Space",
-    date = "--",
-    story = "Regrettably, I've started to feel excitement when I see a Bison. Though they are tough to fell, I can utilize almost every part of their corpse. Their meat reminds me of home. Their bones are sturdy and well-used in my tools. Their metallic growths... exhibit some strange properties. I'm sure they're valuable, if nothing else."
+    destination = "P.O. Box 27,\nRedview,\nMars",
+    date = "6/7/2056",
+    story = "Yes, yes, I know, you told me not to send it back until I'd gotten every word down. But! I'm throwin' in the towel here.\n\nNot on the story, nonono! I just. Can't, write it like this-. I think too hard about what I'm, burning into these pages, and then instead of writing fire, I reinvent fire. As much as I wanna keep the memento-, with the kinda work you guys are doing, I just can't believe that little Ms. Author me over here is truly realizing its potential. I think the only potential I'm realizing is minmaxing work done to emergency evacuations.\n\nP.S., For the love of all gods whatever you find in these batteries can you send THAT to me INSTEAD pleasethankyouverymuch? We'd get SO much more value from slamming these into a lamp or something, compared to the ZERO work I'm doing right now!!!"
 }

@@ -60,8 +60,8 @@ end)
 item:setLog{
     group = "rare",
     description = "20% chance on being hit to spawn an &y&Embercloud&!& which deals &y&100% damage per second&!&.",
-    priority = "&r&High Priority/Biological?&!&",
-    destination = "Caroline Williams,\nRare/Extinct\nStudy Center,\nVenus",
-    date = "4/19/2056",
-    story = "Hey Car, me again. I know it's not your usual thing and all, but this little freak of nature was too cute! It was all whining and begging at me in the alleyway- Stop asking me where I find them -and I just *need* you to look at it! At least let me know how long it's gonna last... I wanna keep it!"
+    priority = "&r&High Priority&!&",
+    destination = "The Cave In The Hills,\nContrue\nIron-Ef",
+    date = "4/30/2056",
+    story = "I thought this was a neat knickknack you might appreciate... It's got such a unique luster! I'm not even sure what material it is, get back to me on that I'm dying to know. And let me know if you have any issues or complaints; Free goods doesn't mean service-free!"
 }
