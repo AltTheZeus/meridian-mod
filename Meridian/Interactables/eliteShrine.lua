@@ -30,7 +30,7 @@ shrine:addCallback("create", function(self)
 	local sA = self:getAccessor()
 	local sD = self:getData()
 	self:set("cost", 0)
-	self:set("text", "to call upon greatness.")
+	self:set("text", "to call upon mystical forces.")
 	sD.opened = 0
 	sD.childrenkilled = 0
 	self.spriteSpeed = 0
