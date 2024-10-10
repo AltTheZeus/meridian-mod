@@ -166,47 +166,33 @@ local m1
 local m2
 local m3
 
-callback.register("globalRoomStart", function(room)
-	if room == Room.find("Start") and not modloader.checkFlag("mn_disable_enemies") then
-		if modloader.checkFlag("enable_mergers") then
-			m1 = MonsterCard.find("m1", "meridian")
-			m2 = MonsterCard.find("m2", "meridian")
-			m3 = MonsterCard.find("m3", "meridian")
-		end
+callback.register("onGameStart", function()
+	if not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers") then
+		m1 = MonsterCard.find("m1", "meridian")
+		m2 = MonsterCard.find("m2", "meridian")
+		m3 = MonsterCard.find("m3", "meridian")
+
+-- "base" stages
+		ST.enemies:add(m1)
+		ST.enemies:add(m2)
+
+		HC.enemies:add(m1)
+		HC.enemies:add(m2)
+
+		ShallowRotlands.enemies:add(m1)
+		ShallowRotlands.enemies:add(m2)
+
+--resetting to base
+		SM.enemies:remove(m2)
+		SM.enemies:remove(m3)
+		ShallowRotlands.enemies:remove(m3)
+		HC.enemies:remove(m3)
+		ST.enemies:remove(m3)
+
+		HC.enemies:add(m1)
+		ST.enemies:add(m1)
+		ShallowRotlands.enemies:add(m1)
 	end
-end)
-
-callback.register("globalRoomStart", function(room)
-	if room == Room.find("Start") and not modloader.checkFlag("mn_disable_enemies") then
-		if modloader.checkFlag("enable_mergers") then
-			SM.enemies:remove(m2)
-			SM.enemies:remove(m3)
-			ShallowRotlands.enemies:remove(m3)
-			HC.enemies:remove(m3)
-			ST.enemies:remove(m3)
-
-			HC.enemies:add(m1)
-			ST.enemies:add(m1)
-			ShallowRotlands.enemies:add(m1)
-		end
-	end
-end)
-
-callback.register("postLoad", function()
-		if not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers") then
-			local m1 = MonsterCard.find("m1", "meridian")
-			local m2 = MonsterCard.find("m2", "meridian")
-			local m3 = MonsterCard.find("m3", "meridian")
-
-			ST.enemies:add(m1)
-			ST.enemies:add(m2)
-
-			HC.enemies:add(m1)
-			HC.enemies:add(m2)
-
-			ShallowRotlands.enemies:add(m1)
-			ShallowRotlands.enemies:add(m2)
-		end
 end)
 
 callback.register("onStageEntry", function()
@@ -384,39 +370,13 @@ local specificStages = {
 local telefake = Object.find("TeleporterFake", "vanilla")
 local base = Object.find("Base", "vanilla")
 
-enteredStage = false
-
-local function isSpecificStage(stageName)
-    for _, specificStage in ipairs(specificStages) do
-        if stageName == specificStage then
-            return true
-        end
-    end
-    return false
-end
-
 callback.register("onStageEntry", function()
-
-    local currentStageName = Stage.getCurrentStage():getName()
-
-    if isSpecificStage(currentStageName) and enteredStage == false then
-        for _, telefakeinst in ipairs(telefake:findAll()) do
-            local x, y = telefakeinst.x, telefakeinst.y
-
-            base:create(x - 64, y)
-
-            telefakeinst:destroy()
-		enteredStage = true
-        end
-    end
-end)
-
-callback.register("globalRoomStart", function(room)
-	if room == Room.find("Start") then
-		enteredStage = false
+	if Stage.getCurrentStage():getName() == "Serpentine Rainforest" and StageValue == 1 then
+		for _, telefakeinst in ipairs(telefake:findAll()) do
+			local x, y = telefakeinst.x, telefakeinst.y
+			base:create(x - 64, y)
+			telefakeinst:destroy()
+			enteredStage = true
+		end
 	end
-end)
-
-callback.register("onPlayerDeath", function()
-	enteredStage = false
 end)
