@@ -27,7 +27,6 @@ if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(Item.find("Discarded Homunculus"), nil, "Spawn 4 chunks of flesh on every stage. Collecting them spawns a\nflesh amalgamate at the teleporter. While the teleport is active, killing\nan enemy near the flesh amalgamate will cause it to explode for 800% damage.", "Damage stacks multiplicatively.")
 	TabMenu.setItemInfo(Item.find("Emberfly Pin"), nil, "20% chance on taking damage to spawn an Embercloud, which deals 50%\ndamage 10 times over the course of 5 seconds.", "+50% damage.")
 	TabMenu.setItemInfo(Item.find("Foraged Spoils"), 39, "5% chance for a boss kill to yield a unique item.", "+2.5% drop chance.")
-	TabMenu.setItemInfo(Item.find("Gilded Leaf"), nil, "Inherit all passive effects of Blessed elites.", nil)
 	TabMenu.setItemInfo(Item.find("Jumpstart Cable"), nil, "Purchase 1 drone for free per stage.", "+1 free drones.")
 	TabMenu.setItemInfo(Item.find("Misshapen Flesh"), nil, "Deal an extra 10% damage to enemies in contact with other enemies.", "+10% damage.")
 	TabMenu.setItemInfo(Item.find("Portable Battery"), nil, "While equipment is off cooldown, increase health regeneration by 3.", "+3 health regeneration.")
@@ -39,3 +38,44 @@ if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(Item.find("Xenial Opal"), nil, "For every minute you spend on a stage, gain 8% speed, up to a maximum of 300%.\nResets at the end of the stage.", "+4% speed.")
 end
 
+--Category Chests compat
+registercallback("postLoad", function()
+	if modloader.checkMod("categorychests") then
+		local damage1 = ItemPool.find("damagePoolCommon", categorychests)
+		local damage2 = ItemPool.find("damagePoolUncommon", categorychests)
+		local damage3 = ItemPool.find("damagePoolRare", categorychests)
+		local health1 = ItemPool.find("healthPoolCommon", categorychests)
+		local health2 = ItemPool.find("healthPoolUncommon", categorychests)
+		local health3 = ItemPool.find("healthPoolRare", categorychests)
+		local utility1 = ItemPool.find("utilityPoolCommon", categorychests)
+		local utility2 = ItemPool.find("utilityPoolUncommon", categorychests)
+		local utility3 = ItemPool.find("utilityPoolRare", categorychests)
+
+--		damage1:add(Item.find("Armed Backpack"))
+
+		damage2:add(Item.find("Arc Pen"))
+		damage2:add(Item.find("Tear Gas"))
+
+		damage3:add(Item.find("Discarded Homunculus"))
+		damage3:add(Item.find("Emberfly Pin"))
+		damage3:add(Item.find("Snowball"))
+
+		health1:add(Item.find("Chaos Drive"))
+		health1:add(Item.find("Portable Battery"))
+
+--		health2:add(Item.find("Armed Backpack"))
+
+--		health3:add(Item.find("Armed Backpack"))
+
+		utility1:add(Item.find("Bidder's Paddle"))
+		utility1:add(Item.find("Xenial Opal"))
+
+		utility2:add(Item.find("Collectible Cards"))
+		utility2:add(Item.find("Chrome Finish"))
+		utility2:add(Item.find("Foraged Spoils"))
+		utility2:add(Item.find("Jumpstart Cable"))
+		utility2:add(Item.find("Worn Iron"))
+
+--		utility3:add(Item.find("Armed Backpack"))
+	end
+end)

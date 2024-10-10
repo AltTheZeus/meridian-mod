@@ -234,12 +234,77 @@ registercallback("onStep", function()
 				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
-			repeat
-				aD.card = table.random(enemyOptions)
-			until aD.card.cost < 500 and aD.card.type == "classic"
+			if #enemyOptions < 1 then
+				aD.card = MonsterCard.find("Sand Crab")
+			else
+				local failsafe = 0
+				repeat
+					failsafe = failsafe + 1
+					aD.card = table.random(enemyOptions)
+				until (aD.card.cost < 500 and aD.card.type == "classic") or failsafe >= 30
+				if failsafe >= 30 then
+					aD.card = MonsterCard.find("Sand Crab")
+				end
+			end
 			aD.timer = aD.card.cost
 		end
 	end
+	end
+end)
+
+--ERUPTIVE
+registercallback("onPlayerInit", function(player)
+	local aD = player:getData()
+	aD.lavaThreshold = 0
+end)
+
+local lavaObj = Object.find("eruptLava")
+local blessedLava = Sprite.find("eruptEfBlessed")
+
+registercallback("onHit", function(damager, hit, x, y)
+	if hit:isValid() and hit:getObject() == playa and hit.useItem == item then
+		local hD = hit:getData()
+		if not hD.lavaThreshold then return end
+		hD.lavaThreshold = hD.lavaThreshold + ((damager:get("damage")/hit:get("maxhp")) * 10)
+		if hD.lavaThreshold >= 1 then
+			local spawnPot
+			if hit:collidesWith(Object.find("B"), hit.x, hit.y + (hit.sprite.height - hit.sprite.yorigin) + 1) then
+				spawnPot = Object.find("B"):findLine(hit.x, hit.y, hit.x, hit.y + (hit.sprite.height - hit.sprite.yorigin) + 1)
+			else return end
+			local cSpawn = spawnPot.x
+			for i = spawnPot.x, spawnPot.x + (spawnPot:get("width_box") * 16) - 32, 16 do
+				if math.abs(hit.x - i) < math.abs(hit.x - cSpawn) then
+					cSpawn = i
+				end
+			end
+			if spawnPot:get("width_box") >= 3 then
+				local myLava = lavaObj:create(cSpawn - 16, spawnPot.y)
+				myLava.sprite = blessedLava
+				myLava:getData().blessed = true
+				myLava:getData().team = hit:get("team")
+				myLava:getData().owner = hit
+				myLava:getData().damage = hit:get("damage") / 2
+				hD.lavaThreshold = 0
+			end
+		end
+	end
+end)
+
+local eruptDoT = Buff.find("eruptDoT")
+
+registercallback("onFireSetProcs", function(damager, parent)
+	if parent:getObject() == Object.find("p") and parent.useItem == item then
+		local dD = damager:getData()
+		dD.erupt = "im erupting"
+	end
+end)
+
+registercallback("onHit", function(damager, hit, x, y)
+	local dD = damager:getData()
+	if dD.erupt then
+		if hit:get("show_boss_health") == 0 or (hit:get("show_boss_health") == 1 and hit:get("blight_type") ~= -1) then
+			hit:applyBuff(eruptDoT, 60)
+		end
 	end
 end)
 
@@ -293,3 +358,81 @@ registercallback("globalRoomStart", function(room)
 		box:create(35, 2)
 	end
 end)
+
+--color palette :O
+--[[registercallback("onPlayerStep", function(player)
+	local pD = player:getData()
+	if player.useItem == item then
+	if not Sprite.find(player.sprite:getName() .. "WHITE") then
+	local whiteSpriteSurface = Surface.new(player.sprite.width * player.sprite.frames, player.sprite.height)
+	graphics.setTarget(whiteSpriteSurface)
+	graphics.setBlendMode("additive")
+	for i = 1, player.sprite.frames do
+	graphics.drawImage{
+		image = player.sprite,
+		x = player.sprite.xorigin + (player.sprite.width * (i - 1)),
+		y = player.sprite.yorigin,
+		subimage = i,
+		color = Color.WHITE,
+		xscale = 1,
+		yscale = 1
+		}
+	graphics.drawImage{
+		image = player.sprite,
+		x = player.sprite.xorigin + (player.sprite.width * (i - 1)),
+		y = player.sprite.yorigin,
+		subimage = i,
+		color = Color.WHITE,
+		xscale = 1,
+		yscale = 1
+		}
+	graphics.drawImage{
+		image = player.sprite,
+		x = player.sprite.xorigin + (player.sprite.width * (i - 1)),
+		y = player.sprite.yorigin,
+		subimage = i,
+		color = Color.WHITE,
+		xscale = 1,
+		yscale = 1
+		}
+	graphics.drawImage{
+		image = player.sprite,
+		x = player.sprite.xorigin + (player.sprite.width * (i - 1)),
+		y = player.sprite.yorigin,
+		subimage = i,
+		color = Color.WHITE,
+		xscale = 1,
+		yscale = 1
+		}
+	end
+	graphics.resetTarget()
+	graphics.setBlendMode("normal")
+	local temp = whiteSpriteSurface:createSprite(player.sprite.xorigin, player.sprite.yorigin, 0, 0, player.sprite.width, player.sprite.height)
+	for i = 1, player.sprite.frames do
+--		if i ~= 1 then
+			temp:addFrame(whiteSpriteSurface, player.sprite.width * i, 0, player.sprite.width, player.sprite.height)
+--		end
+	end
+	temp:finalize(player.sprite:getName() .. "WHITE")
+	end
+	end
+end)
+
+registercallback("onPlayerDrawAbove", function(player)
+	local dD = misc.director:getData()
+	if Sprite.find(player.sprite:getName() .. "WHITE") and player.useItem == item then
+		local swagSprite = Sprite.find(player.sprite:getName() .. "WHITE")
+		graphics.drawImage{
+			image = swagSprite,
+			x = player.x,
+			y = player.y,
+			subimage = player.subimage,
+			alpha = 0.4, --looks bad with 0.4, looks bad with 0.8.......
+			color = Color.fromRGB(255, 237, 187),
+			xscale = player.xscale,
+			yscale = player.yscale
+			}
+	end
+end)
+
+--TODO: if this is worth keeping, add it to engi turrets, too (or make them look molded? might be fun.) (and make it work with huntress)]]

@@ -50,7 +50,9 @@ registercallback("onMapObjectActivate", function(self, player)
 		if dD.freedrones <= 0 then
 			for _, i in ipairs(drones:findAll()) do
 				local iD = i:getData()
-				i:set("cost", iD.truecost)
+				if iD.truecost then
+					i:set("cost", iD.truecost)
+				end
 				iD.truecost = nil
 			end
 			dD.freedrones = 0
