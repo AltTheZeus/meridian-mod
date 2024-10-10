@@ -252,27 +252,12 @@ local card = MonsterCard.new("con2", con2)
 card.sprite = sprites.idle
 card.sprite = sprites.spawn
 card.sound = sounds.spawn
-card.canBlight = true
+card.canBlight = false
 card.type = "classic"
 card.cost = 12
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
 	card.eliteTypes:add(elite)
 end
-
-local headCard = MonsterCard.new("con2Head", head)
-headCard.sprite = sprites.idle
-headCard.sprite = sprites.spawn
-headCard.sound = sounds.spawn
-headCard.canBlight = true
-headCard.type = "classic"
-registercallback("onStageEntry", function()
-	for _, elite in ipairs(headCard.eliteTypes:toTable()) do
-		headCard.eliteTypes:remove(elite)
-	end
-	for _, elite in ipairs(card.eliteTypes:toTable()) do
-		headCard.eliteTypes:add(elite)
-	end
-end, -100)
 
 local stages
 if modloader.checkMod("Starstorm") then
