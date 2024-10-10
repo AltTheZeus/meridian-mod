@@ -175,7 +175,7 @@ local card = MonsterCard.new("m1", m1)
 card.sprite = sprites.idle
 card.sprite = sprites.spawn
 card.sound = sounds.spawn
-card.canBlight = true
+card.canBlight = false
 card.type = "classic"
 card.cost = 6
 
