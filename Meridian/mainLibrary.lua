@@ -1220,45 +1220,6 @@ function spawnItem(rareChance, useChance, uncommonChance, commonChance, x, y)
 	return spawnedItem
 end
 
--- Fake Item Function
-syncFakeItem2 = net.Packet.new("SSFakeItem2", function(player, item, owner, text1, text2)
-	local ownerID = owner:resolve()
-	if ownerID then ownerID = ownerID.id end
-	
-	if item then
-		local itemi = item:resolve()
-		if itemi and itemi:isValid() then
-			itemi:set("used", 1)
-			itemi:set("owner", ownerID)
-			itemi:set("sound_played", 1)
-			itemi:set("text1", text1)
-			itemi:set("text2", text2)
-		end
-	end
-end)
-it.DummyItem = Item.new("Dummy Item")
-it.DummyItem.pickupText = "" 
-it.DummyItem.sprite = spr.Nothing
-local objItem = it.DummyItem:getObject()
-function createFakeItem(x, y, ownerID, text1, text2)
-	local display = objItem:create(x, y)
-	if display:isValid() then
-		display:set("used", 1)
-		display:set("owner", ownerID)
-		display:set("sound_played", 1)
-		display:set("text1", text1)
-		display:set("text2", text2)
-		if net.online and net.host then
-			syncFakeItem2:sendAsHost(net.ALL, nil, display:getNetIdentity(), Object.findInstance(ownerID):getNetIdentity(), text1, text2)
-		end
-	end
-end
-syncFakeItem = net.Packet.new("SSFakeItem", function(player, x, y, player, text1, text2)
-	if player:resolve() then
-		createFakeItem(x, y, player:resolve().id, text1, text2)
-	end
-end)
-
 -- CAMERA CUTSCENES
 local onCutscene = false
 local cutscenePosition = nil

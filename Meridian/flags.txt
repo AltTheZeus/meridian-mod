@@ -1,0 +1,13 @@
+hi welcome to flags.txt, your one and only stop for meridian flag explanations!
+
+"mn_disable_stages"
+- this disables all stages added by Meridian
+
+"mn_disable_enemies"
+- this disables all enemies added by Meridian
+
+"mn_disable_elites"
+- this disables all elites added by Meridian
+
+"mn_disable_items"
+- this disables all items added by Meridian
