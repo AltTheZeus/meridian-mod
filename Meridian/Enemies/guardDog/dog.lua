@@ -108,7 +108,7 @@ local card = MonsterCard.new("dog", dog)
 card.sprite = sprites.idle
 card.sprite = sprites.spawn
 card.sound = sounds.spawn
-card.canBlight = true
+card.canBlight = false
 card.type = "classic"
 card.cost = 172
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
