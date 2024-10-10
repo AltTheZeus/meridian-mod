@@ -99,7 +99,7 @@ registercallback("onGameStart", function()
 				if i.isBoss == false then
 					i.eliteTypes:add(molding)
 				end
-				i.eliteTypes:add(erupt)
+--				i.eliteTypes:add(erupt)
 			end
 			if i ~= MonsterCard.find("Squall Elver") then
 				i.eliteTypes:add(forsaken)

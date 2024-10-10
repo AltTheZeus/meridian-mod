@@ -67,7 +67,9 @@ bubbleObj:addCallback("step", function(self)
 		self.sprite = bubbleWarn
 	end
 	if not sD.owner:isValid() then
-		self:destroy()
+		if self:isValid() then
+			self:destroy()
+		end
 		pop:play()
 	end
 	for _, p in ipairs(misc.players) do

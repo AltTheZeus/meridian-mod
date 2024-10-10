@@ -105,7 +105,9 @@ end)
 registercallback("onStep", function()
 	local dD = misc.director:getData()
 	for i, hp in pairs(dD.sorrowRevert) do
-		i:set("hp", hp)
+		if i:isValid() then
+			i:set("hp", hp)
+		end
 		dD.sorrowRevert[i] = nil
 	end
 end)

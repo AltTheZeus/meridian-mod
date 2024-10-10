@@ -13,3 +13,6 @@ require(path.."blessedTree")
 require(path.."blessedTree_E")
 
 require(path.."eliteManager")
+
+require(path.."eliteDefs")
+require(path.."eliteChecker")

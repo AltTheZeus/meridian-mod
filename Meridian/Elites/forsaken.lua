@@ -160,7 +160,7 @@ end)
 registercallback("onDraw", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
 		local iD = i:getData()
-		if i:getData().eliteVar == 1 or i:getObject() == Object.find("Worm") or i:getObject() == Object.find("WormHead") or i:getObject() == Object.find("WormBody") then
+		if (i:getData().eliteVar == 1 or i:getObject() == Object.find("Worm") or i:getObject() == Object.find("WormHead") or i:getObject() == Object.find("WormBody")) and i.visible == true then
 			local radiusInner
 			local radiusOuter
 			if i:get("show_boss_health") == 1 then
@@ -180,7 +180,7 @@ registercallback("onDraw", function()
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", bID)) do
 		local iD = i:getData()
-		if i:getData().eliteVar == 1 then
+		if i:getData().eliteVar == 1 and i.visible == true then
 			local radiusInner
 			local radiusOuter
 			if i:get("show_boss_health") == 1 then

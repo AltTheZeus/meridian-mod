@@ -37,7 +37,7 @@ end, -10)
 
 registercallback("onDraw", function()
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
-		if i:getObject() ~= Object.find("Beta Construct Head") and i:getObject() ~= Object.find("Beta Construct2") then
+		if i:getObject() ~= Object.find("Beta Construct Head") and i:getObject() ~= Object.find("Beta Construct2") and i.visible == true then
 			local iD = i:getData()
 			local idle = i:getAnimation("idle")
 			graphics.drawImage{
@@ -50,7 +50,7 @@ registercallback("onDraw", function()
 		end
 	end
 	for _, i in ipairs(enemies:findMatching("elite_type", ID)) do
-		if i:getObject() == Object.find("Beta Construct Head") then
+		if i:getObject() == Object.find("Beta Construct Head") and i.visible == true then
 			local iD = i:getData()
 			local idle = i:getAnimation("idle")
 			local haloDistance = 12

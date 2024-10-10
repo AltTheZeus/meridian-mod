@@ -128,9 +128,18 @@ if aD.card.object.sprite.height < heightLevel then
 				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
 				nD.terezi = 1
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
-			repeat
-				aD.card = table.random(enemyOptions)
-			until aD.card.cost < 500 and aD.card.type == "classic"
+			if #enemyOptions < 1 then
+				aD.card = MonsterCard.find("Sand Crab")
+			else
+				local failsafe = 0
+				repeat
+					failsafe = failsafe + 1
+					aD.card = table.random(enemyOptions)
+				until (aD.card.cost < 500 and aD.card.type == "classic") or failsafe >= 30
+				if failsafe >= 30 then
+					aD.card = MonsterCard.find("Sand Crab")
+				end
+			end
 			aD.timer = aD.card.cost
 		end
 		end
@@ -207,9 +216,18 @@ if aD.card.object.sprite.height < heightLevel then
 				nD.terezi = 1
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
-			repeat
-				aD.card = table.random(enemyOptions)
-			until aD.card.cost < 500 and aD.card.type == "classic"
+			if #enemyOptions < 1 then
+				aD.card = MonsterCard.find("Sand Crab")
+			else
+				local failsafe = 0
+				repeat
+					failsafe = failsafe + 1
+					aD.card = table.random(enemyOptions)
+				until (aD.card.cost < 500 and aD.card.type == "classic") or failsafe >= 30
+				if failsafe >= 30 then
+					aD.card = MonsterCard.find("Sand Crab")
+				end
+			end
 			aD.timer = aD.card.cost
 		end
 		end
