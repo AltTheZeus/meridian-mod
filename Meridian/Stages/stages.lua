@@ -131,6 +131,23 @@ Stage.progression[4]:add(DesertPeaks)
 --Music
 DesertPeaks.music = Sound.load("musicDesertPeaks", "Misc/Music/stageDesertPeaks.ogg")
 
+-- Hive Savanna --
+Sprite.load("Tile16Savanna", path.."HiveSavanna/tileset", 1, 0, 0)
+Sprite.load("SavannaSky", path.."HiveSavanna/sky", 1, 0, 0)
+Sprite.load("TempleHill", path.."HiveSavanna/bg1", 1, 0, 0)
+Sprite.load("CloudsSavanna", path.."HiveSavanna/clouds", 1, 0, 0)
+Sprite.load("Planets1_4", path.."HiveSavanna/planet", 1, 0, 0)
+
+local HiveSavanna = require("Stages.HiveSavanna.stage")
+local savanna1 = require("Stages.HiveSavanna.variant1")
+local savanna2 = require("Stages.HiveSavanna.variant2")
+Stage.progression[1]:add(HiveSavanna)
+HiveSavanna.rooms:add(savanna1)
+HiveSavanna.rooms:add(savanna2)
+
+--Music
+HiveSavanna.music = Sound.load("musicDesertPeaks", "Meridian")
+
 --Meridian Enemies
 local DF = Stage.find("Desolate Forest")
 local DL = Stage.find("Dried Lake")
@@ -247,6 +264,9 @@ callback.register("postLoad", function()
 		--Serpentine Rainforest
 		SerpentineRainforest.enemies:add(Lizard)
 		
+		--Hive Savanna
+		HiveSavanna.enemies:add(Lizard)
+		
 		--Shallow Rotlands
 		ShallowRotlands.enemies:add(con1)
 		ShallowRotlands.enemies:add(Lizard)
@@ -347,6 +367,10 @@ callback.register("postLoad", function()
 		--Serpentine Rainforest
 		SerpentineRainforest.interactables:add(dronekiller)
 		SerpentineRainforest.interactables:add(brokenpod)
+
+		--Hive Savanna
+		HiveSavanna.interactables:add(dronekiller)
+		HiveSavanna.interactables:add(brokenpod)
 	end
 end)
 
@@ -355,9 +379,11 @@ callback.register("onStageEntry", function()
 		DF.enemies:add(MonsterCard.find("Scavenger"))
 		DL.enemies:add(MonsterCard.find("Scavenger"))
 		SerpentineRainforest.enemies:add(MonsterCard.find("Scavenger"))
+		HiveSavanna.enemies:add(MonsterCard.find("Scavenger"))
 		DF.enemies:add(MonsterCard.find("Archaic Wisp"))
 		DL.enemies:add(MonsterCard.find("Archaic Wisp"))
 		SerpentineRainforest.enemies:add(MonsterCard.find("Archaic Wisp"))
+		HiveSavanna.enemies:add(MonsterCard.find("Archaic Wisp"))
 		
 	end
 end)
@@ -365,6 +391,7 @@ end)
 --Teleporter Fake replacer 3000
 local specificStages = {
     "Serpentine Rainforest",
+	"Hive Savanna"
 }
 
 local telefake = Object.find("TeleporterFake", "vanilla")
