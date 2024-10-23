@@ -146,7 +146,7 @@ HiveSavanna.rooms:add(savanna1)
 HiveSavanna.rooms:add(savanna2)
 
 --Music
-HiveSavanna.music = Sound.load("musicDesertPeaks", "Meridian")
+HiveSavanna.music = Sound.find("musicDesertPeaks", "Meridian")
 
 --Meridian Enemies
 local DF = Stage.find("Desolate Forest")
