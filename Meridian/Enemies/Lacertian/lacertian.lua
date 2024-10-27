@@ -796,9 +796,6 @@ callback.register("onHit", function(damager, hit)
 			hit:getData().hitTimer = 6 * 60			--- timer until poise from normal damage starts to decay
 			damager:set("damage", damager:get("damage") / 2)
 			damager:set("damage_fake", damager:get("damage_fake") / 2) 
-		else 
-			damager:set("damage", damager:get("damage") * 2) 
-			damager:set("damage_fake", damager:get("damage_fake") * 2) 
 		end
 	end
 end)
