@@ -135,3 +135,66 @@ if modloader.checkMod("Starstorm") then
 		end
 	end)
 end
+
+--Blighted fix...! Courtesy of me (tryagain), myself (also tryagain), and I (you'll never guess)!
+local newBlightedPacket
+newBlightedPacket = net.Packet("Blighted Spawn Packet", function(sender, child, blight_type, value, xscale, mId, x, y)
+	local newBlighted = child:create(x, y)
+	newBlighted.visible = false
+	newBlighted.xscale = xscale
+	newBlighted:set("point_value", value)
+	newBlighted:makeBlighted(blight_type)
+	newBlighted:set("m_id", mId)
+end)
+
+local blightedSpawn = Object.new("BlightedSpawn")
+local backupSprite = Sprite.find("GolemSpawn", "Vanilla")
+local backupObject = Object.find("Golem", "Vanilla")
+blightedSpawn:addCallback("create", function(self)
+	self.spriteSpeed = 0.2
+	self.sprite = backupSprite
+	self:getData().frame = 1
+	self:getData().child = backupObject
+	self:getData().blight_type = 1
+	self:getData().point_value = 0
+	self.blendColor = Color.BLACK
+end)
+blightedSpawn:addCallback("step", function(self)
+	 self:getData().frame = self:getData().frame + self.spriteSpeed
+	 if self:getData().frame > self.sprite.frames + 1 then
+		if net.host then
+			local newBlighted = self:getData().child:create(self.x, self.y)
+			newBlighted.visible = false
+			newBlighted.xscale = self.xscale
+			newBlighted:set("point_value", self:getData().point_value)
+			newBlighted:makeBlighted(self:getData().blight_type)
+			if net.online then
+				local mId = setID(self)
+				newBlightedPacket:sendAsHost(net.ALL, nil, self:getData().child, self:getData().blight_type, self:getData().point_value, self.xscale, mId, self.x, self.y)
+			end
+		end
+		self:destroy()
+	 end
+end)
+
+local objSpawn = Object.find("Spawn", "Vanilla")
+callback.register("onStep", function()
+	for _, blighted in ipairs(obj.Spawn:findMatching("prefix_type", 2)) do
+		if not blighted:getData().checked then
+			local child = Object.fromID(blighted:get("child"))
+			if child:getOrigin() ~= "Vanilla" then
+				local newBlighted = blightedSpawn:create(blighted.x, blighted.y)
+				newBlighted.sprite = blighted.sprite
+				newBlighted.xscale = blighted.xscale
+				newBlighted:getData().child = child
+				newBlighted:getData().point_value = blighted:get("point_value")
+				newBlighted:getData().blight_type = blighted:get("blight_type")
+				if blighted:get("sound_spawn") and onScreenPos(blighted.x, blighted.y) then
+					Sound.fromID(blighted:get("sound_spawn")):play()
+				end
+				blighted:destroy()
+			end
+			blighted:getData().checked = true
+		end
+	end
+end)
