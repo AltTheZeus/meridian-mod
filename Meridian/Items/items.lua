@@ -15,7 +15,8 @@ require("Items/paddle")
 require("Items/pen")
 require("Items/pendant")
 require("Items/snowball")
-
+require("Items/minifridge")
+require("Items/heatsink")
 
 --Starstorm tab menu stuff
 if modloader.checkMod("Starstorm") then
