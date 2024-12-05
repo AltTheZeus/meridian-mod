@@ -148,6 +148,27 @@ HiveSavanna.rooms:add(savanna2)
 --Music
 HiveSavanna.music = Sound.find("musicDesertPeaks", "Meridian")
 
+-- Snowy Spires --
+Sprite.load("Tile16Ice", path.."SnowySpires/tileset", 1, 0, 0)
+Sprite.load("glacier1", path.."SnowySpires/glacier1", 1, 0, 0)
+Sprite.load("snowgroundClouds", path.."SnowySpires/clouds", 1, 0, 0)
+Sprite.load("snowskyClouds", path.."SnowySpires/clouds2", 1, 0, 0)
+Sprite.load("glacier2", path.."SnowySpires/glacier2", 1, 0, 0)
+Sprite.load("glacierSky", path.."SnowySpires/sky", 1, 0, 0)
+Sprite.load("snowSun", path.."SnowySpires/sun", 1, 0, 0)
+require("Stages.SnowySpires.Clouds")
+
+require("Misc.StageObjects.Snowflakes")
+
+local SnowySpires = require("Stages.SnowySpires.stage")
+local glacier1 = require("Stages.SnowySpires.variant")
+Stage.progression[2]:add(SnowySpires)
+SnowySpires.rooms:add(glacier1)
+
+
+--Music
+SnowySpires.music = Sound.load("musicSnowySpires", "Misc/Music/stageSnowySpires.ogg")
+
 --Meridian Enemies
 local DF = Stage.find("Desolate Forest")
 local DL = Stage.find("Dried Lake")
