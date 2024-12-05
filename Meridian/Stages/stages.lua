@@ -158,7 +158,7 @@ Sprite.load("glacierSky", path.."SnowySpires/sky", 1, 0, 0)
 Sprite.load("snowSun", path.."SnowySpires/sun", 1, 0, 0)
 require("Stages.SnowySpires.Clouds")
 
-require("Misc.StageObjects.Snowflakes")
+--require("Misc.StageObjects.Snowflakes")
 
 local SnowySpires = require("Stages.SnowySpires.stage")
 local glacier1 = require("Stages.SnowySpires.variant")
