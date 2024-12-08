@@ -1,6 +1,8 @@
+local path = "Artifacts/"
 local artifact = Artifact.new("Disorientation")
-artifact.loadoutSprite = Sprite.load("DisorientationLoadoutSprite", "Artifacts/disorientation.png", 2, 18, 19)
+artifact.loadoutSprite = Sprite.load("DisorientationLoadoutSprite", path.."disorientation.png", 2, 18, 19)
 artifact.loadoutText = "All stages are shuffled."
+artifact.pickupSprite = Sprite.load("DisorientationPickup", path.."disorientationPickup.png", 1, 14, 13)
 artifact.pickupName = "Artifact of Disorientation"
 artifact.unlocked = true
 
