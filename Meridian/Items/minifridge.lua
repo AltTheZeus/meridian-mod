@@ -8,7 +8,7 @@ item:setTier("uncommon")
 
 local freezeBuff = Buff.find("slow2")
 
-callback.register("onDamage", function(target, damage, source)
+--[[callback.register("onDamage", function(target, damage, source)
 	if target and target:isValid() and isa(target, "PlayerInstance") then 
 		local it = target:countItem(item)
 		local parent
@@ -25,6 +25,21 @@ callback.register("onDamage", function(target, damage, source)
 			end
 		end
 	end
+end)]]
+
+registercallback("onDamage", function(target, damage, source)
+    if source == target then return end
+    if not CheckValid(source) then return end
+    if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
+    if target:isValid() and isa(target, "PlayerInstance") then
+		local it = target:countItem(item)
+		local parent = Object.findInstance(source:get("parent"))
+        if it > 0 and source:get("parent") and CheckValid(parent) then
+			if not parent:hasBuff(freezeBuff) then 
+				parent:applyBuff(freezeBuff, 45 + 45 * it)
+			end
+        end
+    end
 end)
 
 item:setLog{
