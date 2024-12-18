@@ -96,31 +96,52 @@ registercallback("onStep", function()
 	end
 end)
 
+local bubblePacket
+bubblePacket = net.Packet("Rippling Creation Packet", function(sender, netActor, locX, locY)
+	local actor = netActor:resolve()
+	local baby = bubbleObj:create(actor.x, actor.y)
+	local bD = baby:getData()
+	bD.owner = actor
+	bD.damage = actor:get("damage")
+	bD.locX = locX
+	bD.locY = locY
+	if actor:get("elite_type") == bID then
+		bD.swag = "awesome"
+		baby.sprite = goldBub
+	else
+		bD.swag = "normal"
+	end
+end)
+
 registercallback("onDamage", function(target, damage, source)
-	if not CheckValid(source) then return end
-	if target:isValid() and (target:get("elite_type") == ID or target:get("elite_type") == bID) and target:getData().eliteVar == 1 then
-		local tD = target:getData()
-		if tD.bubbleCooldown <= 0 then
-			local bubbleAmount = math.random(1, 3)
-			bubbleAmount = math.round(bubbleAmount * (target.sprite.height/8))
-			if bubbleAmount <= 1 then bubbleAmount = 1 end
-			tD.bubbleCooldown = bubbleAmount * 40
-			repeat
-				local baby = bubbleObj:create(target.x, target.y)
-				local bD = baby:getData()
-				bD.owner = target
-				bD.damage = target:get("damage")
-				bD.locX = target.x + math.random(-50, 50)
-				bD.locY = target.y + math.random(-50, 50)
-				bubbleAmount = bubbleAmount - 1
-				if target:get("elite_type") == ID then
-					bD.swag = "normal"
-				elseif target:get("elite_type") == bID then
-					bD.swag = "awesome"
-					baby.sprite = goldBub
-				end
-			until bubbleAmount <= 0
-			spawn:play()
+	if net.host then
+		if not CheckValid(source) then return end
+		if target:isValid() and (target:get("elite_type") == ID or target:get("elite_type") == bID) and target:getData().eliteVar == 1 then
+			local tD = target:getData()
+			if tD.bubbleCooldown <= 0 then
+				local bubbleAmount = math.random(1, 3)
+				bubbleAmount = math.round(bubbleAmount * (target.sprite.height/8))
+				if bubbleAmount <= 1 then bubbleAmount = 1 end
+				tD.bubbleCooldown = bubbleAmount * 40
+				repeat
+					local baby = bubbleObj:create(target.x, target.y)
+					local bD = baby:getData()
+					bD.owner = target
+					bD.damage = target:get("damage")
+					bD.locX = target.x + math.random(-50, 50)
+					bD.locY = target.y + math.random(-50, 50)
+					bubbleAmount = bubbleAmount - 1
+					if target:get("elite_type") == ID then
+						bD.swag = "normal"
+					elseif target:get("elite_type") == bID then
+						bD.swag = "awesome"
+						baby.sprite = goldBub
+					end
+					
+					bubblePacket:sendAsHost(net.ALL, nil, target:getNetIdentity(), bD.locX, bD.locY)
+				until bubbleAmount <= 0
+				spawn:play()
+			end
 		end
 	end
 end)
