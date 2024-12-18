@@ -62,7 +62,7 @@ registercallback("onHit", function(damager, hit, x, y)
 	local dD = damager:getData()
 	if dD.chainball then
 		if hit:get("show_boss_health") == 0 or (hit:get("show_boss_health") == 1 and hit:get("blight_type") ~= -1) then
-			hit:applyBuff(shackled, 3.5 * 60)
+			applySyncedBuff(hit, shackled, 3.5 * 60, true)
 		end
 	end
 end)
@@ -93,10 +93,21 @@ ach.description = "Overwhelm a Lacertian, and kill it while it's stunned."
 ach:assignUnlockable(item)
 
 registercallback("onNPCDeath", function(npc)
-	if npc:getObject() == Object.find("Lacertian") then
+	if not net.online and npc:getObject() == Object.find("Lacertian") then
 		local lA = npc:getAccessor()
 		if lA.state == "stun" then
 			ach:increment(1)
 		end
 	end
 end)
+
+registercallback("onHit", function(damager, hit) --Same scenario as cards
+	if net.online and hit:getObject() == Object.find("Lacertian") then
+		local parent = damager:getParent()
+		if parent and parent:isValid() and (parent:get("dead") or 0) == 0 and parent == net.localPlayer then
+			if (hit:get("hp") - damager:get("damage")) < 0 and (hit:get("invincible") or 0) <= 0 and hit:get("state") == "stun" then
+				ach:increment(1)
+			end
+		end
+	end
+end, 1700)
