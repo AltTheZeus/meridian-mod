@@ -209,7 +209,7 @@ sorrowBoon:addCallback("step", function(self)
 	end
 	if sD.cCurrent <= 5 then
 		sD.targ:getData().sorrowBuffTimer = sD.targ:getData().sorrowBuffTimer + 180
-		sD.targ:applyBuff(sorrowBuff, sD.targ:getData().sorrowBuffTimer)
+		applySyncedBuff(sD.targ, sorrowBuff, sD.targ:getData().sorrowBuffTimer, true)
 		self:destroy()
 --		print("absorbed")
 	end
