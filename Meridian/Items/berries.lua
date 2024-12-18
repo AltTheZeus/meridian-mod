@@ -59,6 +59,12 @@ berrySplash:life(60, 80)
 local berryBush = Object.new("Berry Bush")
 berryBush.sprite = Sprite.load("Items/berriesObj.png", 1, 17, 19)
 
+local bushCreationPacket
+bushCreationPacket = net.Packet("Berry Bush Creation Packet", function(sender, x, y, item)
+	local bush = berryBush:create(x, y)
+	bush:getData().payload = item
+end)
+
 berryBush:addCallback("create", function(self)
 	if not self:collidesMap(self.x, self.y) then
 		local UHOHcheck = 0
@@ -70,35 +76,38 @@ berryBush:addCallback("create", function(self)
 	end
 end)
 
+local bushActivationPacket
+bushActivationPacket = net.Packet("Berry Bush Activation Packet", function(sender, x, y, newItem)
+	local bush = berryBush:findNearest(x, y)
+	if newItem then
+		newItem:create(bush.x, bush.y)
+	end
+	berrySplash:burst("above", bush.x, bush.y - 6, 20)
+	bush:destroy()
+	
+	if net.host then
+		bushActivationPacket:sendAsHost(net.EXCLUDE, sender, x, y)
+	end
+end)
+
 berryBush:addCallback("draw", function(self)
 	local sD = self:getData()
 	for _, i in ipairs(misc.players) do
 		if self:collidesWith(i, self.x, self.y) then
 			graphics.alpha(1)
+			graphics.color(Color.WHITE)
 			local offset = graphics.textWidth("Press '" .. input.getControlString("enter", i) .. "' to forage.", graphics.FONT_DEFAULT) / 2
-			graphics.printColor("&w&Press &y&'" .. input.getControlString("enter", i) .. "'&w& to forage.&!&", self.x - offset + 5, self.y - 30, graphics.FONT_DEFAULT)
+			graphics.printColor("Press &y&'" .. input.getControlString("enter", i) .. "'&!& to forage.", self.x - offset + 5, self.y - 30, graphics.FONT_DEFAULT)
 			if input.checkControl("enter", i) == 2 or input.checkControl("enter", i) == 3 then
-				if Artifact.find("Command").active == true then
-					if modloader.checkMod("Starstorm") then
-						ItemPool.find("legendary"):getCrate():create(self.x, self.y)
-						berrySplash:burst("above", self.x, self.y - 6, 20)
-						self:destroy()
-					else
-						ItemPool.find("uncommon"):getCrate():create(self.x, self.y)
-						berrySplash:burst("above", self.x, self.y - 6, 20)
-						self:destroy()
-					end
+				local newItem = Artifact.find("Command").active and (modloader.checkMod("Starstorm") and ItemPool.find("legendary"):getCrate() or ItemPool.find("uncommon"):getCrate()) or (sD.payload or item)
+				if net.host then
+					newItem:create(self.x, self.y)
+					bushActivationPacket:sendAsHost(net.ALL, nil, self.x, self.y)
 				else
-					if sD.payload then
-						sD.payload:create(self.x, self.y - 16)
-						berrySplash:burst("above", self.x, self.y - 6, 20)
-						self:destroy()
-					else
-						item:create(self.x, self.y - 16)
-						berrySplash:burst("above", self.x, self.y - 6, 20)
-						self:destroy()
-					end
+					bushActivationPacket:sendAsClient(self.x, self.y, newItem)
 				end
+				berrySplash:burst("above", self.x, self.y - 6, 20)
+				self:destroy()
 			end
 		end
 	end
@@ -112,7 +121,7 @@ registercallback("onGameStart", function()
 end)
 
 registercallback("onNPCDeathProc", function(npc, player)
-	if player:countItem(item) > 0 then
+	if player:countItem(item) > 0 and net.host then
 		local dD = misc.director:getData()
 		if modloader.checkMod("Starstorm") and Artifact.find("Command").active == true then 
 				if math.chance(2.5 + (player:countItem(item) * 2.5)) then
@@ -217,6 +226,8 @@ registercallback("onStep", function()
 		dD.bushTableX[id] = nil
 		dD.bushTableY[id] = nil
 		dD.bushTableI[id] = nil
+		
+		bushCreationPacket:sendAsHost(net.ALL, nil, bush.x, bush.y, bD.payload)
 	end
 end)
 
