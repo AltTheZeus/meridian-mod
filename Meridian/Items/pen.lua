@@ -35,26 +35,48 @@ registercallback("onPlayerInit", function(player)
 end)
 
 registercallback("onFireSetProcs", function(damager, player)
-	if player:getObject() == Object.find("p") and player:countItem(item) > 0 then
+	if player:getObject() == Object.find("p") and player:countItem(item) > 0 and net.host then
 		if math.random(100) <= 15 + ((player:countItem(item) - 1) * 7.5) then
 			damager:getData().pen = 1
 		end
 	end
 end)
 
+local penPacket = net.Packet.new("Arc Pen Packet", function(sender, netActor, rBuff, aBuff, netPlayer, x, y)
+	local actor = netActor:resolve()
+	local player = netPlayer:resolve()
+	if actor and actor:isValid() then
+		if rBuff then
+			actor:removeBuff(Buff.find(rBuff))
+		end
+		if aBuff then
+			actor:applyBuff(Buff.find(aBuff), 300)
+		end
+	end
+	Sound.find("ChainLightning"):play()
+	player:getData().penMode = 5
+	if x and y then
+		player:fireExplosion(x, y, 2, 2.5, 3, itemEf)
+	end
+end)
+
 registercallback("onHit", function(damager, hit, x, y)
 	if damager:getData().pen and damager:getData().pen == 1 then
+		local parent = damager:getParent()
 		if hit:hasBuff(penBuff2) then
 			hit:removeBuff(penBuff2)
-			Object.findInstance(damager:get("parent")):fireExplosion(hit.x, hit.y, 2, 2.5, 3, itemEf)
+			parent:fireExplosion(hit.x, hit.y, 2, 2.5, 3, itemEf)
+			penPacket:sendAsHost(net.ALL, nil, hit:getNetIdentity(), "Very Shocked", false, parent:getNetIdentity(), hit.x, hit.y)
 		elseif hit:hasBuff(penBuff) then
 			hit:removeBuff(penBuff)
 			hit:applyBuff(penBuff2, 300)
+			penPacket:sendAsHost(net.ALL, nil, hit:getNetIdentity(), "Shocked", "Very Shocked", parent:getNetIdentity())
 		else
 			hit:applyBuff(penBuff, 300)
+			penPacket:sendAsHost(net.ALL, nil, hit:getNetIdentity(), false, "Shocked", parent:getNetIdentity())
 		end
-		Sound.find("ChainLightning"):play(1, 1)
-		Object.findInstance(damager:get("parent")):getData().penMode = 5
+		Sound.find("ChainLightning"):play()
+		parent:getData().penMode = 5
 	end
 end)
 
