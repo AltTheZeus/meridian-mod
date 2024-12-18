@@ -805,23 +805,19 @@ end)
 
 -- Synced Object Spawn (with function!)
 local funcs = {}
-local syncInst = net.Packet.new("SSInstSpawn", function(player, object, x, y, instid, funcid, other)
+local syncSpawnInst = net.Packet.new("SSInstSpawn", function(player, object, x, y, instid, funcid, other, other2, other3, other4)
 	local inst = object:create(x, y)
-	if instid ~= false then
+	if instid then
 		inst:set("m_id", instid)
 	end
 	
-	local arg
-	if other then 
-		if isa(other, "NetInstance") then
-			arg = other:resolve()
-		else
-			arg = other
-		end
+	local arg, arg2, arg3, arg4 = other, other2, other3, other4
+	if isa(other, "NetInstance") then
+		arg = other:resolve()
 	end
 	if funcid then
 		if funcs[funcid] then
-			funcs[funcid](inst, arg)
+			funcs[funcid](inst, arg, arg2, arg3, arg4)
 		else
 			error("Invalid ID: "..funcid, 2)
 		end
@@ -831,24 +827,20 @@ function setFunc(func)
 	table.insert(funcs, func)
 	return #funcs
 end
-function createSynced(object, x, y, id, otherv)
+function createSynced(object, x, y, id, otherv, otherv2, otherv3, otherv4)
 	if net.host then
 		local inst = object:create(x, y):set("sync", 0)
 		if id then
-			funcs[id](inst, otherv)
+			funcs[id](inst, otherv, otherv2, otherv3, otherv4)
 		end
 		if net.online then
 			local instid = setID(inst)
-			local other = otherv
-			if otherv and isa(otherv, "Instance") then
-				if otherv.getNetIdentity then
-					other = otherv:getNetIdentity()
-				else
-					other = nil
-				end
+			if otherv and isa(otherv, "Instance") and otherv.getNetIdentity then
+				otherv = otherv:getNetIdentity()
 			end
-			syncInst:sendAsHost(net.ALL, nil, object, x, y, instid, id, other)
+			syncSpawnInst:sendAsHost(net.ALL, nil, object, x, y, instid, id, otherv, otherv2, otherv3, otherv4)
 		end
+		return inst
 	end
 end
 
