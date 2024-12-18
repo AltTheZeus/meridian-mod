@@ -89,6 +89,18 @@ registercallback("onNPCDeathProc", function(npc, player)
 	end
 end)
 
+local fleshActivationPacket
+fleshActivationPacket = net.Packet("Flesh Bit Activation Packet", function(sender, x, y)
+	miniFlesh:findNearest(x, y):destroy()
+	fleshSound1:play(math.random(0.7, 1.1), 1.2)
+	
+	if net.host then
+		local dD = misc.director:getData()
+		dD.flesh = dD.flesh + 1
+		fleshActivationPacket:sendAsHost(net.EXCLUDE, sender, x, y)
+	end
+end)
+
 miniFlesh:addCallback("draw", function(self)
 	local sD = self:getData()
 	local dD = misc.director:getData()
@@ -99,25 +111,54 @@ miniFlesh:addCallback("draw", function(self)
 			graphics.printColor("&w&Press &y&'" .. input.getControlString("enter", i) .. "'&w& to  collect flesh.&!&", self.x - offset + 5, self.y - 45, graphics.FONT_DEFAULT)
 			if input.checkControl("enter", i) == 2 or input.checkControl("enter", i) == 3 then
 				self:destroy()
-				dD.flesh = dD.flesh + 1
 				fleshSound1:play(math.random(0.7, 1.1), 1.2)
+				
+				if net.host then
+					dD.flesh = dD.flesh + 1
+					fleshActivationPacket:sendAsHost(net.ALL, nil, self.x, self.y)
+				else
+					fleshActivationPacket:sendAsClient(self.x, self.y)
+				end
 			end
 		end
 	end
 end)
 
-registercallback("onStageEntry", function()
-	local dD = misc.director:getData()
-	dD.flesh = 0
+local fleshCreationPacket
+fleshCreationPacket = net.Packet("Flesh Creation Packet", function(sender, object, x, y)
+	object:create(x, y) --It's as simunculuple as that
+end)
+
+local spawnFlesh = function()
 	local fCount = 0
 	for _, i in ipairs(misc.players) do
 		if i:countItem(item) > 0 then fCount = fCount + 1 end
 	end
 	if fCount > 0 then
-		if not Object.find("Teleporter"):find(1) then return end
+		if not (Object.find("Teleporter"):find(1) or Object.find("Command"):find(1)) then return end
 		for i = 1, 4 do
 			local ground = table.random(Object.find("B"):findAll())
-			miniFlesh:create(ground.x + math.random(10, (16 * ground:get("width_box"))), ground.y)
+			local flesh = miniFlesh:create(ground.x + math.random(10, (16 * ground:get("width_box"))), ground.y)
+			fleshCreationPacket:sendAsHost(net.ALL, nil, miniFlesh, flesh.x, flesh.y)
+		end
+	end
+end
+
+registercallback("onStageEntry", function()
+	misc.director:getData().flesh = 0
+	if not net.online then
+		spawnFlesh()
+	elseif net.host then
+		net.localPlayer:getData().fleshTimer = 5
+	end
+end)
+
+callback.register("onPlayerStep", function(player)
+	if player:getData().fleshTimer then
+		player:getData().fleshTimer = player:getData().fleshTimer - 1
+		if player:getData().fleshTimer <= 0 then
+			spawnFlesh()
+			player:getData().fleshTimer = nil
 		end
 	end
 end)
@@ -127,16 +168,17 @@ registercallback("onStep", function()
 	if dD.flesh >= 4 then
 		dD.flesh = 0
 		local groundRand = math.random(-50, 50)
-		local tp = Object.find("Teleporter"):find(1)
+		local tp = Object.find("Teleporter"):find(1) or Object.find("Command"):find(1)
 		local bf = bigFlesh:create(tp.x + groundRand, tp.y)
 		if not bf:collidesMap(bf.x, bf.y) then
-			local failsafe = 0
+				local failsafe = 0
 			repeat
 				bf.y = bf.y + 1
 				failsafe = failsafe + 1
 			until bf:collidesMap(bf.x, bf.y) or failsafe >= 100
 			bf.y = bf.y - 1
 		end
+		fleshCreationPacket:sendAsHost(net.ALL, nil, bigFlesh, bf.x, bf.y)
 	end
 end)
 
