@@ -37,6 +37,7 @@ lavaObj:addCallback("step", function(self)
 				sD.owner:getData().lavaThreshold = sD.owner:getData().lavaThreshold + 0.5
 			end
 			self:destroy()
+			return
 		end
 	end
 --	if not sD.owner:isValid() or not sD.owner then
@@ -45,6 +46,7 @@ lavaObj:addCallback("step", function(self)
 	sD.life = sD.life + 1
 	if sD.life >= 300 then
 		self:destroy()
+		return
 	end
 	sD.damageTimer = sD.damageTimer + 1
 	if sD.damageTimer == 15 and self:isValid() then
@@ -73,6 +75,7 @@ registercallback("onHit", function(damager, hit, x, y)
 			if hit:collidesWith(Object.find("B"), hit.x, hit.y + (hit.sprite.height - hit.sprite.yorigin) + 1) then
 				spawnPot = Object.find("B"):findLine(hit.x, hit.y, hit.x, hit.y + (hit.sprite.height - hit.sprite.yorigin) + 1)
 			else return end
+			if not spawnPot then return end
 			local cSpawn = spawnPot.x
 			for i = spawnPot.x, spawnPot.x + (spawnPot:get("width_box") * 16) - 32, 16 do
 				if math.abs(hit.x - i) < math.abs(hit.x - cSpawn) then
@@ -125,17 +128,17 @@ eruptDoT:addCallback("step", function(actor)
 end)
 
 registercallback("onDamage", function(target, damage, source)
-if Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
-	if source == target then return end
-	if not CheckValid(source) then return end
-	if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
-	if target:isValid() and isa(target, "PlayerInstance") then
-		if (source:get("elite_type") == ID and (source:getData().eliteVar == 1 or source:getObject() == Object.find("Worm") or source:getObject() == Object.find("WormHead") or source:getObject() == Object.find("WormBody"))) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) and (source:getParent():getData().eliteVar == 1 or source:getParent():getObject() == Object.find("Worm") or source:getParent():getObject() == Object.find("WormHead") or source:getParent():getObject() == Object.find("WormBody"))) then
-			target:applyBuff(eruptDoT, 201)
-		end
-		if (source:get("elite_type") == bID and source:getData().eliteVar == 1) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) and source:getParent():getData().eliteVar == 1) then
-			target:applyBuff(eruptDoT, 201)
+	if net.host and Difficulty.getActive().forceHardElites == true or misc.director:get("stages_passed") >= 2 then
+		if source == target then return end
+		if not CheckValid(source) then return end
+		if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
+		if target:isValid() and isa(target, "PlayerInstance") then
+			if (source:get("elite_type") == ID and (source:getData().eliteVar == 1 or source:getObject() == Object.find("Worm") or source:getObject() == Object.find("WormHead") or source:getObject() == Object.find("WormBody"))) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == ID) and (source:getParent():getData().eliteVar == 1 or source:getParent():getObject() == Object.find("Worm") or source:getParent():getObject() == Object.find("WormHead") or source:getParent():getObject() == Object.find("WormBody"))) then
+				applySyncedBuff(target, eruptDoT, 201)
+			end
+			if (source:get("elite_type") == bID and source:getData().eliteVar == 1) or (((source:get("parent") and CheckValid(Object.findInstance(source:get("parent")))) and source:getParent():get("elite_type") == bID) and source:getParent():getData().eliteVar == 1) then
+				applySyncedBuff(target, eruptDoT, 201)
+			end
 		end
 	end
-end
 end)
