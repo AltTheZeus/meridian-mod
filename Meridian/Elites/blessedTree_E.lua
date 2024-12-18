@@ -41,8 +41,9 @@ treeSpawnerE:addCallback("step", function(self)
 	local data = self:getData()
 	data.timer = data.timer + 1
 	if data.timer >= 60 then
-		local ad = treeE:create(self.x, self.y):getData()
-		ad.isPlayer = 0
+		if net.host then
+			createSynced(treeE, self.x, self.y)
+		end
 		self:destroy()
 	end
 end)
@@ -70,6 +71,7 @@ treeE:addCallback("create", function(self)
 	ac.point_value = 0
 	ac.state = "idle"
 	data.age = 0
+	data.isPlayer = 0
 	self.mask = treeMask_E
 	self:setAnimations{
 		idle = treeIdle_E,
@@ -108,9 +110,9 @@ treeE:addCallback("destroy", function(self)
 	gogobalga:play()
 	treeDeadE:create(self.x, self.y)
 	if not modloader.checkFlag("mn_disable_items") then
-	if math.random(1,4000) == 1 then
-		aspect:create(self.x, self.y - 15)
-	end
+		if math.random(1,4000) == 1 and net.host then
+			aspect:create(self.x, self.y - 15)
+		end
 	end
 	repeat
 		if math.random(1,2) == 1 then
@@ -209,7 +211,7 @@ end)
 
 registercallback("onStep", function()
 	local dD = misc.director:getData()
---	print(dD.bTrees)
+	--print(dD.bTrees)
 	for i, n in pairs(dD.bTrees) do
 		treeSpawnerE:create(i, n)
 		dD.bTrees[i] = nil
