@@ -87,6 +87,37 @@ local red = ItemPool.find("rare")
 local green = ItemPool.find("uncommon")
 local white = ItemPool.find("common")
 
+local bestowalActivationPacket
+bestowalActivationPacket = net.Packet("Bestowal Shrine Activation Packet", function(sender, netPlayer, netShrine)
+	local pickedShrine = netShrine:resolve()
+	local player = netPlayer:resolve()
+	
+	local sD = pickedShrine:getData()
+	if sD.opened == 0 then
+		pickedShrine.spriteSpeed = 0.35
+		sD.activator = player.id
+	end
+	
+	if net.host then
+		bestowalActivationPacket:sendAsHost(net.EXCLUDE, sender, netPlayer, netShrine)
+	end
+end)
+
+local bestowalChildPacket
+bestowalChildPacket = net.Packet("Bestowal Shrine Child Packet", function(sender, netShrine, netActor, eliteType)
+	local bShrine = netShrine:resolve()
+	local actor = netActor:resolve()
+	local actorData = actor:getData()
+	local shrineData = bShrine:getData()
+	local directorData = misc.director:getData()
+	
+	actorData.shrineborn = bShrine.id
+	actor:makeElite(EliteType.fromID(eliteType))
+	shrinesplosion:create(actor.x, actor.y + actor.sprite.height - actor.sprite.yorigin)
+	directorData.shrineBabies[actor.id] = actor
+	shrineData.shrineBabies[actor.id] = actor
+end)
+
 shrine:addCallback("step", function(self)
 	local sD = self:getData()
 	local dD = misc.director:getData()
@@ -99,33 +130,39 @@ shrine:addCallback("step", function(self)
 	local diffBonus = math.round(misc.director:get("stages_passed") * 0.4)
 	if self.subimage >= 2 and sD.opened == 0 then
 		shrineNoise:play()
-		local elited = 0
-		for _, i in ipairs(nonElites) do
-			if elited < (3 + diffBonus) then
-				local card
-				local elites
-				local elite
-				for _, c in ipairs(MonsterCard.findAll()) do
-					if c.object == i:getObject() then
-						elites = c.eliteTypes:toTable()
-						local failsafe = 0
-						repeat
-							elite = table.random(elites)
-							failsafe = failsafe + 1
-						until elite ~= EliteType.find("blessed") or failsafe >= 100
-						if failsafe >= 100 then
-							elite = EliteType.find("blazing")
+		if net.host then
+			local elited = 0
+			for _, i in ipairs(nonElites) do
+				if elited < (3 + diffBonus) then
+					local card
+					local elites
+					local elite
+					for _, c in ipairs(MonsterCard.findAll()) do
+						if c.object == i:getObject() then
+							elites = c.eliteTypes:toTable()
+							local failsafe = 0
+							repeat
+								elite = table.random(elites)
+								failsafe = failsafe + 1
+							until elite ~= EliteType.find("blessed") or failsafe >= 100
+							if failsafe >= 100 then
+								elite = EliteType.find("blazing")
+							end
 						end
 					end
+					local iD = i:getData()
+					iD.shrineborn = self.id
+					i:makeElite(elite)
+					local spriteMaths = i.sprite.height - i.sprite.yorigin
+					shrinesplosion:create(i.x, i.y + spriteMaths)
+					elited = elited + 1
+					dD.shrineBabies[i.id] = i
+					sD.shrineBabies[i.id] = i
+					
+					if net.online then
+						bestowalChildPacket:sendAsHost(net.ALL, nil, self:getNetIdentity(), i:getNetIdentity(), elite.id)
+					end
 				end
-				local iD = i:getData()
-				iD.shrineborn = self.id
-				i:makeElite(elite)
-				local spriteMaths = i.sprite.height - i.sprite.yorigin
-				shrinesplosion:create(i.x, i.y + spriteMaths)
-				elited = elited + 1
-				dD.shrineBabies[i.id] = i
-				sD.shrineBabies[i.id] = i
 			end
 		end
 		sD.opened = 1
@@ -159,6 +196,14 @@ shrine:addCallback("step", function(self)
 						pickedShrine.spriteSpeed = 0.35
 						sD.activator = player.id
 					end
+					
+					if net.online then
+						if net.host then
+							bestowalActivationPacket:sendAsHost(net.ALL, nil, player:getNetIdentity(), pickedShrine:getNetIdentity())
+						else
+							bestowalActivationPacket:sendAsClient(player:getNetIdentity(), pickedShrine:getNetIdentity())
+						end
+					end
 				end
 			end
 		end
@@ -166,21 +211,23 @@ shrine:addCallback("step", function(self)
 	if sD.childrenkilled >= 3 + diffBonus and sD.item == false then
 		local p = Object.findInstance(sD.activator)
 		local chestMath = math.random(0,100)
-		if Artifact.find("Command").active == true then
-			if chestMath <= 1 then
-				red:getCrate().create(p.x, p.y)
-			elseif chestMath >= 2 and chestMath <= 30 then
-				green:getCrate():create(p.x, p.y)
+		if net.host then
+			if Artifact.find("Command").active == true then
+				if chestMath <= 1 then
+					red:getCrate().create(p.x, p.y)
+				elseif chestMath >= 2 and chestMath <= 30 then
+					green:getCrate():create(p.x, p.y)
+				else
+					white:getCrate():create(p.x, p.y)
+				end
 			else
-				white:getCrate():create(p.x, p.y)
-			end
-		else
-			if chestMath <= 1 then
-				red:roll():getObject():create(p.x, p.y - 8)
-			elseif chestMath >= 2 and chestMath <= 30 then
-				green:roll():getObject():create(p.x, p.y - 8)
-			else
-				white:roll():getObject():create(p.x, p.y - 8)
+				if chestMath <= 1 then
+					red:roll():getObject():create(p.x, p.y - 8)
+				elseif chestMath >= 2 and chestMath <= 30 then
+					green:roll():getObject():create(p.x, p.y - 8)
+				else
+					white:roll():getObject():create(p.x, p.y - 8)
+				end
 			end
 		end
 		sD.item = true
