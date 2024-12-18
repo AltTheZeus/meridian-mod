@@ -61,7 +61,18 @@ ach.description = "Kill an enemy worth over 5000 gold."
 ach:assignUnlockable(item)
 
 registercallback("onNPCDeath", function(npc)
-	if npc:get("exp_worth") > 5000 then
+	if not net.online and npc:get("exp_worth") > 5000 then
 		ach:increment(1)
 	end
 end)
+
+registercallback("onHit", function(damager, hit) --Alternate callback for online use, could be slightly more unstable so it'll only be active in multiplayer. Only way to find out who killed what.
+	if net.online then
+		local parent = damager:getParent()
+		if parent and parent:isValid() and (parent:get("dead") or 0) == 0 and parent == net.localPlayer then
+			if (hit:get("hp") - damager:get("damage")) < 0 and (hit:get("invincible") or 0) <= 0 and hit:get("exp_worth") > 5000 then
+				ach:increment(1)
+			end
+		end
+	end
+end, 1700)
