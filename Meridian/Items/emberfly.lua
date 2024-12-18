@@ -49,11 +49,23 @@ cloud:addCallback("step", function(self)
 	end
 end)
 
+local emberflyPacket
+emberflyPacket = net.Packet("Emberfly Pin Packet", function(sender, netPlayer, x, y)
+	local player = netPlayer:resolve()
+	local cD = cloud:create(x, y)
+	cD.owner = player
+	cD.mult = player:countItem(item)
+end)
+
 registercallback("onHit", function(damager, hit, x, y)
-	if hit:getObject() == Object.find("p") and hit:countItem(item) > 0 and math.random(100) <= 20 then
+	if net.host and hit:getObject() == Object.find("p") and hit:countItem(item) > 0 and math.random(100) <= 20 then
 		local cD = cloud:create(x + 8, y - 40):getData()
 		cD.owner = hit
 		cD.mult = hit:countItem(item)
+		
+		if net.online then
+			emberflyPacket:sendAsHost(net.ALL, nil, hit:getNetIdentity(), cD.x, cD.y)
+		end
 	end
 end)
 
