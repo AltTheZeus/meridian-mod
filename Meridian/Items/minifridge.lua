@@ -33,9 +33,9 @@ registercallback("onDamage", function(target, damage, source)
     if isa(source, "Instance") and (source:getObject() == Object.find("ChainLightning") or source:getObject() == Object.find("MushDust") or source:getObject() == Object.find("FireTrail") or source:getObject() == Object.find("DoT")) then return end
     if target:isValid() and isa(target, "PlayerInstance") then
 		local it = target:countItem(item)
-		local parent = Object.findInstance(source:get("parent"))
-        if it > 0 and source:get("parent") and CheckValid(parent) then
-			if not parent:hasBuff(freezeBuff) then 
+        if it > 0 and source:get("parent") then
+			local parent = Object.findInstance(source:get("parent"))
+			if CheckValid(parent) and not parent:hasBuff(freezeBuff) then 
 				parent:applyBuff(freezeBuff, 45 + 45 * it)
 			end
         end
@@ -44,7 +44,7 @@ end)
 
 item:setLog{
     group = "uncommon",
-    description = ".",
+    description = "Freeze the enemy that hits you.",
     priority = "&w&Standard&!&",
     destination = "Stepped Terraces,\n3rd Colony,\nMars",
     date = "8/12/2056",
