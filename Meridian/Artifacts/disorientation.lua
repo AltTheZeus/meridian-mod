@@ -17,6 +17,7 @@ callback.register("postLoad", function()
 end)
 
 callback.register("onGameStart", function()
+	disorientationStage1 = true 
 	if artifact.active then 
 		local stgAll = {}
 		for i = 1, 5 do 
@@ -38,7 +39,8 @@ callback.register("onGameStart", function()
 		end
 	else
 		for i = 1, 5 do 
-			for j = 1, #prevStageProgression[i] do 
+			local progrAmount = Stage.progression[i]:len()
+			for j = 1, progrAmount do 
 				Stage.progression[i]:remove(Stage.progression[i][1])
 			end
 		end
@@ -48,5 +50,13 @@ callback.register("onGameStart", function()
 			end	
 		end	
 	end
-	Stage.transport(Stage.progression[1][math.random(1, Stage.progression[1]:len())])
+end)
+
+callback.register("onStageEntry", function()
+	if disorientationStage1 then 
+		disorientationStage1 = false
+		if net.host then 
+			Stage.transport(Stage.progression[1][math.random(1, Stage.progression[1]:len())])
+		end
+	end
 end)
