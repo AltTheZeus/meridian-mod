@@ -22,6 +22,7 @@ require(path.."mergers.mergerS")
 
 -- bosses
 require(path.."Lacertian.lacertian")
+require(path.."Stymphalian.stymphalian")
 
 registercallback("onStageEntry", function()
 	local dD = misc.director:getData()
