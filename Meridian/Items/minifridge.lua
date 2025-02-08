@@ -3,7 +3,7 @@ local item = Item.new("MiniFridge")
 item.pickupText = "Freeze the enemy that hits you." 
 item.displayName = "Mini Fridge"
 
-item.sprite = Sprite.load("Items/minifridge.png", 1, 10, 11)
+item.sprite = Sprite.load("Items/minifridge.png", 1, 15, 15)
 item:setTier("uncommon")
 
 local freezeBuff = Buff.find("slow2")

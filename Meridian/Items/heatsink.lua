@@ -3,7 +3,7 @@ local item = Item.new("OverclockedHeatsink")
 item.pickupText = "Use items have a chance to not go on cooldown." 
 item.displayName = "Overclocked Heatsink"
 
-item.sprite = Sprite.load("Items/heatsink.png", 1, 10, 11)
+item.sprite = Sprite.load("Items/heatsink.png", 1, 15, 17)
 item:setTier("rare")
 
 callback.register("postUseItemUse", function(player, use)
@@ -17,7 +17,7 @@ end)
 
 item:setLog{
     group = "rare",
-    description = ".",
+    description = "Use items have a chance to not go on cooldown.",
     priority = "&w&Standard&!&",
     destination = "Stepped Terraces,\n3rd Colony,\nMars",
     date = "8/12/2056",
