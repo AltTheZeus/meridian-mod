@@ -13,7 +13,11 @@ local sprites = {
 	shoot1_1 = Sprite.load("DuelistShoot1_1", path.."shoot1_1", 7, 10, 12),
 	shoot1_2 = Sprite.load("DuelistShoot1_2", path.."shoot1_2", 7, 11, 11),
 	shoot1_3 = Sprite.load("DuelistShoot1_3", path.."shoot1_3", 7, 8, 12),
-	shoot1_4 = Sprite.load("DuelistShoot1_4", path.."shoot1_4", 7, 8, 15)
+	shoot1_4 = Sprite.load("DuelistShoot1_4", path.."shoot1_4", 7, 8, 15),
+	
+	shoot3 = Sprite.load("DuelistShoot3", path.."shoot3", 20, 39, 12),
+	sparks1 = Sprite.load("DuelistShoot3Sparks1", path.."sparks1", 4, 39, 12),
+	sparks2 = Sprite.load("DuelistShoot3Sparks2", path.."sparks2", 4, 39, 12)
 }
 
 local sounds = {
@@ -88,6 +92,7 @@ survivor:addCallback("init", function(player)
 	
 	playerData.combo = 1
 	playerData.comboReset = 0
+	playerData.utilityDis = 0
 	
 	playerAc.pHmax = 1.45
 	player:set("walk_speed_coeff", 1)
@@ -118,7 +123,6 @@ objAfterimage:addCallback("create", function(self)
 	self.spriteSpeed = 0.24
 	self.alpha = 0
 	selfData.alpha = startAlpha
-	selfData.multiple = 0
 	selfData.parent = nil
 	selfData.attack = false
 	selfData.fullCombo = false
@@ -218,7 +222,7 @@ objAfterimage:addCallback("step", function(self)
 			vfx:getData().curSprite = selfData.curSprite
 			vfx:getData().fullCombo = selfData.fullCombo
 		end]]
-		if selfData.alpha == startAlpha and selfData.curSprite < 4 and selfData.fullCombo and selfData.multiple == 0 then 
+		if selfData.alpha == startAlpha and selfData.curSprite < 4 and selfData.fullCombo then 
 			print("done")
 			selfData.fullCombo = false 
 			local vfx = objAfterimage:create(self.x, self.y) 
@@ -443,7 +447,7 @@ survivor:addCallback("useSkill", function(player, skill)
 		elseif skill == 2 then 
 			player:survivorActivityState(2, player:getAnimation("shoot1_2"), 0.24, true, true)
 		elseif skill == 3 then 
-			player:survivorActivityState(3, player:getAnimation("shoot1_4"), 0.24, true, true)
+			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.24, true, true)
 		elseif skill == 4 then 
 			local images = objLastingAfterimage:findAll()
 			for _, img in ipairs(images) do 
@@ -504,7 +508,6 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 				vfx.sprite = player.sprite 
 				vfx.xscale = player.xscale
 				vfx.yscale = player.yscale
-				vfx:getData().multiple = 0
 				vfx.depth = player.depth + 1
 				vfx:getData().parent = player
 				vfx:getData().curSprite = playerData.combo
@@ -520,7 +523,6 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 				vfx.sprite = player.sprite 
 				vfx.xscale = player.xscale
 				vfx.yscale = player.yscale
-				vfx:getData().multiple = 0
 				vfx.depth = player.depth + 1
 				vfx:getData().parent = player
 				vfx:getData().lasting = true
@@ -534,39 +536,64 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 			end				
 		end	
 	elseif skill == 3 then 
-		if relevantFrame == 1 or relevantFrame == player.sprite.frames - 1 then 
-			for i = 0, playerAc.sp do 
-				local vfx = objAfterimage:create(player.x - player.xscale * i * 5, player.y) 
-				vfx.sprite = player.sprite 
-				vfx.spriteSpeed = player.spriteSpeed
-				vfx.xscale = player.xscale
-				vfx.yscale = player.yscale
-				vfx:getData().multiple = 0
-				vfx.depth = player.depth + 1
-				vfx:getData().parent = player
-				vfx:getData().curSprite = 4	
-				vfx:getData().lasting = true
-				vfx:getData().afterimageBlack = i > 0
+		local maxDis = 80
+		if player.subimage >= 9 and player.subimage <= 13 then 
+			if playerAc.invincible <= 8 then 
+				playerAc.invincible = 8
 			end
 		end
-		if relevantFrame == 3 then 
-			local maxDis = 60
+		if relevantFrame == 10 then 
 			local dis = maxDis
-			while dis > 0 and not player:collidesMap(player.x + player.xscale, player.y) do 
+			while dis > 0 and player:collidesMap(player.x + player.xscale * dis, player.y) do 
 				dis = dis - 1
-				player.x = player.x + player.xscale
 			end
-			for i = 0, playerAc.sp do
-				local bullet = player:fireExplosion(player.x + player.xscale * 5, player.y, 20/19, 15/4, 2)
-				if i ~= 0 then
-					bullet:set("climb", bullet:get("climb") + i * 8)
-				end
-			end	
-			local bullet = player:fireExplosion(player.x - player.xscale * (maxDis - dis) / 2, player.y, (maxDis - dis)/19, 15/4, 2)
+			playerData.utilityDis = dis 
+			
+			local vfx = obj.EfSparks:create(player.x, player.y)
+			vfx.spriteSpeed = 0.24
+			vfx.sprite = sprites.sparks1
+			vfx.xscale = player.xscale
+			vfx.yscale = player.yscale
+			
+			local vfx = obj.EfSparks:create(player.x + player.xscale * dis, player.y)
+			vfx.spriteSpeed = 0.24
+			vfx.sprite = sprites.sparks2
+			vfx.xscale = player.xscale
+			vfx.yscale = player.yscale
+		end
+		if relevantFrame == 13 then 
+			local dis = playerData.utilityDis
+			player.x = player.x + dis * player.xscale
+			local bullet = player:fireExplosion(player.x - player.xscale * dis / 2, player.y, dis/19, 15/4, 2)
 			bullet:getData().duelistAfterimage = true 
 			bullet:getData().duelistY = player.y
 			bullet:getData().duelistDirection = player.xscale
+			bullet:getData().afterimageBlack = playerAc.sp > 0 
 			playerData.xAccel = player.xscale * 3
+		end
+		if relevantFrame == 5 or relevantFrame == 13 then 
+			for i = 0, playerAc.sp do 
+				local vfx = objAfterimage:create(player.x - player.xscale * i * 5, player.y) 
+				vfx.sprite = sprites.shoot1_1
+				vfx.spriteSpeed = player.spriteSpeed
+				vfx.xscale = player.xscale
+				vfx.yscale = player.yscale
+				vfx.depth = player.depth + 1
+				vfx:getData().parent = player
+				vfx:getData().curSprite = 1
+				if relevantFrame == 13 then 
+					vfx:getData().curSprite = 2
+					vfx.sprite = sprites.shoot1_2
+				end
+				vfx:getData().fullCombo = true
+				vfx:getData().lasting = true
+				vfx:getData().afterimageBlack = i > 0
+				
+				local bullet = player:fireExplosion(player.x + player.xscale * 5, player.y, 20/19, 15/4, 1.5)
+				if i ~= 0 then
+					bullet:set("climb", bullet:get("climb") + i * 8)
+				end
+			end
 		end
 	elseif skill == 4 then 
 	
@@ -580,6 +607,8 @@ callback.register("preHit", function(damager, hit)
 		local rng = math.random(1, 4)
 		vfx.sprite = spriteCombo[rng]
 		vfx.subimage = 3
+		vfx.depth = hit.depth - 1
+		vfx:getData().afterimageBlack = damager:getData().afterimageBlack
 		if rng == 3 then 
 			vfx.subimage = 4
 		end
