@@ -1,7 +1,7 @@
 local path = "Enemies/guardDog/"
 local sprites = {
     idle = Sprite.load("dogIdle", path.."dogIdle", 1, 18, 12),
-    walk = Sprite.load("dogWalk", path.."dogWalk", 5, 18, 15),
+    walk = Sprite.load("dogWalk", path.."dogWalk", 7, 25, 15),
     shoot = Sprite.load("dogShoot", path.."dogShoot", 6, 21, 14),
     spawn = Sprite.load("dogSpawn", path.."dogSpawn", 35, 36, 14),
     death = Sprite.load("dogDeath", path.."dogDeath", 9, 36, 23),
