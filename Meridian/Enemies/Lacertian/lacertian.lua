@@ -9,9 +9,9 @@ local sprites = {
 	burrow = Sprite.load("LacertianBurrow", path.."burrow", 10, 85, 51),
 	shoot2 = Sprite.load("LacertianShoot2", path.."shoot2", 7, 90, 80), -- 
 	shoot2neutral = Sprite.load("LacertianShoot2Neutral", path.."shoot2neutral", 7, 90, 80),
-	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51),
-	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51),
-	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31),
+	mask = Sprite.load("LacertianMask", path.."mask", 1, 85, 51 - 6),
+	mask2 = Sprite.load("LacertianMask2", path.."maskBelow", 1, 30, 51 - 6),
+	mask3 = Sprite.load("LacertianMask3", path.."maskAbove", 1, 15, 31 - 6),
 	maskNone = Sprite.load("LacertianMaskNone", path.."maskNone", 1, 0, 50),
 	warn1 = Sprite.load("LacertianWarning1", path.."shoot2warning", 6, 90, 51),
 	warn2 = Sprite.load("LacertianWarning2", path.."shoot2neutralWarning", 6, 90, 51),
@@ -206,7 +206,7 @@ findLacertianGround = function(actor, x, y)
 	return x2, x1]]
 	
 	actor.mask = sprites.mask2
-	local checkDown = actor:collidesMap(x, y + 12)
+	local checkDown = actor:collidesMap(x, y + 6)
 	actor.mask = sprites.mask3
 	local checkUp = not actor:collidesMap(x, y - 12)
 	actor.mask = sprites.mask
@@ -647,7 +647,7 @@ lacertian:addCallback("step", function(actor)
 				actor:setAlarm(2, shoot1Cd)
 				
 				actor.sprite = sprites.shoot1
-				actor.spriteSpeed = 0.2		
+				actor.spriteSpeed = 0.2
 				
 				actorAc.moveRight = 0
 				actorAc.moveLeft = 0
@@ -789,8 +789,8 @@ end)
 callback.register("onHit", function(damager, hit)
 	if hit and hit:isValid() and hit:getObject() == lacertian then 
 		if hit:getAccessor().state ~= "stun" then 
-			local damagePercent = (math.pow(1 + damager:get("damage") / hit:get("maxhp"), 1.5) - 1) * 150   --- poise damage from normal damage 
-			local stunAmount = damager:get("stun") * 15 													 --- poise damage from stun
+			local damagePercent = (math.pow(1 + damager:get("damage") / hit:get("maxhp"), 1.5) - 1) * 100   --- poise damage from normal damage 
+			local stunAmount = damager:get("stun") * 10 													 --- poise damage from stun
 			hit:getData().poiseDamage = math.min(hit:getData().poiseDamage + damagePercent, 100)
 			hit:getData().poiseStun = math.min(hit:getData().poiseStun + stunAmount, 100)
 			hit:getData().hitTimer = 6 * 60			--- timer until poise from normal damage starts to decay
