@@ -4,7 +4,11 @@ artifact.loadoutSprite = Sprite.load("DisorientationLoadoutSprite", path.."disor
 artifact.loadoutText = "All stages are shuffled."
 artifact.pickupSprite = Sprite.load("DisorientationPickup", path.."disorientationPickup.png", 1, 14, 13)
 artifact.pickupName = "Artifact of Disorientation"
-artifact.unlocked = true
+
+local artifactObj = artifact:getObject()
+local room = Room.find("Raininglake1", "meridian")
+room:createInstance(artifactObj, 196, 516)
+room:createInstance(obj.ArtifactNoise, 196, 516)
 
 callback.register("postLoad", function()
 	prevStageProgression = {}
