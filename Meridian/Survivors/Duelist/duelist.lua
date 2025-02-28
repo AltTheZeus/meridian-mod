@@ -471,7 +471,7 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 		local dir = playerAc.moveRight - playerAc.moveLeft
 		if playerData.combo == 3 then 
 			if relevantFrame == 4 then 
-				local newx = player.x + dir * 5
+				local newx = player.x + dir * 3
 				if not player:collidesMap(newx, player.y) then 
 					player.x = newx
 				end
@@ -543,9 +543,9 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 			end
 		end
 		if relevantFrame == 10 then 
-			local dis = maxDis
-			while dis > 0 and player:collidesMap(player.x + player.xscale * dis, player.y) do 
-				dis = dis - 1
+			local dis = 0
+			while dis < maxDis and not player:collidesMap(player.x + player.xscale * dis, player.y) do 
+				dis = dis + 1
 			end
 			playerData.utilityDis = dis 
 			
