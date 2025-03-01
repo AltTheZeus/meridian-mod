@@ -50,7 +50,8 @@ bit:life(60, 60)
 local sounds = {
     attack = Sound.find("CrabDeath"),
     spawn = Sound.find("GuardSpawn"),
-    death = Sound.find("GuardDeath")
+    death = Sound.find("GuardDeath"),
+	merge = Sound.load("mergerGMergeSound", path.."mGconnect")
 }
 
 local mG = Object.base("EnemyClassic", "mergerG")
@@ -186,6 +187,7 @@ mG:addCallback("step", function(self)
 	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
 		if sD.mergeSlowed == 0 then
 			self:set("pHmax", self:get("pHmax") - 0.95)
+			sounds.merge:play(1, 1)
 		end
 		sD.mergeSlowed = 1
 		if self:get("stunned") == 0 and misc.getTimeStop() == 0 then

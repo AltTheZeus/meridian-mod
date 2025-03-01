@@ -11,7 +11,7 @@ local sprites = {
 }
 
 local sounds = {
-    attack = Sound.find("CrabDeath"),
+    hit = Sound.load("mergerSHitSound", path.."m1hit"),
     spawn = Sound.load("mergerSSpawnSound", path.."m1spawn"),
     death = Sound.load("mergerSDeathSound", path.."m1death"),
 	merge = Sound.load("mergerSMergeSound", path.."m1connect")
@@ -57,7 +57,7 @@ m1:addCallback("create", function(self)
         death = sprites.death,
 	palette = sprites.palette
     }
-    actorAc.sound_hit = Sound.find("MushHit","vanilla").id
+    actorAc.sound_hit = sounds.hit.id
     actorAc.sound_death = sounds.death.id
     self.mask = sprites.mask
     actorAc.health_tier_threshold = 3
