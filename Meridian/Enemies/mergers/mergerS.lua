@@ -12,8 +12,9 @@ local sprites = {
 
 local sounds = {
     attack = Sound.find("CrabDeath"),
-    spawn = Sound.find("GuardSpawn"),
-    death = Sound.find("GuardDeath")
+    spawn = Sound.load("mergerSSpawnSound", path.."m1spawn"),
+    death = Sound.load("mergerSDeathSound", path.."m1death"),
+	merge = Sound.load("mergerSMergeSound", path.."m1connect")
 }
 
 local m1 = Object.base("EnemyClassic", "mergerS")
@@ -92,6 +93,7 @@ m1:addCallback("step", function(self)
 	if sD.partner and sD.partner ~= nil and sD.partner ~= "none" and Object.findInstance(sD.partner) and Object.findInstance(sD.partner):isValid() and self:collidesWith(Object.findInstance(sD.partner), self.x, self.y) then
 		if sD.mergeSlowed == 0 then
 			self:set("pHmax", self:get("pHmax") - 1.25)
+			sounds.merge:play(1, 1)
 		end
 		sD.mergeSlowed = 1
 		if self:get("stunned") == 0 and misc.getTimeStop() == 0 then
