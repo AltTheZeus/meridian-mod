@@ -205,7 +205,7 @@ local m2
 local m3
 
 callback.register("onGameStart", function()
-	if not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers") then
+	if not modloader.checkFlag("mn_disable_enemies") --[[and modloader.checkFlag("enable_mergers")]] then
 		m1 = MonsterCard.find("m1", "meridian")
 		m2 = MonsterCard.find("m2", "meridian")
 		m3 = MonsterCard.find("m3", "meridian")
@@ -234,7 +234,7 @@ callback.register("onGameStart", function()
 end)
 
 callback.register("onStageEntry", function()
-	if StageValue == 5 and not modloader.checkFlag("mn_disable_enemies") and modloader.checkFlag("enable_mergers")then
+	if StageValue == 5 and not modloader.checkFlag("mn_disable_enemies") --[[and modloader.checkFlag("enable_mergers")]] then
 		SM.enemies:add(m2)
 		SM.enemies:add(m3)
 		ShallowRotlands.enemies:add(m3)
@@ -258,6 +258,7 @@ callback.register("postLoad", function()
 		local giant = MonsterCard.find("giant", "meridian")
 		local BC = MonsterCard.find("Basalt Crab", "meridian")
 		local Lizard = MonsterCard.find("Lacertian", "meridian")
+		local icicle = MonsterCard.find("Icicle", "meridian")
 
 		--Desolate Forest
 		DF.enemies:add(Lizard)
@@ -273,6 +274,9 @@ callback.register("postLoad", function()
 
 		--Sky Meadow
 		--none <3
+		
+		--Ancient Valley
+		AV.enemies:add(icicle)
 
 		--Temple of the Elders
 		TOTE.enemies:add(Lizard)
@@ -309,6 +313,10 @@ callback.register("postLoad", function()
 
 		--Starswept Valley
 		StarsweptValley.enemies:add(con1)
+		StarsweptValley.enemies:add(con2)
+		
+		--Snowy Spires 
+		SnowySpires.enemies:add(icicle)
 		--print("MERIDIAN ENEMIES DETECTED!")
 	end
 	if modloader.checkMod("starstorm") then
