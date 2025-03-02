@@ -364,7 +364,7 @@ card.sprite = sprites.idle
 --card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
-card.cost = 180
+card.cost = 120
 for _, elite in ipairs(EliteType.findAll("vanilla")) do
     card.eliteTypes:add(elite)
 end
