@@ -42,7 +42,7 @@ local sprSkills = Sprite.load("DuelistSkills", path.."idle", 4, 0, 0) -- placeho
 
 survivor.loadoutColor = Color.fromHex(0x8BACE0)
 
-survivor.loadoutSprite = Sprite.load("ReaperSelect", path.."idle", 1, 2, 0) -- placeholder
+survivor.loadoutSprite = Sprite.load("DuelistSelect", path.."idle", 1, 2, 0) -- placeholder
 
 callback.register("postLoad", function()
 	if modloader.checkMod("Starstorm") then
@@ -53,23 +53,26 @@ end)
 
 survivor:setLoadoutInfo(
 [[The ]]..colorString("Duelist", survivor.loadoutColor)..[[ is placeholder.
-]]
+Hologram tech allows you to overwhelm your enemies.]]
 , sprSkills)
 
 survivor:setLoadoutSkill(1, "1",
-[[.
+[[Slash with your twinblade in a combo for X%. 
+Each slash causes a hologram to attack for half the damage.
 ]])
 
 survivor:setLoadoutSkill(2, "2",
-[[.
+[[Slash for X% and perform an evasive maneuver.
+A hologram lingers in your place.
 ]])
 
 survivor:setLoadoutSkill(3, "3",
-[[.
+[[Dash forward, slashing all enemies for X%.
+Holograms linger at the start and end of the dash.
 ]])
 
 survivor:setLoadoutSkill(4, "4",
-[[.
+[[Activate all lingering holograms to attack nearby enemies.
 ]])
 
 survivor.idleSprite = sprites.idle
@@ -97,16 +100,16 @@ survivor:addCallback("init", function(player)
 	playerAc.pHmax = 1.45
 	player:set("walk_speed_coeff", 1)
 	
-    player:setSkill(1, "1", ".",
+    player:setSkill(1, "1", "Slash for X% damage. Hologram follows up with half damage.",
     sprSkills, 1, 30)
 	
-    player:setSkill(2, "2", ".",
+    player:setSkill(2, "2", ".Slash for X% damage, spawn a hologram and backstep.",
     sprSkills, 2, 60 * 2)
 
-    player:setSkill(3, "3", ".",
+    player:setSkill(3, "3", "Dash for X% damage. Spawn hologram at the start and end of the dash.",
     sprSkills, 3, 60 * 3)
 
-    player:setSkill(4, "4", ".",
+    player:setSkill(4, "4", "Cause all lingering holograms to attack nearby enemies.",
     sprSkills, 4, 60 * 8)
 end)
 
