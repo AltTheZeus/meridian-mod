@@ -40,4 +40,6 @@ end
 if modloader.checkFlag("mn_debug") then 
 	require("Misc/dev")
 end
--- Survivors (none, yet)
+
+-- Survivors
+require("Survivors/survivors")
