@@ -19,6 +19,7 @@ require(path.."mergers.mergerG")
 require(path.."mergers.merger")
 require(path.."mergers.mergerM")
 require(path.."mergers.mergerS")
+require(path.."Icicle.icicle")
 
 -- bosses
 require(path.."Lacertian.lacertian")
