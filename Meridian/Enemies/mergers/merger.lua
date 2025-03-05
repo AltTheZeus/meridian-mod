@@ -13,7 +13,7 @@ local sprites = {
 
 local sounds = {
     attack = Sound.find("CrabDeath"),
-    spawn = Sound.find("GuardSpawn"),
+    spawn = Sound.load("mergerSpawnSound", path.."m3spawn"),
     death = Sound.find("GuardDeath"),
 	merge = Sound.load("mergerMergeSound", path.."m3connect")
 }
