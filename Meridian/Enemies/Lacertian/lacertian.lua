@@ -413,9 +413,14 @@ lacertian:addCallback("step", function(actor)
 				local n = actorAc.moveRight - actorAc.moveLeft
 				if n ~= 0 and findLacertianGround(actor, actor.x + sprites.mask.width / 2 * n, actor.y) then 
 					n = actorAc.moveRight - actorAc.moveLeft
-					actor.x = actor.x + n * actorAc.pHmax 
+					actor.x = actor.x + n * math.max(actorAc.pHmax, 0)
+					actorAc.ghost_x = actor.x
 					actor.xscale = n 
-					actor.sprite = sprites.walk
+					if actorAc.pHmax > 0 then 
+						actor.sprite = sprites.walk
+					else
+						actor.sprite = sprites.idle
+					end
 					actor.spriteSpeed = 0.2
 				else
 					actor.sprite = sprites.idle 
