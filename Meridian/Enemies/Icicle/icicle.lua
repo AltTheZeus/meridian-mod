@@ -3,6 +3,7 @@ local sprites = {
 	idle = Sprite.load("IcicleIdle", path.."idle", 1, 14, 29),
 	walk = Sprite.load("IcicleWalk", path.."walk", 6, 21, 31),
 	death = Sprite.load("IcicleDeath", path.."death", 13, 44, 38),
+	spawn = Sprite.load("IcicleSpawn", path.."spawn", 17, 29, 41),
 	mask = Sprite.load("IcicleMask", path.."icicleMask", 1, 14, 29),
 	palette = Sprite.load("IciclePalette", path.."palette", 1, 0, 0),
 	
@@ -13,11 +14,18 @@ local sprites = {
 	snowballMask = Sprite.load("IcicleSnowballMask", path.."snowballMask", 1, 10, -1),
 	
 	spike = Sprite.load("IcicleSpike", path.."spike", 4, 7, 32),
+	spikeBreak = Sprite.load("IcicleSpikeBreak", path.."spikeBreak", 5, 8, 30),
 	spikeMask = Sprite.load("IcicleSpikeMask", path.."spikeMask", 1, 7, 32)
 }
 
 local sounds = {
-
+	spawn = Sound.load("IcicleSpawnSound", path.."golemIceSpawn"),
+	death = Sound.load("IcicleDeathSound", path.."golemIceDeath"),
+	shoot1 = Sound.load("IcicleShoot1Sound", path.."golemIceAttack1"),
+	ice1 = Sound.load("IcicleIce1Sound", path.."golemIceIcicle"),
+	ice2 = Sound.load("IcicleIce2Sound", path.."golemIceIcicleDespawn"),
+	shoot2 = Sound.load("IcicleShoot2Sound", path.."golemIceAttack2"),
+	snowball = Sound.load("IcicleSnowballSound", path.."golemSnowball")
 }
 
 local icicle = Object.base("EnemyClassic", "Icicle")
@@ -77,7 +85,7 @@ icicle:addCallback("create", function(actor)
 		palette = sprites.palette
     }
     --actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
-    --actorAc.sound_death = Sound.find("GolemDeath","vanilla").id
+    actorAc.sound_death = sounds.death.id
     actorAc.health_tier_threshold = 3
     actorAc.knockback_cap = actorAc.maxhp
     actorAc.exp_worth = 30 * Difficulty.getScaling()
@@ -200,6 +208,7 @@ snowball:addCallback("step", function(self)
 			particleSnowball:burst("middle", self.x, self.y, 10)
 			local vfx = cloudObj:create(self.x, self.y)
 			vfx:getData().cloudTeam = selfData.snowballTeam
+			sounds.snowball:play(1, 1)
 			self:destroy()
 		end
 	end
@@ -235,6 +244,12 @@ spikeObj:addCallback("step", function(self)
 	selfData.life = selfData.life - 1
 	
 	if self.subimage >= 4 then 
+		local vfx = obj.EfSparks:create(self.x, self.y)
+		vfx.spriteSpeed = 0.2
+		vfx.sprite = sprites.spikeBreak
+		vfx.xscale = self.xscale
+		vfx.yscale = self.yscale
+		sounds.ice2:play(1, 1)
 		self:destroy()
 	end
 end)
@@ -274,7 +289,8 @@ spikeWarnObj:addCallback("step", function(self)
 	if selfData.life <= 0 then 
 		local actualSpike = spikeObj:create(self.x, self.y)
 		actualSpike:getData().team = selfData.team 
-		actualSpike:getData().damage = selfData.damage 		
+		actualSpike:getData().damage = selfData.damage 	
+		sounds.ice1:play(1, 1)
 		self:destroy()
 	end
 end)
@@ -284,6 +300,9 @@ Monster.setSkill(icicle, 1, 30, 4 * 60, function(actor)
 	Monster.activateSkillCooldown(actor, 1)
 end)
 Monster.skillCallback(icicle, 1, function(actor, relevantFrame)
+	if relevantFrame == 1 then 
+		sounds.shoot1:play(1, 1)
+	end
 	if relevantFrame == 5 then 
 		local bullet = actor:fireExplosion(actor.x + 10 * actor.xscale, actor.y + 10, 15/19, 10/4, 1)
 		local spike = spikeWarnObj:create(actor.x + 10 * actor.xscale, actor.y)
@@ -300,6 +319,7 @@ end)
 Monster.skillCallback(icicle, 2, function(actor, relevantFrame)
 	local actorAc = actor:getAccessor()
 	if relevantFrame == 1 then 
+		sounds.shoot2:play(1, 1)
 		if actorAc.target then 
 			local trg = Object.findInstance(actorAc.target)
 			if trg and trg:isValid() then 
@@ -359,9 +379,8 @@ callback.register("preHit", function(damager, hit)
 end)
 
 local card = MonsterCard.new("Icicle", icicle)
-card.sprite = sprites.idle
---card.sprite = sprites.spawn
---card.sound = sounds.spawn
+card.sprite = sprites.spawn
+card.sound = sounds.spawn
 card.canBlight = true
 card.type = "classic"
 card.cost = 120
