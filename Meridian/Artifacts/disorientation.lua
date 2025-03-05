@@ -60,6 +60,7 @@ callback.register("onStageEntry", function()
 	if disorientationStage1 then 
 		disorientationStage1 = false
 		if net.host then 
+			misc.director:set("stages_passed", misc.director:get("stages_passed") - 1)
 			Stage.transport(Stage.progression[1][math.random(1, Stage.progression[1]:len())])
 		end
 	end
