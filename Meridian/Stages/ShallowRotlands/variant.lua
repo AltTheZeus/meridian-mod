@@ -4223,4 +4223,14 @@ callback("globalRoomStart", function(r)
 end)
 
 
+callback.register("globalRoomStart", function(rm)
+    local rope = Object.find("Rope")
+	if rm and rm == room then
+        rope:create(3792, 1104)
+        rope:create(3792, 1120)
+        rope:create(3792, 1136)
+        rope:create(3792, 1150)
+	end
+end)
+
 return room
