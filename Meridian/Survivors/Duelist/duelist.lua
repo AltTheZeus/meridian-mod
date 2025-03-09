@@ -505,7 +505,7 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 				end				
 			end
 		end
-		if relevantFrame == player.sprite.frames - 1 then 
+		if (playerData.combo == 3 and relevantFrame == 4) or (playerData.combo ~= 3 and relevantFrame == 3) then 
 			for i = 0, playerAc.sp do 
 				local vfx = objAfterimage:create(player.x - player.xscale * i * 5, player.y) 
 				vfx.sprite = player.sprite 
@@ -516,6 +516,8 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 				vfx:getData().curSprite = playerData.combo
 				vfx:getData().afterimageBlack = i > 0
 			end
+		end
+		if relevantFrame == player.sprite.frames - 1 then 
 			playerData.combo = playerData.combo % 4 + 1
 		end
 	elseif skill == 2 then 
@@ -540,10 +542,16 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 		end	
 	elseif skill == 3 then 
 		local maxDis = 80
-		if player.subimage >= 9 and player.subimage <= 13 then 
+		if relevantFrame == 9 then 
+			playerData.stuckX = player.x 
+			playerData.stuckY = player.y 
+		end
+		if player.subimage >= 9 and player.subimage < 13 then 
 			if playerAc.invincible <= 8 then 
 				playerAc.invincible = 8
 			end
+			player.x = playerData.stuckX
+			player.y = playerData.stuckY
 		end
 		if relevantFrame == 10 then 
 			local dis = 0
