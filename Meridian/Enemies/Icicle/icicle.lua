@@ -4,6 +4,7 @@ local sprites = {
 	walk = Sprite.load("IcicleWalk", path.."walk", 6, 21, 31),
 	death = Sprite.load("IcicleDeath", path.."death", 13, 44, 38),
 	spawn = Sprite.load("IcicleSpawn", path.."spawn", 17, 29, 41),
+	jump = Sprite.load("IcicleJump", path.."jump", 1, 16, 29),
 	mask = Sprite.load("IcicleMask", path.."icicleMask", 1, 14, 29),
 	palette = Sprite.load("IciclePalette", path.."palette", 1, 0, 0),
 	
@@ -77,7 +78,7 @@ icicle:addCallback("create", function(actor)
 	actorAc.walk_speed_coeff = 1.05
     actor:setAnimations{
         idle = sprites.idle,
-        --jump = sprites.jump,
+        jump = sprites.jump,
         walk = sprites.walk,
         death = sprites.death,
 		shoot1 = sprites.shoot1,
@@ -176,6 +177,7 @@ snowball:addCallback("create", function(self)
 	selfData.snowballTeam = nil
 	selfData.parent = nil
 	selfData.life = 150
+	selfData.hitTargets = {}
 end)
 snowball:addCallback("step", function(self)
 	local selfAc = self:getAccessor()
@@ -192,9 +194,10 @@ snowball:addCallback("step", function(self)
 	
 	if self:isValid() and selfData.snowballTeam then 
 		for _, act in ipairs(pobj.actors:findAllRectangle(self.x - xrsnow, self.y + yrsnow, self.x + xrsnow, self.y - yrsnow)) do 
-			if act and act:isValid() and selfData.snowballTeam ~= act:get("team") then 
-				selfDestroy = true
-				break
+			if act and act:isValid() and not contains(selfData.hitTargets, act) and selfData.snowballTeam ~= act:get("team") then 
+				local bullet = misc.fireBullet(self.x, self.y, 0, 1, selfData.snowballDamage, selfData.snowballTeam)
+				bullet:set("specific_target", act.id)
+				table.insert(selfData.hitTargets, act)
 			end
 		end		
 	end
@@ -202,9 +205,9 @@ snowball:addCallback("step", function(self)
 	if self:isValid() then 
 		selfData.life = selfData.life - 1
 		if selfDestroy or selfData.life <= 0 then 
-			if selfData.snowballTeam then 
+			--[[if selfData.snowballTeam then 
 				local bullet = misc.fireExplosion(self.x, self.y, (xrsnow + 5)/19, (yrsnow + 5)/4, selfData.snowballDamage, selfData.snowballTeam)
-			end
+			end]]
 			particleSnowball:burst("middle", self.x, self.y, 10)
 			local vfx = cloudObj:create(self.x, self.y)
 			vfx:getData().cloudTeam = selfData.snowballTeam
