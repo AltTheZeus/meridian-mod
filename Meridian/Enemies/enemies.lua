@@ -4,6 +4,7 @@ MonsterLog.new("Beta Construct1")
 MonsterLog.new("Beta Construct2")
 MonsterLog.new("Dewdrop")
 MonsterLog.new("Stone Giant")
+MonsterLog.new("Icicle")
 MonsterLog.new("Temple Marauder")
 MonsterLog.new("Basalt Crab")
 MonsterLog.new("Doomdrop")
@@ -23,7 +24,7 @@ require(path.."Icicle.icicle")
 
 -- bosses
 require(path.."Lacertian.lacertian")
-require(path.."Stymphalian.stymphalian")
+--require(path.."Stymphalian.stymphalian")
 
 registercallback("onStageEntry", function()
 	local dD = misc.director:getData()
