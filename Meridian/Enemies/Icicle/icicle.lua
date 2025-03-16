@@ -7,6 +7,7 @@ local sprites = {
 	jump = Sprite.load("IcicleJump", path.."jump", 1, 16, 29),
 	mask = Sprite.load("IcicleMask", path.."icicleMask", 1, 14, 29),
 	palette = Sprite.load("IciclePalette", path.."palette", 1, 0, 0),
+	portrait = Sprite.load("IciclePortrait", path.."portrait", 1, 119, 119),
 	
 	shoot1 = Sprite.load("IcicleShoot1", path.."shoot1", 9, 16, 34),
 	shoot2 = Sprite.load("IcicleShoot2", path.."shoot2", 11, 20, 29),
@@ -401,3 +402,13 @@ if not modloader.checkFlag("mn_disable_elites") then
 	end
 end
 
+local monsLog = MonsterLog.find("Icicle")
+MonsterLog.map[icicle] = monsLog
+
+monsLog.displayName = "Icicle"
+monsLog.story = "Icicle."
+monsLog.statHP = 450
+monsLog.statDamage = 20
+monsLog.statSpeed = 0.95
+monsLog.sprite = sprites.walk
+monsLog.portrait = sprites.portrait
