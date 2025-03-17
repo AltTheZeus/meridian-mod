@@ -86,7 +86,7 @@ icicle:addCallback("create", function(actor)
 		shoot2 = sprites.shoot2,
 		palette = sprites.palette
     }
-    --actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
+    actorAc.sound_hit = Sound.find("GolemHit","vanilla").id
     actorAc.sound_death = sounds.death.id
     actorAc.health_tier_threshold = 3
     actorAc.knockback_cap = actorAc.maxhp
