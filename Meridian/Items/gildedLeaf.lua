@@ -232,6 +232,7 @@ registercallback("onStep", function()
 				newGuy:set("damage", (math.round(((newGuy:get("damage") / 1.7) * 0.75))))
 				newGuy:set("exp_worth", (math.round(((newGuy:get("exp_worth") / 2) * 0.5))))
 				newGuy:set("cdr", newGuy:get("cdr") - 0.3)
+				newGuy:set("knockback_cap", newGuy:get("knockback_cap") / 3)
 				nD.sparkleCD = 15
 			local enemyOptions = Stage.getCurrentStage().enemies:toTable()
 			if #enemyOptions < 1 then
