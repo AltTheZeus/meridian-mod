@@ -1,20 +1,3 @@
---[[local eliteClones = {}
-registercallback("postLoad", function()
-	for _, i in ipairs(EliteType.findAll()) do
-		local i2 = EliteType.new(i:getName() .. "_Clone")
-		i2.displayName = i.displayName
-		i2.color = i.color
-		i2.colorHard = i.colorHard
-		i2.palette = i.palette
---		print(i.palette)
---		print(i2.palette)
-		eliteClones[i] = i2
-	end
-	EliteType.refreshPalettes()
---	print(eliteClones)
-end)]]
-
-
 local path = "Enemies/construct2/"
 
 local bulletCheck = Object.new("bCon2Bullet")
@@ -31,126 +14,7 @@ local headSprites = {
 	mask = Sprite.load("con2Mask_B", path .. "con2Mask_B", 1, 0, 0)
 }
 
-local head = Object.base("Enemy", "Beta Construct Head")
-head.sprite = headSprites.idle
-
-EliteType.registerPalette(headSprites.palette, head)
-
-head:addCallback("create", function(actor)
-	local actorAc = actor:getAccessor()
-	local data = actor:getData()
-	actorAc.name = "Beta Construct"
-	--    actorAc.maxhp = data.body:get("maxhp")
-	--    actorAc.hp = data.body:get("maxhp")
-	--    actorAc.damage = data.body:get("damage")
-	actorAc.pHmax = 0
-	actorAc.walk_speed_coeff = 0
-	actor:setAnimations {
-		idle = headSprites.idle,
-		jump = headSprites.jump,
-		walk = headSprites.walk,
-		shoot = headSprites.shoot,
-		death = headSprites.death,
-		spawn = headSprites.spawn,
-		palette = headSprites.palette
-	}
-	--    actorAc.sound_hit = Sound.find("MushHit","vanilla").id
-	--    actorAc.sound_death = sounds.death.id
-	--    actor.mask = sprites.mask
-	actorAc.health_tier_threshold = 3
-	actorAc.knockback_cap = 6 * Difficulty.getScaling("hp")
-	actorAc.exp_worth = 0
-	actorAc.can_drop = 0
-	actorAc.can_jump = 0
-	data.shot = false
-	data.angleLocked = false
-	actor.mask = headSprites.mask
-end)
-
 local everyonelol = ParentObject.find("actors")
-head:addCallback("step", function(self)
-	local sD = self:getData()
-	local actorAc = self:getAccessor()
-	self:setAlarm(6, -1)
-	if not sD.body or not sD.body:isValid() then
-		self:delete()
-		return
-	end
-	if self:get("prefix_type") ~= sD.body:get("prefix_type") then
-		if sD.body:get("prefix_type") == 1 then
-			self:set("prefix_type", sD.body:get("prefix_type"))
-			self:set("elite_type", sD.body:get("elite_type"))
-			--			local key = sD.body:get("elite_type")
-			--			self:makeElite(eliteClones[key])
-		elseif sD.body:get("prefix_type") == 2 then
-			--			self:makeBlighted(sD.body:getBlighted())
-			actorAc.prefix_type = 2
-		end
-	end
-	actorAc.team = sD.body:get("team")
-	actorAc.maxhp = sD.body:get("maxhp")
-	actorAc.hp = sD.body:get("hp")
-	actorAc.damage = sD.body:get("damage")
-	self.sprite = Sprite.find(sD.body.sprite:getName() .. "_B")
-	self.subimage = sD.body.subimage
-	self.xscale = sD.body.xscale
-	self.yscale = sD.body.yscale
-	self.x = sD.body.x
-	self.y = sD.body.y
-	self.depth = sD.body.depth - 1
-	actorAc.ghost = sD.body:get("ghost")
-	if sD.body:get("target") == self.id then
-		sD.body:set("target", -4)
-	end
-	local targ = Object.findInstance(sD.body:get("target"))
-	if sD.angleLocked == false then
-		if targ ~= nil and targ.y < self.y then
-			--		local xVar = (math.sign(self.x - targ.x) * (self.x - targ.x))
-			--		local yVar = (math.sign(self.y - targ.y) * (self.y - targ.y))
-			--		local c2 = (xVar * xVar) + (yVar * yVar)
-			--		local h = c2 ^ 0.5
-			--		local a = xVar
-			--		self.angle = math.deg(math.asin(a/h))/2 * self.xscale
-			local directionToPlayer = {
-				x = targ.x - self.x,
-				y = targ.y - self.y
-			}
-
-			local angleToPlayer = math.deg(math.atan2(-self.xscale * (targ.y - self.y), math.abs(targ.x - self.x)))
-
-			local maxAngle = 75
-			angleToPlayer = math.clamp(angleToPlayer, -maxAngle, maxAngle)
-			self.angle = angleToPlayer
-
-		else
-			self.angle = 0
-		end
-	end
-	if self.sprite == headSprites.shoot and self.subimage <= 2 then
-		sD.shot = false
-	elseif self.sprite == headSprites.shoot and self.subimage >= 8 then
-		sD.angleLocked = true
-	end
-	if self.sprite == headSprites.shoot and self.subimage >= 9 and self.subimage <= 10 and sD.shot == false then
-		local explosion = bulletCheck:create(self.x + (6 * self.xscale), self.y - (8 * self.yscale))
-		explosion.mask = explosion.sprite
-		explosion.angle = self.angle
-		explosion.xscale = self.xscale
-		explosion.yscale = self.yscale
-		--		explosion.alpha = 0.2
-		explosion:set("visible", 0)
-		for _, i in ipairs(everyonelol:findAll()) do
-			if i:get("team") ~= self:get("team") and explosion:collidesWith(i, explosion.x, explosion.y) then
-				local bullet = sD.body:fireBullet(i.x, i.y, 0, 5, 1)
-				bullet:set("specific_target", i.id)
-			end
-		end
-		sD.shot = true
-	end
-	if self.sprite ~= headSprites.shoot then
-		sD.angleLocked = false
-	end
-end)
 
 bulletCheck:addCallback("step", function(self)
 	self:destroy()
@@ -206,8 +70,179 @@ con2:addCallback("create", function(actor)
 	actorAc.exp_worth = 5 * Difficulty.getScaling()
 	actorAc.can_drop = 1
 	actorAc.can_jump = 1
-	local mD = head:create(actor.x, actor.y):getData()
-	mD.body = actor
+end)
+
+registercallback("onDraw", function() --thanks nk!!!! :D :D :D :D :D
+for _, i in ipairs(con2:findAll()) do
+	local playerData = i:getData()
+	if playerData.fakeSprite and playerData.fakeSprite:isValid() then
+		ac = playerData.fakeSprite:getAccessor()
+		playerData.fakeSprite.sprite = Sprite.find(i.sprite:getName() .. "_B")
+		playerData.fakeSprite.subimage = i.subimage
+		playerData.fakeSprite.depth = i.depth - 1
+		playerData.fakeSprite.x = i.x
+		playerData.fakeSprite.y = i.y
+		playerData.fakeSprite.alpha = i.alpha
+--		playerData.fakeSprite.angle = i.angle
+		playerData.fakeSprite.xscale = i.xscale
+	else
+		local fakeSprite = Object.find("Spawn"):create(math.round(100), math.round(100))
+		local fakeSpriteAc = fakeSprite:getAccessor()
+		local fsd = fakeSprite:getData() --no way free smiley dealer!!
+		fakeSpriteAc.alarm = -1
+		fakeSpriteAc.child = 353
+		fakeSpriteAc.sprite_palette = (i:get("sprite_palette") or 1)
+		fakeSpriteAc.persistent = 1
+		fakeSpriteAc.prefix_type = i:get("prefix_type")
+		fakeSpriteAc.elite_type = i:get("elite_type")
+		if i:get("ghost") == 1 then
+			fakeSprite.visible = false
+		end
+		fakeSprite.spriteSpeed = 0
+		fakeSprite.xscale = i.xscale
+		fakeSprite.sprite = Sprite.find(i.sprite:getName() .. "_B")
+		fakeSprite.subimage = i.subimage
+		fsd.body = i
+		fsd.shot = false
+		fsd.angleLocked = false
+		playerData.fakeSprite = fakeSprite
+	end
+	if i:get("ghost") == 1 then
+		graphics.setBlendMode("additive")
+		local head = playerData.fakeSprite
+		if misc.getOption("video.quality") == 3 then
+			graphics.drawImage{head.sprite, head.x, head.y, head.subimage,
+				color = Color.fromRGB(142, 129, 190),
+				alpha = 0.8,
+				angle = head.angle,
+				xscale = i.xscale,
+				yscale = i.yscale}
+		else
+			graphics.drawImage{head.sprite, head.x, head.y, head.subimage,
+				color = Color.fromGML(14344898),
+				alpha = 0.6,
+				angle = head.angle,
+				xscale = i.xscale,
+				yscale = i.yscale}
+			graphics.drawImage{head.sprite, head.x, head.y, head.subimage,
+				color = Color.fromGML(14344898),
+				alpha = 0.3,
+				angle = head.angle,
+				xscale = i.xscale,
+				yscale = i.yscale}
+		end
+		graphics.setBlendMode("normal")
+	end
+end
+end)
+
+registercallback("onStep", function()
+	for _, self in ipairs(Object.find("Spawn"):findAll()) do
+		local sD = self:getData()
+		if not sD.body then return end
+		local targ = Object.findInstance(sD.body:get("target"))
+		if sD.angleLocked == false then
+			if targ ~= nil and targ.y < self.y then
+				local directionToPlayer = {
+					x = targ.x - self.x,
+					y = targ.y - self.y
+				}
+	
+				local angleToPlayer = math.deg(math.atan2(-self.xscale * (targ.y - self.y), math.abs(targ.x - self.x)))
+	
+				local maxAngle = 75
+				angleToPlayer = math.clamp(angleToPlayer, -maxAngle, maxAngle)
+				self.angle = angleToPlayer
+	
+			else
+				self.angle = 0
+			end
+		end
+		if self.sprite == headSprites.shoot and self.subimage <= 2 then
+			sD.shot = false
+		elseif self.sprite == headSprites.shoot and self.subimage >= 8 then
+			sD.angleLocked = true
+		end
+		if self.sprite == headSprites.shoot and self.subimage >= 9 and self.subimage <= 10 and sD.shot == false then
+			local explosion = bulletCheck:create(self.x + (6 * self.xscale), self.y - (8 * self.yscale))
+			explosion.mask = explosion.sprite
+			explosion.angle = self.angle
+			explosion.xscale = self.xscale
+			explosion.yscale = self.yscale
+--					explosion.alpha = 0.2
+			explosion:set("visible", 0)
+			for _, i in ipairs(everyonelol:findAll()) do
+				if i:get("team") ~= sD.body:get("team") and explosion:collidesWith(i, explosion.x, explosion.y) then
+					local bullet = sD.body:fireBullet(i.x, i.y, 0, 5, 1)
+					bullet:set("specific_target", i.id)
+				end
+			end
+			sD.shot = true
+		end
+		if self.sprite ~= headSprites.shoot then
+			sD.angleLocked = false
+		end
+	end
+end)
+
+registercallback("onGameStart", function()
+	local dD = misc.director:getData()
+	dD.newGhostsX = {}
+	dD.newGhostsY = {}
+	dD.newGhostsSprite = {}
+	dD.newGhostsSubimage = {}
+	dD.newGhostsXs = {}
+	dD.newGhostsYs = {}
+end)
+
+con2:addCallback("destroy", function(self)
+	if self:get("ghost") == 1 then
+		local shadow = Object.find("EfTrail"):create(self:getData().fakeSprite.x, self:getData().fakeSprite.y)
+		shadow.sprite = self:getData().fakeSprite.sprite
+		shadow.subimage = math.floor(self:getData().fakeSprite.subimage)
+		shadow.xscale = self:getData().fakeSprite.xscale
+		shadow.yscale = self:getData().fakeSprite.yscale
+		shadow:set("ghost", 1)
+		shadow:getData().coolGhost = true
+	end
+	self:getData().fakeSprite:destroy()
+end)
+
+registercallback("onNPCDeath", function(self)
+	if self:get("ghost") == 1 then
+		local dD = misc.director:getData()
+		dD.newGhostsX[self.id] = self.x
+		dD.newGhostsY[self.id] = self.y
+		dD.newGhostsSprite[self.id] = self.sprite
+		dD.newGhostsSubimage[self.id] = math.floor(self.subimage)
+		dD.newGhostsXs[self.id] = self.xscale
+		dD.newGhostsYs[self.id] = self.yscale
+	end
+end)
+
+registercallback("onStep", function()
+	local dD = misc.director:getData()
+	for id, x in pairs(dD.newGhostsX) do
+		local shadow = Object.find("EfTrail"):create(x, dD.newGhostsY[id])
+		shadow.sprite = dD.newGhostsSprite[id]
+		shadow.subimage = dD.newGhostsSubimage[id]
+		shadow.xscale = dD.newGhostsXs[id]
+		shadow.yscale = dD.newGhostsYs[id]
+		shadow:set("ghost", 1)
+		shadow:getData().coolGhost = true
+		dD.newGhostsX[id] = nil
+		dD.newGhostsY[id] = nil
+		dD.newGhostsSprite[id] = nil
+		dD.newGhostsSubimage[id] = nil
+		dD.newGhostsXs[id] = nil
+		dD.newGhostsYs[id] = nil
+	end
+end)
+
+Object.find("EfTrail"):addCallback("create", function(self)
+	if self:get("ghost") == 1 and not self:getData().coolGhost then
+		self:destroy()
+	end
 end)
 
 Monster.giveAI(con2)
