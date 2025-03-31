@@ -406,7 +406,7 @@ local monsLog = MonsterLog.find("Icicle")
 MonsterLog.map[icicle] = monsLog
 
 monsLog.displayName = "Icicle"
-monsLog.story = "Icicle."
+monsLog.story = "These aren't quite like the rock golems I've encountered before. They're even taller, and have this stare frozen on their face. They are, of course, made entirely of ice, so that might be why. But.. I just can't shake the feeling they've done something or seen something terrible. They don't 'play' like their stony counterparts. They clamber out of the ground, and sometimes just stay.. silently still. Like a snowman.\n\nDespite their makeup of ice and sleet, they're just as formidable as (if not, even more than) their rocky brethren. Their arms are made of incredibly densely packed snow, which they use to strike the ground with immense force, bringing forth these gigantic icicles that could more than easily skewer the unsuspecting foe. From a distance, I've seen a few rip chunks of snow out of the ground, sending them hurtling towards a stray imp and what have you.\n\nI've started to dread any snowdrifts I come across. I never know when a huge arm is going to plunge out of the snow and pull me back through."
 monsLog.statHP = 450
 monsLog.statDamage = 20
 monsLog.statSpeed = 0.95
