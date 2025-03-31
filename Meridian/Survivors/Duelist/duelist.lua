@@ -7,13 +7,15 @@ local sprites = {
 	walk = Sprite.load("DuelistWalk", path.."walk", 8, 8, 6),
 	jump = Sprite.load("DuelistJump", path.."jump", 6, 5, 8),
 	death = Sprite.load("DuelistDeath", path.."death", 13, 9, 16),
-	climb = Sprite.load("DuelistClimb", path.."idle", 1, 5, 6),  -- placeholder
+	climb = Sprite.load("DuelistClimb", path.."climb", 2, 5, 0),  
 	decoy = Sprite.load("DuelistDecoy", path.."idle", 1, 7, 11), -- placeholder
 	
 	shoot1_1 = Sprite.load("DuelistShoot1_1", path.."shoot1_1", 7, 10, 12),
 	shoot1_2 = Sprite.load("DuelistShoot1_2", path.."shoot1_2", 7, 11, 11),
 	shoot1_3 = Sprite.load("DuelistShoot1_3", path.."shoot1_3", 7, 8, 12),
 	shoot1_4 = Sprite.load("DuelistShoot1_4", path.."shoot1_4", 7, 8, 15),
+	
+	shoot2 = Sprite.load("DuelistShoot2", path.."shoot2", 16, 9, 13),
 	
 	shoot3 = Sprite.load("DuelistShoot3", path.."shoot3", 20, 39, 12),
 	sparks1 = Sprite.load("DuelistShoot3Sparks1", path.."sparks1", 4, 39, 12),
@@ -62,7 +64,7 @@ Each slash causes a hologram to attack for half the damage.
 ]])
 
 survivor:setLoadoutSkill(2, "2",
-[[Slash for X% and perform an evasive maneuver.
+[[Slash for X% and perform an evasive maneuver for 4xX% damage.
 A hologram lingers in your place.
 ]])
 
@@ -103,8 +105,8 @@ survivor:addCallback("init", function(player)
     player:setSkill(1, "1", "Slash for X% damage. Hologram follows up with half damage.",
     sprSkills, 1, 30)
 	
-    player:setSkill(2, "2", ".Slash for X% damage, spawn a hologram and backstep.",
-    sprSkills, 2, 60 * 2)
+    player:setSkill(2, "2", "Slash for X% damage, spawn a hologram and backflip for 4xX% damage.",
+    sprSkills, 2, 60 * 3)
 
     player:setSkill(3, "3", "Dash for X% damage. Spawn hologram at the start and end of the dash.",
     sprSkills, 3, 60 * 3)
@@ -448,7 +450,7 @@ survivor:addCallback("useSkill", function(player, skill)
 			playerData.comboReset = 90
 			cd = false
 		elseif skill == 2 then 
-			player:survivorActivityState(2, player:getAnimation("shoot1_2"), 0.24, true, true)
+			player:survivorActivityState(2, player:getAnimation("shoot2"), 0.24, true, true)
 		elseif skill == 3 then 
 			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.24, true, true)
 		elseif skill == 4 then 
@@ -521,25 +523,42 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 			playerData.combo = playerData.combo % 4 + 1
 		end
 	elseif skill == 2 then 
-		if relevantFrame == 3 then 
-			playerData.xAccel = -3 * player.xscale
+		if relevantFrame == 2 then 
+			if not player:collidesMap(player.x + 5 * player.xscale, player.y) then 
+				player.x = player.x + 5 * player.xscale
+			end
+			playerData.xAccel = player.xscale * 2
 			for i = 0, playerAc.sp do
-				local vfx = objAfterimage:create(player.x - player.xscale * i * 5, player.y) 
-				vfx.sprite = player.sprite 
-				vfx.xscale = player.xscale
-				vfx.yscale = player.yscale
-				vfx.depth = player.depth + 1
-				vfx:getData().parent = player
-				vfx:getData().lasting = true
-				vfx:getData().curSprite = 2
-				vfx:getData().fullCombo = true
-				vfx:getData().afterimageBlack = i > 0
-				local bullet = player:fireExplosion(player.x + player.xscale * 5, player.y, 20/19, 15/4, 1.5)
+				local bullet = player:fireExplosion(player.x + player.xscale * 15, player.y, 30/19, 15/4, 2)
+				bullet:set("stun", 0.3)
 				if i ~= 0 then
 					bullet:set("climb", bullet:get("climb") + i * 8)
 				end
 			end				
 		end	
+		if relevantFrame == 9 then 
+			for i = 0, playerAc.sp do
+				local vfx = objAfterimage:create(player.x - player.xscale * i * 5, player.y) 
+				vfx.sprite = sprites.shoot1_1 
+				vfx.xscale = player.xscale
+				vfx.yscale = player.yscale
+				vfx.depth = player.depth + 1
+				vfx:getData().parent = player
+				vfx:getData().lasting = true
+				vfx:getData().curSprite = 1
+				vfx:getData().fullCombo = true
+				vfx:getData().afterimageBlack = i > 0
+			end
+			playerData.xAccel = player.xscale * -4
+		end
+		if relevantFrame and relevantFrame > 0 and player.subimage >= 9 and player.subimage <= 12 then 
+			for i = 0, playerAc.sp do
+				local bullet = player:fireExplosion(player.x + player.xscale, player.y, 15/19, 15/4, 0.5)
+				if i ~= 0 then
+					bullet:set("climb", bullet:get("climb") + i * 8)
+				end
+			end				
+		end
 	elseif skill == 3 then 
 		local maxDis = 80
 		if relevantFrame == 9 then 
