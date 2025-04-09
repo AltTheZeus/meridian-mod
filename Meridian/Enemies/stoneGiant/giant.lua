@@ -19,9 +19,11 @@ local sprites = {
 }
 
 local sounds = {
-    attack = Sound.find("ImpGShoot1"), --CrabDeath
-    spawn = Sound.find("GolemSpawn"),
-    death = Sound.find("GolemDeath")
+    attack = Sound.load("giantAttack1Snd", path.."golemBigAttack1"), 
+	attack2_1 = Sound.load("giantAttack2_1Snd", path.."golemBigAttack2_1"), 
+	attack2_2 = Sound.load("giantAttack2_2Snd", path.."golemBigAttack2_2"), 
+    spawn = Sound.load("giantSpawnSnd", path.."golemBigSpawn"),
+    death = Sound.load("giantDeathSnd", path.."golemBigDeath")
 }
 
 local giant = Object.base("EnemyClassic", "Stone Giant")
@@ -64,8 +66,10 @@ Monster.setSkill(giant, 1, 33, 3 * 60, function(actor)
 	Monster.activateSkillCooldown(actor, 1)
 end)
 Monster.skillCallback(giant, 1, function(actor, relevantFrame)
-	if relevantFrame == 6 or relevantFrame == 8 then
+	if relevantFrame == 1 then 
 		sounds.attack:play(1 + 1)
+	end
+	if relevantFrame == 6 or relevantFrame == 8 then
 		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y + 7, 1, 1, 0.7, sprites.hit, nil)
 	end
 end)
@@ -81,6 +85,7 @@ local fistElite = Sprite.load("giantFistElite", path.."giantFistElite", 9, 6, 16
 fist:addCallback("create", function(self)
 	local sD = self:getData()
 	self.spriteSpeed = 0.2
+	sounds.attack2_2:play(1 + 1)
 end)
 
 fist:addCallback("step", function(self)
@@ -90,7 +95,6 @@ fist:addCallback("step", function(self)
 			sD.damage = 34 * Difficulty.getScaling("damage")
 		end
 		misc.fireExplosion(self.x, self.y, 15/19, 20/4, sD.damage * 0.6, "enemy")
-		sounds.attack:play(1 + 1)
 	elseif self.subimage >= 8 then
 		self:destroy()
 	end
@@ -126,8 +130,10 @@ Monster.setSkill(giant, 2, 900, 3 * 60, function(actor)
 end)
 Monster.skillCallback(giant, 2, function(actor, relevantFrame)
 	local aA = actor:getAccessor()
+	if relevantFrame == 1 then 
+		sounds.attack2_1:play(1 + 1)
+	end
 	if relevantFrame == 6 then
-		sounds.attack:play(1 + 1)
 --		actor:fireExplosion(actor.x + (20 * actor.xscale), actor.y, 1, 1, 2, sprites.hit, nil)
 		local player = Object.findInstance(aA.target)
 		if not player then return end
