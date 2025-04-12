@@ -38,6 +38,7 @@ if modloader.checkMod("Starstorm") then
 	TabMenu.setItemInfo(Item.find("Worn Iron"), 39, "5% to ground enemies on hit for 3.5 seconds, stopping them from flying, jumping, or dropping down ledges.", "+2.5% chance.")
 	TabMenu.setItemInfo(Item.find("Xenial Opal"), nil, "For every minute you spend on a stage, gain 8% speed, up to a maximum of 300%.\nResets at the end of the stage.", "+4% speed.")
 	TabMenu.setItemInfo(Item.find("Mini Fridge"), nil, "When you get hit, damage and freeze nearby enemies.\n5 second cooldown.", "30% cooldown reduction, multiplicative.")
+	TabMenu.setItemInfo(Item.find("Overclocked Heatsink"), nil, "Use items have a 25% chance to not go on cooldown.", "Multiplicative.")
 end
 
 --Category Chests compat
