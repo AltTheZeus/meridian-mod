@@ -146,7 +146,7 @@ HiveSavanna.rooms:add(savanna1)
 HiveSavanna.rooms:add(savanna2)
 
 --Music
-HiveSavanna.music = Sound.find("musicDesertPeaks", "Meridian")
+HiveSavanna.music = Sound.load("musicHiveSavanna", "Misc/Music/stageHiveSavanna.ogg")
 
 -- Snowy Spires --
 Sprite.load("Tile16Ice", path.."SnowySpires/tileset", 1, 0, 0)
