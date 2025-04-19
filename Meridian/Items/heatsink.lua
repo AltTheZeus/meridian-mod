@@ -4,13 +4,23 @@ item.pickupText = "Use items have a chance to not go on cooldown."
 item.displayName = "Overclocked Heatsink"
 
 item.sprite = Sprite.load("Items/heatsink.png", 1, 15, 17)
+local snd = Sound.load("HeatsinkUse", "Items/heatsinkUse.ogg")
 item:setTier("rare")
+
+local heatsinkspark = ParticleType.new("heatsinkspark")
+heatsinkspark:color(Color.fromHex(0xB00000), Color.fromHex(0xEACF63), nil)
+heatsinkspark:speed(1, 1.5, 0, 0)
+heatsinkspark:direction(60, 120, 0, 0)
+heatsinkspark:gravity(0.03, 270)
+heatsinkspark:life(75, 105)
 
 callback.register("postUseItemUse", function(player, use)
 	local amount = player:countItem(item)
 	local chance = math.floor((1 - 0.75^amount) * 100)
 	
 	if chance > 0 and math.chance(chance) then 
+		snd:play(1, 1)
+		heatsinkspark:burst("middle", player.x, player.y, 30)
 		player:setAlarm(0, 20)
 	end
 end)
