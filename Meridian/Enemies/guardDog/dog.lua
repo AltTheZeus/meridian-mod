@@ -115,7 +115,7 @@ for _, elite in ipairs(EliteType.findAll("vanilla")) do
     card.eliteTypes:add(elite)
 end
 
-local stages
+--[[local stages
 if modloader.checkMod("Starstorm") then
 stages = {
 	Stage.find("Temple of the Elders"),
@@ -165,7 +165,7 @@ registercallback("onGameEnd", function()
 	for _, stage in ipairs(stages2) do
 		stage.enemies:remove(card)
 	end
-end)
+end)]]
 
 local monsLog = MonsterLog.find("Temple Marauder")
 MonsterLog.map[dog] = monsLog
