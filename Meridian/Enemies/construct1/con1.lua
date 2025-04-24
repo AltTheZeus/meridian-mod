@@ -96,7 +96,7 @@ for _, elite in ipairs(EliteType.findAll("vanilla")) do
     card.eliteTypes:add(elite)
 end
 
-local stages
+--[[local stages
 if modloader.checkMod("Starstorm") then
 stages = {
 	Stage.find("Sky Meadow"),
@@ -146,7 +146,7 @@ registercallback("onGameEnd", function()
 	for _, stage in ipairs(stages2) do
 		stage.enemies:remove(card)
 	end
-end)
+end)]]
 
 local monsLog = MonsterLog.find("Beta Construct1")
 MonsterLog.map[con1] = monsLog
