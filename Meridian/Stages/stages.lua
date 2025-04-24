@@ -169,7 +169,7 @@ SnowySpires.rooms:add(glacier1)
 --Music
 SnowySpires.music = Sound.load("musicSnowySpires", "Misc/Music/stageSnowySpires.ogg")
 
---Meridian Enemies
+--Vanilla Stages
 local DF = Stage.find("Desolate Forest")
 local DL = Stage.find("Dried Lake")
 local SM = Stage.find("Sky Meadow")
@@ -181,213 +181,105 @@ local HC = Stage.find("Hive Cluster")
 local TOTE = Stage.find("Temple of the Elders")
 local ROR = Stage.find("Risk of Rain")
 
-StageValue = 0
+-- Starstorm Stages
+local SlateMines
+local StrayTarn
+local TorridOutlands
+local UnchartedMountain
+local VerdantWoodland
+local WhistlingBasin
+-- Starstorm Interactables
+local brokenpod
+local activator
+local shocker
+local hax
+local dupeglitch
+local dronekiller
+local relic
+-- Starstorm Enemies 
+local admonitor
+local exploder
+local follower
+local elver
+local eel
+local wayfarer
+local wyvern
+local bughive
+local overseer
 
---Stage Counter
-callback.register("onStageEntry", function(room)
-	StageValue = StageValue + 1
-end)
-
-callback.register("globalRoomStart", function(room)
-	if room == Room.find("Start") then
-		StageValue = 0
-		DF.enemies:remove(MonsterCard.find("Scavenger"))
-		DL.enemies:remove(MonsterCard.find("Scavenger"))
-		SerpentineRainforest.enemies:remove(MonsterCard.find("Scavenger"))
-		DF.enemies:remove(MonsterCard.find("Archaic Wisp"))
-		DL.enemies:remove(MonsterCard.find("Archaic Wisp"))
-		SerpentineRainforest.enemies:remove(MonsterCard.find("Archaic Wisp"))
-	end
-end)
-
+-- Meridian Enemies 
+local con1
+--local con2 --the con1 monster card spawns both constructs 
+local dog
+local giant
+local BC
+local Lizard
+local icicle
 local m1
 local m2
 local m3
 
-callback.register("onGameStart", function()
-	if not modloader.checkFlag("mn_disable_enemies") --[[and modloader.checkFlag("enable_mergers")]] then
-		m1 = MonsterCard.find("m1", "meridian")
-		m2 = MonsterCard.find("m2", "meridian")
-		m3 = MonsterCard.find("m3", "meridian")
-
--- "base" stages
-		ST.enemies:add(m1)
-		ST.enemies:add(m2)
-
-		HC.enemies:add(m1)
-		HC.enemies:add(m2)
-
-		ShallowRotlands.enemies:add(m1)
-		ShallowRotlands.enemies:add(m2)
-
---resetting to base
-		SM.enemies:remove(m2)
-		SM.enemies:remove(m3)
-		ShallowRotlands.enemies:remove(m3)
-		HC.enemies:remove(m3)
-		ST.enemies:remove(m3)
-
-		HC.enemies:add(m1)
-		ST.enemies:add(m1)
-		ShallowRotlands.enemies:add(m1)
-	end
-end)
-
-callback.register("onStageEntry", function()
-	if StageValue == 5 and not modloader.checkFlag("mn_disable_enemies") --[[and modloader.checkFlag("enable_mergers")]] then
-		SM.enemies:add(m2)
-		SM.enemies:add(m3)
-		ShallowRotlands.enemies:add(m3)
-		HC.enemies:add(m3)
-		ST.enemies:add(m3)
-
-		HC.enemies:remove(m1)
-		ST.enemies:remove(m1)
-		ShallowRotlands.enemies:remove(m1)
-		
-	end
-end)
-
 callback.register("postLoad", function()
 
-
-	if not modloader.checkFlag("mn_disable_enemies") then
-		local con1 = MonsterCard.find("con1", "meridian")
-		local con2 = MonsterCard.find("con2", "meridian")
-		local dog = MonsterCard.find("dog", "meridian")
-		local giant = MonsterCard.find("giant", "meridian")
-		local BC = MonsterCard.find("Basalt Crab", "meridian")
-		local Lizard = MonsterCard.find("Lacertian", "meridian")
-		local icicle = MonsterCard.find("Icicle", "meridian")
-
-		--Desolate Forest
-		DF.enemies:add(Lizard)
-
-		--Dried Lake
-		DL.enemies:add(Lizard)
-
-		--Sunken Tombs
-		ST.enemies:add(Lizard)
-
-		--Hive Cluster
-
-
-		--Sky Meadow
-		--none <3
-		
-		--Ancient Valley
-		AV.enemies:add(icicle)
-
-		--Temple of the Elders
-		TOTE.enemies:add(Lizard)
-		TOTE.enemies:add(giant)
-
-		--Risk of Rain
-		--ROR.enemies:add(Lizard)
-		ROR.enemies:add(giant)
-
-		--Serpentine Rainforest
-		SerpentineRainforest.enemies:add(Lizard)
-		
-		--Hive Savanna
-		HiveSavanna.enemies:add(Lizard)
-		
-		--Shallow Rotlands
-		ShallowRotlands.enemies:add(con1)
-		ShallowRotlands.enemies:add(Lizard)
-
-
-		--Marshland Sanctuary
-		MarshlandSanctuary.enemies:add(giant)
-		MarshlandSanctuary.enemies:add(Lizard)
-		
-		--Basalt Quarry
-		BasaltQuarry.enemies:add(con2)
-		BasaltQuarry.enemies:add(con1)
-		BasaltQuarry.enemies:add(BC)
-		BasaltQuarry.enemies:add(giant)
-
-		--Dissonant Reliquary
-		DissonantReliquary.enemies:add(giant)
-		DissonantReliquary.enemies:add(dog)
-
-		--Starswept Valley
-		StarsweptValley.enemies:add(con1)
-		StarsweptValley.enemies:add(con2)
-		
-		--Snowy Spires 
-		SnowySpires.enemies:add(icicle)
-		--print("MERIDIAN ENEMIES DETECTED!")
-	end
 	if modloader.checkMod("starstorm") then
-		local brokenpod = Interactable.find("Broken Escape Pod", "starstorm")
-		local activator = Interactable.find("Activator", "starstorm")
-		local shocker = Interactable.find("Shocker Drone", "starstorm")
-		local hax = Interactable.find("Hacking Drone", "starstorm")
-		local dupeglitch = Interactable.find("Duplicator Drone", "starstorm")
-		local dronekiller = Interactable.find("Refabricator", "starstorm")
-		local relic = Interactable.find("Relic Shrine", "starstorm")
-
-		local admonitor = MonsterCard.find("Clay Admonitor", "starstorm")
-		local exploder = MonsterCard.find("Exploder", "Starstorm")
-		local follower = MonsterCard.find("Follower", "Starstorm")
-		local elver = MonsterCard.find("Squall Elver", "Starstorm")
-		local eel = MonsterCard.find("SquallEel", "Starstorm")
-		local wayfarer = MonsterCard.find("Wayfarer", "Starstorm")
-		local wyvern = MonsterCard.find("Wyvern", "Starstorm")
-		local bughive = MonsterCard.find("Archer Bug Hive", "Starstorm")
-		local overseer = MonsterCard.find("Overseer", "Starstorm")
-
+		-- Starstorm Stages
+		SlateMines = Stage.find("Slate Mines", "starstorm")
+		StrayTarn = Stage.find("Stray Tarn", "starstorm")
+		TorridOutlands = Stage.find("Torrid Outlands", "starstorm")
+		UnchartedMountain = Stage.find("Uncharted Mountain", "starstorm")
+		VerdantWoodland = Stage.find("Verdant Woodland", "starstorm")
+		WhistlingBasin = Stage.find("Whistling Basin", "starstorm")
+		-- Starstorm Interactables
+		brokenpod = Interactable.find("Broken Escape Pod", "starstorm")
+		activator = Interactable.find("Activator", "starstorm")
+		shocker = Interactable.find("Shocker Drone", "starstorm")
+		hax = Interactable.find("Hacking Drone", "starstorm")
+		dupeglitch = Interactable.find("Duplicator Drone", "starstorm")
+		dronekiller = Interactable.find("Refabricator", "starstorm")
+		relic = Interactable.find("Relic Shrine", "starstorm")
+		-- Starstorm Enemies
+		admonitor = MonsterCard.find("Clay Admonitor", "starstorm")
+		exploder = MonsterCard.find("Exploder", "Starstorm")
+		follower = MonsterCard.find("Follower", "Starstorm")
+		elver = MonsterCard.find("Squall Elver", "Starstorm")
+		eel = MonsterCard.find("SquallEel", "Starstorm")
+		wayfarer = MonsterCard.find("Wayfarer", "Starstorm")
+		wyvern = MonsterCard.find("Wyvern", "Starstorm")
+		bughive = MonsterCard.find("Archer Bug Hive", "Starstorm")
+		overseer = MonsterCard.find("Overseer", "Starstorm")
+		
+		-- Starstorm Interactables in Meridian Stages
+		
 		--Shallow Rotlands
-		--ShallowRotlands.enemies:add(bughive)
-		ShallowRotlands.enemies:add(exploder)
-		ShallowRotlands.enemies:add(wayfarer)
-		ShallowRotlands.enemies:add(eel)
 		ShallowRotlands.interactables:add(shocker)
 		ShallowRotlands.interactables:add(dronekiller)
 		ShallowRotlands.interactables:add(brokenpod)
 		ShallowRotlands.interactables:add(hax)
 
 		--Desert Peaks
-		DesertPeaks.enemies:add(admonitor)
-		DesertPeaks.enemies:add(overseer)
 		DesertPeaks.interactables:add(dupeglitch)
 		DesertPeaks.interactables:add(dronekiller)
 		DesertPeaks.interactables:add(brokenpod)
 
 		--Marshland Sanctuary
-		MarshlandSanctuary.enemies:add(exploder)
-		MarshlandSanctuary.enemies:add(follower)
-		MarshlandSanctuary.enemies:add(admonitor)
-		MarshlandSanctuary.enemies:add(overseer)
 		MarshlandSanctuary.interactables:add(dupeglitch)
 		MarshlandSanctuary.interactables:add(shocker)
 		MarshlandSanctuary.interactables:add(dronekiller)
 		MarshlandSanctuary.interactables:add(brokenpod)
 
 		--Basalt Quarry
-		BasaltQuarry.enemies:add(follower)
-		BasaltQuarry.enemies:add(wayfarer)
-		BasaltQuarry.enemies:add(overseer)
 		BasaltQuarry.interactables:add(dupeglitch)
 		BasaltQuarry.interactables:add(dronekiller)
 		BasaltQuarry.interactables:add(brokenpod)
 		BasaltQuarry.interactables:add(hax)
 
 		--Dissonant Reliquary
-		DissonantReliquary.enemies:add(overseer)
-		DissonantReliquary.enemies:add(elver)
-		DissonantReliquary.enemies:add(wyvern)
 		DissonantReliquary.interactables:add(relic)
 		DissonantReliquary.interactables:add(dupeglitch)
 		DissonantReliquary.interactables:add(dronekiller)
 		DissonantReliquary.interactables:add(brokenpod)
 		
 		--Starswept Valley
-		StarsweptValley.enemies:add(overseer)
-		StarsweptValley.enemies:add(wayfarer)
-		StarsweptValley.enemies:add(follower)
-		StarsweptValley.enemies:add(admonitor)
 		StarsweptValley.interactables:add(shocker)
 		StarsweptValley.interactables:add(hax)
 		StarsweptValley.interactables:add(dronekiller)
@@ -399,12 +291,271 @@ callback.register("postLoad", function()
 
 		--Hive Savanna
 		HiveSavanna.interactables:add(dronekiller)
-		HiveSavanna.interactables:add(brokenpod)
+		HiveSavanna.interactables:add(brokenpod)		
+	end
+	
+	if not modloader.checkFlag("mn_disable_enemies") then
+		con1 = MonsterCard.find("con1", "meridian")
+		dog = MonsterCard.find("dog", "meridian")
+		giant = MonsterCard.find("giant", "meridian")
+		BC = MonsterCard.find("Basalt Crab", "meridian")
+		Lizard = MonsterCard.find("Lacertian", "meridian")
+		icicle = MonsterCard.find("Icicle", "meridian")
+		m1 = MonsterCard.find("m1", "meridian")
+		m2 = MonsterCard.find("m2", "meridian")
+		m3 = MonsterCard.find("m3", "meridian")	
+	end
+	
+end)
+
+--Stage Counter
+
+callback.register("globalRoomStart", function(room)
+	if room == Room.find("Start") then
+		DF.enemies:remove(MonsterCard.find("Scavenger"))
+		DL.enemies:remove(MonsterCard.find("Scavenger"))
+		SerpentineRainforest.enemies:remove(MonsterCard.find("Scavenger"))
+		DF.enemies:remove(MonsterCard.find("Archaic Wisp"))
+		DL.enemies:remove(MonsterCard.find("Archaic Wisp"))
+		SerpentineRainforest.enemies:remove(MonsterCard.find("Archaic Wisp"))
+	end
+end)
+
+callback.register("onGameStart", function()
+	if not modloader.checkFlag("mn_disable_enemies") then	
+		-- Meridian Enemies in Vanilla and Meridian Stages 
+		
+		--Desolate Forest
+		DF.enemies:add(Lizard)
+		DF.enemies:remove(con1)
+		DF.enemies:remove(giant)
+
+		--Dried Lake
+		DL.enemies:add(Lizard)
+		DL.enemies:remove(BC)
+
+		--Sunken Tombs
+		ST.enemies:add(Lizard)
+		ST.enemies:add(m1)
+		ST.enemies:add(m2)
+		ST.enemies:remove(m3)
+		ST.enemies:remove(BC)
+
+		--Hive Cluster
+		HC.enemies:add(m1)
+		HC.enemies:add(m2)
+		HC.enemies:remove(m3)
+		
+		--Sky Meadow
+		SM.enemies:add(con1)
+		SM.enemies:remove(m2)
+		SM.enemies:remove(m3)
+		SM.enemies:remove(giant)
+		
+		--Ancient Valley
+		AV.enemies:add(icicle)
+		AV.enemies:remove(dog)
+		
+		--Magma Barracks
+		MB.enemies:add(BC)
+		MB.enemies:add(giant)
+
+		--Temple of the Elders
+		TOTE.enemies:add(Lizard)
+		TOTE.enemies:add(giant)
+		TOTE.enemies:add(dog)
+
+		--Risk of Rain
+		--ROR.enemies:add(Lizard)
+		ROR.enemies:add(giant)
+		ROR.enemies:add(dog)
+
+		--Serpentine Rainforest
+		SerpentineRainforest.enemies:add(Lizard)
+		
+		--Hive Savanna
+		HiveSavanna.enemies:add(Lizard)
+		
+		--Shallow Rotlands
+		ShallowRotlands.enemies:add(con1)
+		ShallowRotlands.enemies:add(Lizard)
+		ShallowRotlands.enemies:add(m1)
+		ShallowRotlands.enemies:add(m2)
+		ShallowRotlands.enemies:remove(m3)
+
+		--Marshland Sanctuary
+		MarshlandSanctuary.enemies:add(giant)
+		MarshlandSanctuary.enemies:add(Lizard)
+		
+		--Basalt Quarry
+		BasaltQuarry.enemies:add(con1)
+		BasaltQuarry.enemies:add(BC)
+		BasaltQuarry.enemies:add(giant)
+
+		--Dissonant Reliquary
+		DissonantReliquary.enemies:add(giant)
+		DissonantReliquary.enemies:add(dog)
+
+		--Starswept Valley
+		StarsweptValley.enemies:add(con1)
+		
+		--Snowy Spires 
+		SnowySpires.enemies:add(icicle)			
+	end
+	
+	if modloader.checkMod("starstorm") then
+		-- Starstorm Enemies in Meridian Stages 
+		
+		--Shallow Rotlands
+		--ShallowRotlands.enemies:add(bughive)
+		ShallowRotlands.enemies:add(exploder)
+		ShallowRotlands.enemies:add(wayfarer)
+		ShallowRotlands.enemies:add(eel)
+
+		--Desert Peaks
+		DesertPeaks.enemies:add(admonitor)
+		DesertPeaks.enemies:add(overseer)
+
+		--Marshland Sanctuary
+		MarshlandSanctuary.enemies:add(exploder)
+		MarshlandSanctuary.enemies:add(follower)
+		MarshlandSanctuary.enemies:add(admonitor)
+		MarshlandSanctuary.enemies:add(overseer)
+
+		--Basalt Quarry
+		BasaltQuarry.enemies:add(follower)
+		BasaltQuarry.enemies:add(wayfarer)
+		BasaltQuarry.enemies:add(overseer)
+
+		--Dissonant Reliquary
+		DissonantReliquary.enemies:add(overseer)
+		DissonantReliquary.enemies:add(elver)
+		DissonantReliquary.enemies:add(wyvern)
+		
+		--Starswept Valley
+		StarsweptValley.enemies:add(overseer)
+		StarsweptValley.enemies:add(wayfarer)
+		StarsweptValley.enemies:add(follower)
+		StarsweptValley.enemies:add(admonitor)	
+		
+		if not modloader.checkFlag("mn_disable_enemies") then	
+			-- Meridian enemies in Starstorm stages 
+			
+			-- Slate Mines 
+			SlateMines.enemies:add(BC)
+			
+			-- Stray Tarn
+			StrayTarn.enemies:add(BC)
+			
+			-- Torrid Outlands
+			TorridOutlands.enemies:add(con1)
+			TorridOutlands.enemies:add(giant)
+			
+			-- Uncharted Mountain
+			UnchartedMountain.enemies:add(icicle)
+			
+			-- Verdant Woodland
+			
+			-- Whistling Basin	
+			WhistlingBasin.enemies:remove(BC)
+			
+		end
+	end
+end)
+
+-- POST-LOOP
+callback.register("onStageEntry", function()
+	if misc.director:get("stages_passed") == 5 then 
+		if not modloader.checkFlag("mn_disable_enemies") then
+			-- POST-LOOP Meridian Enemies in Vanilla and Meridian Stages 
+			--Desolate Forest
+			DF.enemies:add(con1)
+			DF.enemies:add(giant)
+
+			--Dried Lake
+			DL.enemies:add(BC)
+
+			--Sunken Tombs
+			ST.enemies:add(m3)
+			ST.enemies:remove(m1)
+			ST.enemies:add(BC)
+
+			--Hive Cluster
+			HC.enemies:add(m3)
+			HC.enemies:remove(m1)
+			
+			--Sky Meadow
+			SM.enemies:add(m2)
+			SM.enemies:add(m3)
+			SM.enemies:add(giant)
+			
+			--Ancient Valley
+			AV.enemies:add(dog)
+
+			--Temple of the Elders
+
+			--Risk of Rain
+
+			--Serpentine Rainforest
+
+			--Hive Savanna
+			
+			--Shallow Rotlands
+			ShallowRotlands.enemies:add(m3)
+			ShallowRotlands.enemies:remove(m1)
+
+			--Marshland Sanctuary
+			
+			--Basalt Quarry
+
+			--Dissonant Reliquary
+
+			--Starswept Valley
+			
+			--Snowy Spires 
+			
+		end
+		if modloader.checkMod("starstorm") then
+			-- POST-LOOP Starstorm Enemies in Meridian Stages 
+			--Serpentine Rainforest
+
+			--Hive Savanna
+			
+			--Shallow Rotlands
+
+			--Marshland Sanctuary
+			
+			--Basalt Quarry
+
+			--Dissonant Reliquary
+
+			--Starswept Valley
+			
+			--Snowy Spires 		
+			
+			if not modloader.checkFlag("mn_disable_enemies") then	
+				-- POST-LOOP Meridian enemies in Starstorm stages 
+				
+				-- Slate Mines 
+				
+				-- Stray Tarn
+				
+				-- Torrid Outlands
+				
+				-- Uncharted Mountain
+				
+				-- Verdant Woodland
+				
+				-- Whistling Basin		
+				WhistlingBasin.enemies:add(BC)
+				
+			end		
+		end
 	end
 end)
 
 callback.register("onStageEntry", function()
-	if StageValue == 5 then
+	if misc.director:get("stages_passed") == 5 then
 		DF.enemies:add(MonsterCard.find("Scavenger"))
 		DL.enemies:add(MonsterCard.find("Scavenger"))
 		SerpentineRainforest.enemies:add(MonsterCard.find("Scavenger"))
@@ -427,7 +578,7 @@ local telefake = Object.find("TeleporterFake", "vanilla")
 local base = Object.find("Base", "vanilla")
 
 callback.register("onStageEntry", function()
-	if Stage.getCurrentStage():getName() == "Serpentine Rainforest" and StageValue == 1 then
+	if --[[Stage.getCurrentStage():getName() == "Serpentine Rainforest" and]] misc.director:get("stages_passed") == 0 then
 		for _, telefakeinst in ipairs(telefake:findAll()) do
 			local x, y = telefakeinst.x, telefakeinst.y
 			base:create(x - 64, y)
