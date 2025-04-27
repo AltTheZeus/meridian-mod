@@ -103,7 +103,7 @@ survivor:addCallback("init", function(player)
 	player:set("walk_speed_coeff", 1)
 	
     player:setSkill(1, "1", "Slash for X% damage. Hologram follows up with half damage.",
-    sprSkills, 1, 30)
+    sprSkills, 1, 5)
 	
     player:setSkill(2, "2", "Slash for X% damage, spawn a hologram and backflip for 4xX% damage.",
     sprSkills, 2, 60 * 3)
@@ -442,17 +442,14 @@ end)
 survivor:addCallback("useSkill", function(player, skill)
 	local playerAc = player:getAccessor()
 	local playerData = player:getData()
+	local cd = false
 	
 	if playerAc.activity == 0 then
-		local cd = true
 		if skill == 1 then 
 			player:survivorActivityState(1, player:getAnimation("shoot1_"..playerData.combo), 0.24, true, true)
 			playerData.comboReset = 90
-			cd = false
-		elseif skill == 2 then 
-			player:survivorActivityState(2, player:getAnimation("shoot2"), 0.24, true, true)
-		elseif skill == 3 then 
-			player:survivorActivityState(3, player:getAnimation("shoot3"), 0.24, true, true)
+			playerData.comboChange = false
+			cd = true
 		elseif skill == 4 then 
 			local images = objLastingAfterimage:findAll()
 			for _, img in ipairs(images) do 
@@ -461,10 +458,27 @@ survivor:addCallback("useSkill", function(player, skill)
 					img:getData().specialStart = true
 				end
 			end
+			cd = true
 		end
-		if cd then 
-			player:activateSkillCooldown(skill)
+	end
+	if playerAc.activity == 0 or playerAc.activity == 1 then 
+		if skill == 2 or skill == 3 then 
+			if playerAc.activity == 1 and not playerData.comboChange then
+				playerData.combo = playerData.combo % 4 + 1
+				playerData.comboChange = false
+			end
+			playerAc.activity = 0
+			playerData.comboReset = 90
+			cd = true
+			if skill == 2 then 
+				player:survivorActivityState(2, player:getAnimation("shoot2"), 0.24, true, true)
+			elseif skill == 3 then 
+				player:survivorActivityState(3, player:getAnimation("shoot3"), 0.24, true, true)
+			end
 		end
+	end
+	if cd then 
+		player:activateSkillCooldown(skill)
 	end
 end)
 
@@ -520,6 +534,7 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 			end
 		end
 		if relevantFrame == player.sprite.frames - 1 then 
+			playerData.comboChange = true
 			playerData.combo = playerData.combo % 4 + 1
 		end
 	elseif skill == 2 then 
