@@ -44,3 +44,4 @@ end
 -- Survivors
 require("Survivors/survivors")
 
+require("Misc/invasions")
