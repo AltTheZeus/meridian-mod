@@ -8,7 +8,7 @@ local sprites = {
 	jump = Sprite.load("DuelistJump", path.."jump", 6, 5, 8),
 	death = Sprite.load("DuelistDeath", path.."death", 13, 9, 16),
 	climb = Sprite.load("DuelistClimb", path.."climb", 2, 5, 0),  
-	decoy = Sprite.load("DuelistDecoy", path.."idle", 1, 7, 11), -- placeholder
+	decoy = Sprite.load("DuelistDecoy", path.."decoy", 1, 9, 10), -- placeholder
 	
 	shoot1_1 = Sprite.load("DuelistShoot1_1", path.."shoot1_1", 7, 10, 12),
 	shoot1_2 = Sprite.load("DuelistShoot1_2", path.."shoot1_2", 7, 11, 11),
