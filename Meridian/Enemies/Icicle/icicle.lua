@@ -71,7 +71,7 @@ icicle:addCallback("create", function(actor)
 	
 	actor.mask = sprites.mask
 	
-	actorAc.name = "Ice Golem"
+	actorAc.name = "Icicle"
     actorAc.maxhp = 450 * Difficulty.getScaling("hp")
     actorAc.hp = actorAc.maxhp
     actorAc.damage = 20 * Difficulty.getScaling("damage")
