@@ -14,8 +14,8 @@ local spawnTheCreature = function(x, y, monster_card, elite_type)
 	actor:set("child", monster_card.object.id)
 	actor.sprite = monster_card.sprite
 	if elite_type and not monster_card.eliteTypes:contains(elite_type) then 
-		misc.director:getData().elites_pass_timer = math.ceil(60 / (60 * actor.spriteSpeed)) * (actor.sprite.frames + 1)
-		misc.director:getData().elites_pass[monster_card] = elite_type
+		local elite_timer = math.ceil(60 / (60 * actor.spriteSpeed)) * (actor.sprite.frames + 1)
+		misc.director:getData().elites_pass[monster_card] = {elite = elite_type, timer = elite_timer}
 		monster_card.eliteTypes:add(elite_type)
 	end	
 	if elite_type then 
@@ -45,7 +45,7 @@ Object.find("Spawn"):addCallback("destroy", function(self)
 		local child = Object.fromID(self:get("child"))
 		local actor = nearestMatchingOp(self, child, "elite_type", "==", EliteType.find("blessed", "meridian").id)
 		if actor then 
-			--actor:getData().invasionBoss = true 
+			actor:getData().invasionBoss = true 
 			--misc.director:getData().invasionBoss = actor
 			local tele = nearestMatchingOp(actor, obj.Teleporter, "active", "==", 1)
 			if tele then 
@@ -58,15 +58,30 @@ Object.find("Spawn"):addCallback("destroy", function(self)
 	end
 end)
 
+callback.register("onNPCDeath", function(npc)
+	local dirData = misc.director:getData()
+
+	if npc and npc:isValid() and npc:getData().invasionBoss then 
+		if dirData.invasionBlesseds > 0 then 
+			dirData.blessedLimit = dirData.blessedLimit - dirData.invasionBlesseds
+			dirData.invasionBlesseds = 0
+		end		
+	end
+end)
+
 callback.register("onStageEntry", function()
 	local dirData = misc.director:getData()
 	
 	dirData.initInvasion = false -- turn off for release 
 	
 	dirData.ongoingInvasion = false
+	if dirData.invasionBlesseds and dirData.invasionBlesseds > 0 then 
+		dirData.blessedLimit = dirData.blessedLimit - dirData.invasionBlesseds
+	end
 	dirData.invasionBlesseds = 0
-	dirData.elites_pass = {}
-	dirData.elites_pass_timer = 0
+	if not dirData.elites_pass then 
+		dirData.elites_pass = {}
+	end
 	dirData.invasionEnemyType = nil
 	dirData.invasionWeatherType = nil
 	dirData.invasionWeatherTintAlpha = 0
@@ -80,10 +95,11 @@ callback.register("postStep", function()
 		local tps = obj.Teleporter:findAll()
 		local init 
 		for _, tp in ipairs(tps) do 
-			init = tp:get("active") == 1
+			init = tp:get("active") > 0
 			if init then break end 
 		end
 		if init then 
+			print("invasion started")
 			dirData.initInvasion = false 
 			dirData.ongoingInvasion = true 
 			dirData.invasionScaling = math.max(math.sqrt(misc.director:get("enemy_buff")) - 1, 1)
@@ -96,19 +112,12 @@ end)
 callback.register("onStep", function()
 	local dirData = misc.director:getData()
 	
-	if dirData.invasionBlesseds > 0 then 
-		dirData.blessedLimit = dirData.blessedLimit - dirData.invasionBlesseds
-		dirData.invasionBlesseds = 0
-	end
-	if dirData.elites_pass_timer > 0 then 
-		dirData.elites_pass_timer = dirData.elites_pass_timer - 1
-		if dirData.elites_pass_timer == 0 then 
-			for mc, et in pairs(dirData.elites_pass) do 
-				mc.eliteTypes:remove(et)
+	if dirData.elites_pass then
+		for mc, et in pairs(dirData.elites_pass) do 
+			et.timer = et.timer - 1
+			if et.timer <= 0 then 
+				mc.eliteTypes:remove(et.elite)
 				dirData.elites_pass[mc] = nil
-				--if not MonsterCard.find("Elder Lemurian").eliteTypes:contains(EliteType.find("blessed", "meridian")) then 
-					--print("reset back to norm")
-				--end
 			end
 		end
 	end
@@ -116,12 +125,13 @@ callback.register("onStep", function()
 		local tps = obj.Teleporter:findAll()
 		local tele 
 		for _, tp in ipairs(tps) do 
-			if tp:get("active") == 3 then 
+			if tp:get("active") >= 3 then 
+				print("invasion finished")
 				dirData.ongoingInvasion = false
 				dirData.postInvasion = true
 				red:roll():create(tp.x, tp.y - 6)
 				break
-			else
+			elseif tp:get("active") > 0 then
 				tele = tp
 			end
 		end
@@ -136,6 +146,7 @@ callback.register("onStep", function()
 			-- enemy invasion boss
 			--if dirData.invasionEnemyType.name == "lemurian" then 
 				if tele:get("time") == 180 then 
+					print("blessed spawned")
 					dirData.blessedLimit = dirData.blessedLimit + 1
 					dirData.invasionBlesseds = dirData.invasionBlesseds + 1
 					spawnTheCreature(tele.x, tele.y, dirData.invasionEnemyType.cards.bossCard.card, EliteType.find("blessed", "meridian"))		
@@ -144,7 +155,7 @@ callback.register("onStep", function()
 			-- enemy invasion fodder
 			if tele:get("active") == 1 and tele:get("time") >= 240 then 
 				for cardName, cardData in pairs(dirData.invasionEnemyType.cards) do 
-					if tele:get("time") % math.floor(cardData.cost / dirData.invasionScaling) == 0 then 
+					if tele:get("time") % math.ceil(cardData.cost / dirData.invasionScaling) == 0 then 
 						local elite
 						if math.chance(math.max(100 - (cardData.cost / dirData.invasionScaling) / 10, 0)) then 
 							elite = table.irandom(dirData.invasionWeatherType.elites)
