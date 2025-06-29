@@ -8,7 +8,7 @@ local sprites = {
 	jump = Sprite.load("DuelistJump", path.."jump", 6, 5, 8),
 	death = Sprite.load("DuelistDeath", path.."death", 13, 9, 16),
 	climb = Sprite.load("DuelistClimb", path.."climb", 2, 5, 0),  
-	decoy = Sprite.load("DuelistDecoy", path.."decoy", 1, 9, 10), -- placeholder
+	decoy = Sprite.load("DuelistDecoy", path.."decoy", 1, 9, 10),
 	
 	shoot1_1 = Sprite.load("DuelistShoot1_1", path.."shoot1_1", 7, 10, 12),
 	shoot1_2 = Sprite.load("DuelistShoot1_2", path.."shoot1_2", 7, 11, 11),
@@ -44,7 +44,7 @@ local sprSkills = Sprite.load("DuelistSkills", path.."idle", 4, 0, 0) -- placeho
 
 survivor.loadoutColor = Color.fromHex(0x8BACE0)
 
-survivor.loadoutSprite = Sprite.load("DuelistSelect", path.."idle", 1, 2, 0) -- placeholder
+survivor.loadoutSprite = Sprite.load("DuelistSelect", path.."select", 16, 9, 0) 
 
 callback.register("postLoad", function()
 	if modloader.checkMod("Starstorm") then
@@ -427,6 +427,102 @@ objAfterimageUtility:addCallback("draw", function(self)
 	}
 end)
 
+objAfterimageSecondarySkill = Object.new("DuelistAfterimageSecondarySkill")
+objAfterimageSecondarySkill:addCallback("create", function(self)
+	local selfData = self:getData()
+	
+	self.sprite = sprites.shoot2
+	self.mask = sprites.idle
+	self.alpha = 0
+	selfData.alpha = 2
+	selfData.parent = nil
+	self.spriteSpeed = 0.24
+	selfData.outline = true
+	selfData.afterimageColor = duelistColors[math.random(1, #duelistColors)]
+	selfData.afterimageBlack = false
+	
+	selfData.frame2 = true 
+	selfData.frame9_12 = 9
+	selfData.afterimageAccel = 0
+end)
+objAfterimageSecondarySkill:addCallback("step", function(self)
+	local selfData = self:getData()
+	local parent = selfData.parent
+	
+	if selfData.outline then 
+		selfData.outline = false
+		local outline = obj.EfOutline:create(0, 0)
+		outline:set("rate", 0)
+		outline:set("parent", self.id)
+		outline.alpha = selfData.alpha
+		outline.blendColor = Color.fromHex(0x0F82DC)
+		if selfData.afterimageBlack then 
+			outline.blendColor = Color.BLACK
+			selfData.afterimageColor = Color.BLACK
+		end
+		outline.depth = self.depth + 1
+		selfData.outlineObj = outline
+	else
+		local outline = selfData.outlineObj
+		if outline and outline:isValid() then 
+			outline.alpha = selfData.alpha
+		end
+	end
+	
+	if self.subimage >= 2 and selfData.frame2 then 
+		selfData.frame2 = false
+		if not self:collidesMap(self.x + 5 * self.xscale, self.y) then 
+			self.x = self.x + 5 * self.xscale
+		end
+		selfData.afterimageAccel = self.xscale * 2
+		if parent then 
+			local dmg = parent:get("damage")
+			local bullet = misc.fireExplosion(self.x + self.xscale * 15, self.y, 20/19, 15/4, dmg, parent:get("team"))
+			bullet:set("stun", 0.3)	
+		end
+	end
+	
+	if self.subimage <= 12 and self.subimage >= selfData.frame9_12 then 
+		if selfData.frame9_12 == 9 then 
+			selfData.afterimageAccel = self.xscale * -4
+		end
+		selfData.frame9_12 = selfData.frame9_12 + 1
+		if parent then 
+			local dmg = parent:get("damage") * 0.25
+			local bullet = misc.fireExplosion(self.x + self.xscale * 15, self.y, 15/19, 15/4, dmg, parent:get("team"))
+		end		
+	end
+	
+	if selfData.afterimageAccel ~= 0 then
+		selfData.afterimageAccel = math.approach(selfData.afterimageAccel, 0, 0.1)
+		self.x = self.x + selfData.afterimageAccel
+	end
+	
+	if self.subimage >= self.sprite.frames then 
+		self.spriteSpeed = 0
+		selfData.alpha = selfData.alpha - 1/30
+	end
+	
+	if selfData.alpha == 0 then 
+		self:destroy()
+	end
+end)
+objAfterimageSecondarySkill:addCallback("draw", function(self)
+	local selfData = self:getData()
+	
+	graphics.drawImage{
+	x = self.x,
+	y = self.y,
+	image = self.sprite,
+	subimage = self.subimage,
+	xscale = self.xscale,
+	yscale = self.yscale,
+	angle = self.angle,
+	alpha = selfData.alpha,
+	solidColor = selfData.afterimageColor
+	}
+end)
+
 survivor:addCallback("step", function(player)
 	local playerAc = player:getAccessor()
 	local playerData = player:getData()
@@ -456,6 +552,16 @@ survivor:addCallback("useSkill", function(player, skill)
 				local parent = img:getData().parent
 				if parent and parent:isValid() and parent == player then 
 					img:getData().specialStart = true
+				end
+			end
+			for i = 0, playerAc.sp do
+				for j = 0, 1 do
+					local dir = j * 2 - 1
+					local vfx = objAfterimageSecondarySkill:create(player.x + dir * (6 + 4 * i), player.y)
+					vfx.xscale = dir
+					vfx.depth = player.depth + 1
+					vfx:getData().parent = player
+					vfx:getData().afterimageBlack = i > 0
 				end
 			end
 			cd = true
