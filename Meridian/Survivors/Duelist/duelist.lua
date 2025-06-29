@@ -5,7 +5,7 @@ local survivor = Survivor.new("Duelist")
 local sprites = {
 	idle = Sprite.load("DuelistIdle", path.."idle", 1, 9, 6),
 	walk = Sprite.load("DuelistWalk", path.."walk", 8, 8, 6),
-	jump = Sprite.load("DuelistJump", path.."jump", 6, 5, 8),
+	jump = Sprite.load("DuelistJump", path.."jump", 6, 5, 9),
 	death = Sprite.load("DuelistDeath", path.."death", 13, 9, 16),
 	climb = Sprite.load("DuelistClimb", path.."climb", 2, 5, 0),  
 	decoy = Sprite.load("DuelistDecoy", path.."decoy", 1, 9, 10),
@@ -16,6 +16,7 @@ local sprites = {
 	shoot1_4 = Sprite.load("DuelistShoot1_4", path.."shoot1_4", 7, 8, 15),
 	
 	shoot2 = Sprite.load("DuelistShoot2", path.."shoot2", 16, 9, 13),
+	shoot2Scepter = Sprite.load("DuelistShoot2Hologram", path.."shoot2_hologram", 8, 9, 13),
 	
 	shoot3 = Sprite.load("DuelistShoot3", path.."shoot3", 20, 39, 12),
 	sparks1 = Sprite.load("DuelistShoot3Sparks1", path.."sparks1", 4, 39, 12),
@@ -44,7 +45,7 @@ local sprSkills = Sprite.load("DuelistSkills", path.."idle", 4, 0, 0) -- placeho
 
 survivor.loadoutColor = Color.fromHex(0x8BACE0)
 
-survivor.loadoutSprite = Sprite.load("DuelistSelect", path.."select", 16, 9, 0) 
+survivor.loadoutSprite = Sprite.load("DuelistSelect", path.."select", 16, 11, 0) 
 
 callback.register("postLoad", function()
 	if modloader.checkMod("Starstorm") then
@@ -165,7 +166,7 @@ objAfterimage:addCallback("step", function(self)
 	end
 	
 	if parent and selfData.special and selfData.targeting then 
-		print("targeting")
+		--print("targeting")
 		local dis = 80
 		local minDis
 		local target
@@ -173,7 +174,7 @@ objAfterimage:addCallback("step", function(self)
 		for _, act in ipairs(actors) do 
 			if act and act:isValid() and act:get("team") ~= parent:get("team") then 
 				local actDis = distance(self.x, self.y, act.x, act.y)
-				print("team check passed")
+				--print("team check passed")
 				if not minDis or actDis < minDis then 
 					minDis = actDis 
 					target = act 
@@ -181,7 +182,7 @@ objAfterimage:addCallback("step", function(self)
 			end
 		end
 		if target then
-			print("target found")
+			--print("target found")
 			self.xscale = math.sign(target.x - self.x) 
 			if self.xscale == 0 then self.xscale = 1 end 
 			if minDis > 2 then 
@@ -214,45 +215,40 @@ objAfterimage:addCallback("step", function(self)
 	end
 	
 	if math.floor(self.subimage) == self.sprite.frames then 
-		--[[if selfData.alpha == startAlpha and selfData.multiple > 0 then 
-			local vfx = objAfterimage:create(self.x, self.y) 
-			vfx.sprite = self.sprite 
-			vfx.xscale = self.xscale
-			vfx.yscale = self.yscale
-			vfx:getData().multiple = selfData.multiple - 1
-			vfx.spriteSpeed = self.spriteSpeed * 0.8
-			if parent then 
-				vfx:getData().parent = parent
+		if selfData.alpha == startAlpha then
+			if selfData.curSprite < 4 and selfData.fullCombo then 
+				selfData.fullCombo = false 
+				local vfx = objAfterimage:create(self.x, self.y) 
+				vfx.xscale = self.xscale
+				vfx.yscale = self.yscale
+				--vfx:getData().multiple = 0
+				vfx:getData().parent = parent	
+				vfx:getData().curSprite = selfData.curSprite + 1
+				vfx.sprite = spriteCombo[selfData.curSprite + 1]
+				vfx:getData().fullCombo = true 
+				vfx:getData().special = selfData.special
+				vfx:getData().scepter = selfData.scepter
+				vfx:getData().lasting = selfData.lasting
+				vfx:getData().afterimageColor = selfData.afterimageColor
+				vfx:getData().afterimageBlack = selfData.afterimageBlack
+				selfData.lasting = false
 			end
-			vfx:getData().curSprite = selfData.curSprite
-			vfx:getData().fullCombo = selfData.fullCombo
-		end]]
-		if selfData.alpha == startAlpha and selfData.curSprite < 4 and selfData.fullCombo then 
-			print("done")
-			selfData.fullCombo = false 
-			local vfx = objAfterimage:create(self.x, self.y) 
-			vfx.xscale = self.xscale
-			vfx.yscale = self.yscale
-			--vfx:getData().multiple = 0
-			if parent then 
+			if selfData.lasting then 
+				local vfx = objLastingAfterimage:create(self.x, self.y)
+				vfx.sprite = self.sprite 
+				vfx.subimage = self.subimage
+				vfx.xscale = self.xscale 
 				vfx:getData().parent = parent
-			end			
-			vfx:getData().curSprite = selfData.curSprite + 1
-			vfx.sprite = spriteCombo[selfData.curSprite + 1]
-			vfx:getData().fullCombo = true 
-			vfx:getData().special = selfData.special
-			vfx:getData().lasting = selfData.lasting
-			vfx:getData().afterimageColor = selfData.afterimageColor
-			selfData.lasting = false
-		end
-		if selfData.alpha == startAlpha and selfData.lasting then 
-			local vfx = objLastingAfterimage:create(self.x, self.y)
-			vfx.sprite = self.sprite 
-			vfx.subimage = self.subimage
-			vfx.xscale = self.xscale 
-			vfx:getData().parent = parent
-			vfx:getData().afterimageColor = selfData.afterimageColor
-			vfx:getData().afterimageBlack = selfData.afterimageBlack
+				vfx:getData().afterimageColor = selfData.afterimageColor
+				vfx:getData().afterimageBlack = selfData.afterimageBlack
+			end
+			if selfData.curSprite == 4 and selfData.scepter then 
+				selfData.scepter = false
+				local vfx = objAfterimageScepter:create(self.x, self.y)
+				vfx.xscale = self.xscale
+				vfx:getData().parent = parent
+				vfx:getData().afterimageBlack = selfData.afterimageBlack			
+			end
 		end
 		self.spriteSpeed = 0
 		selfData.alpha = selfData.alpha - 1/75
@@ -343,6 +339,7 @@ objLastingAfterimage:addCallback("step", function(self)
 		vfx.sprite = spriteCombo[1]
 		vfx:getData().fullCombo = true		
 		vfx:getData().special = true
+		vfx:getData().scepter = selfData.scepter
 		vfx:getData().afterimageColor = selfData.afterimageColor
 		vfx:getData().afterimageBlack = selfData.afterimageBlack
 		self:destroy()
@@ -523,6 +520,117 @@ objAfterimageSecondarySkill:addCallback("draw", function(self)
 	}
 end)
 
+objAfterimageScepter = Object.new("DuelistAfterimageScepter")
+objAfterimageScepter:addCallback("create", function(self)
+	local selfData = self:getData()
+	
+	self.sprite = sprites.shoot2Scepter
+	self.mask = sprites.idle
+	self.alpha = 0
+	selfData.alpha = 2
+	selfData.parent = nil
+	self.spriteSpeed = 0.24
+	selfData.outline = true
+	--selfData.afterimageColor = duelistColors[math.random(1, #duelistColors)]
+	selfData.afterimageColor = Color.fromHex(0xB121EC)
+	selfData.afterimageBlack = false
+	
+	selfData.frame2 = true 
+	selfData.afterimageAccel = 0
+	selfData.targeting = true
+end)
+objAfterimageScepter:addCallback("step", function(self)
+	local selfData = self:getData()
+	local parent = selfData.parent
+	
+	if selfData.outline then 
+		selfData.outline = false
+		local outline = obj.EfOutline:create(0, 0)
+		outline:set("rate", 0)
+		outline:set("parent", self.id)
+		outline.alpha = selfData.alpha
+		--outline.blendColor = Color.fromHex(0x0F82DC)
+		outline.blendColor = Color.fromHex(0x6C18DE)
+		if selfData.afterimageBlack then 
+			outline.blendColor = Color.BLACK
+			selfData.afterimageColor = Color.BLACK
+		end
+		outline.depth = self.depth + 1
+		selfData.outlineObj = outline
+	else
+		local outline = selfData.outlineObj
+		if outline and outline:isValid() then 
+			outline.alpha = selfData.alpha
+		end
+	end
+	
+	if parent and selfData.targeting then 
+		--print("targeting")
+		local dis = 80
+		local minDis
+		local target
+		local actors = pobj.actors:findAllRectangle(self.x - dis, self.y + 10, self.x + dis, self.y - 10)
+		for _, act in ipairs(actors) do 
+			if act and act:isValid() and act:get("team") ~= parent:get("team") then 
+				local actDis = distance(self.x, self.y, act.x, act.y)
+				--print("team check passed")
+				if not minDis or actDis < minDis then 
+					minDis = actDis 
+					target = act 
+				end
+			end
+		end
+		if target then
+			--print("target found")
+			self.xscale = math.sign(target.x - self.x) 
+			if self.xscale == 0 then self.xscale = 1 end 
+		end
+		selfData.targeting = false
+	end	
+	
+	if self.subimage >= 2 and selfData.frame2 then 
+		selfData.frame2 = false
+		if not self:collidesMap(self.x + 5 * self.xscale, self.y) then 
+			self.x = self.x + 5 * self.xscale
+		end
+		selfData.afterimageAccel = self.xscale * 2
+		if parent then 
+			local dmg = parent:get("damage")
+			local bullet = misc.fireExplosion(self.x + self.xscale * 15, self.y, 20/19, 15/4, dmg, parent:get("team"))
+			bullet:set("stun", 0.7)	
+		end
+	end
+	
+	if selfData.afterimageAccel ~= 0 then
+		selfData.afterimageAccel = math.approach(selfData.afterimageAccel, 0, 0.1)
+		self.x = self.x + selfData.afterimageAccel
+	end
+	
+	if self.subimage >= self.sprite.frames then 
+		self.spriteSpeed = 0
+		selfData.alpha = selfData.alpha - 1/30
+	end
+	
+	if selfData.alpha == 0 then 
+		self:destroy()
+	end
+end)
+objAfterimageScepter:addCallback("draw", function(self)
+	local selfData = self:getData()
+	
+	graphics.drawImage{
+	x = self.x,
+	y = self.y,
+	image = self.sprite,
+	subimage = self.subimage,
+	xscale = self.xscale,
+	yscale = self.yscale,
+	angle = self.angle,
+	alpha = selfData.alpha,
+	solidColor = selfData.afterimageColor
+	}
+end)
+
 survivor:addCallback("step", function(player)
 	local playerAc = player:getAccessor()
 	local playerData = player:getData()
@@ -552,6 +660,7 @@ survivor:addCallback("useSkill", function(player, skill)
 				local parent = img:getData().parent
 				if parent and parent:isValid() and parent == player then 
 					img:getData().specialStart = true
+					img:getData().scepter = playerAc.scepter > 0
 				end
 			end
 			for i = 0, playerAc.sp do
@@ -679,6 +788,11 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 					bullet:set("climb", bullet:get("climb") + i * 8)
 				end
 			end				
+		end
+		if player.subimage >= 9 and player.subimage <= 12 then 
+			if playerAc.invincible <= 8 then 
+				playerAc.invincible = 8
+			end		
 		end
 	elseif skill == 3 then 
 		local maxDis = 80
