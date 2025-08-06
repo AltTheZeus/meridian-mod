@@ -20,7 +20,9 @@ local sprites = {
 	
 	shoot3 = Sprite.load("DuelistShoot3", path.."shoot3", 20, 39, 12),
 	sparks1 = Sprite.load("DuelistShoot3Sparks1", path.."sparks1", 4, 39, 12),
-	sparks2 = Sprite.load("DuelistShoot3Sparks2", path.."sparks2", 4, 39, 12)
+	sparks2 = Sprite.load("DuelistShoot3Sparks2", path.."sparks2", 4, 39, 12),
+	
+	shoot4 = Sprite.load("DuelistShoot4", path.."shoot4", 13, 9, 34)
 }
 
 local sounds = {
@@ -34,11 +36,37 @@ table.insert(spriteCombo, sprites.shoot1_3)
 table.insert(spriteCombo, sprites.shoot1_4)
 
 local duelistColors = {
-	Color.fromHex(0x8BACE0),
+--[[
+	Color.fromHex(0x8BACE0),	-- LIGHT COLORS
 	Color.fromHex(0x2D99EC),
 	Color.fromHex(0x3CDAF0),
 	Color.fromHex(0x29EADB),
 	Color.fromHex(0x76B1F3)
+	]]
+	Color.fromHex(0x0F82DC) -- DARK COLORS
+}
+
+local duelistOutlineColors = {
+--[[
+	Color.fromHex(0x0F82DC)		-- DARK COLORS
+	]]
+	--Color.fromHex(0x8BACE0),	-- LIGHT COLORS
+	Color.fromHex(0x33B4FF),
+	Color.fromHex(0x3CDAF0),
+	Color.fromHex(0x29EADB),
+	--Color.fromHex(0x76B1F3)	
+}
+
+local duelistColorsScepter = {
+	--Color.fromHex(0xB121EC) -- LIGHT COLORS
+	
+	Color.fromHex(0x7F2DD6) -- DARK COLORS
+}
+
+local duelistOutlineColorsScepter = {
+	--Color.fromHex(0x6C18DE) -- DARK COLORS
+	
+	Color.fromHex(0xE863FF) -- LIGHT COLORS
 }
 
 local sprSkills = Sprite.load("DuelistSkills", path.."idle", 4, 0, 0) -- placeholder
@@ -151,7 +179,7 @@ objAfterimage:addCallback("step", function(self)
 		outline:set("rate", 0)
 		outline:set("parent", self.id)
 		outline.alpha = selfData.alpha
-		outline.blendColor = Color.fromHex(0x0F82DC)
+		outline.blendColor = duelistOutlineColors[math.random(1, #duelistOutlineColors)]
 		if selfData.afterimageBlack then 
 			outline.blendColor = Color.BLACK
 			selfData.afterimageColor = Color.BLACK
@@ -300,7 +328,7 @@ objLastingAfterimage:addCallback("step", function(self)
 		outline:set("rate", 0)
 		outline:set("parent", self.id)
 		outline.alpha = selfData.alpha
-		outline.blendColor = Color.fromHex(0x0F82DC)
+		outline.blendColor = duelistOutlineColors[math.random(1, #duelistOutlineColors)]
 		if selfData.afterimageBlack then 
 			outline.blendColor = Color.BLACK
 			selfData.afterimageColor = Color.BLACK
@@ -388,7 +416,7 @@ objAfterimageUtility:addCallback("step", function(self)
 		outline:set("rate", 0)
 		outline:set("parent", self.id)
 		outline.alpha = selfData.alpha
-		outline.blendColor = Color.fromHex(0x0F82DC)
+		outline.blendColor = duelistOutlineColors[math.random(1, #duelistOutlineColors)]
 		if selfData.afterimageBlack then 
 			outline.blendColor = Color.BLACK
 			selfData.afterimageColor = Color.BLACK
@@ -452,7 +480,7 @@ objAfterimageSecondarySkill:addCallback("step", function(self)
 		outline:set("rate", 0)
 		outline:set("parent", self.id)
 		outline.alpha = selfData.alpha
-		outline.blendColor = Color.fromHex(0x0F82DC)
+		outline.blendColor = duelistOutlineColors[math.random(1, #duelistOutlineColors)]
 		if selfData.afterimageBlack then 
 			outline.blendColor = Color.BLACK
 			selfData.afterimageColor = Color.BLACK
@@ -532,7 +560,7 @@ objAfterimageScepter:addCallback("create", function(self)
 	self.spriteSpeed = 0.24
 	selfData.outline = true
 	--selfData.afterimageColor = duelistColors[math.random(1, #duelistColors)]
-	selfData.afterimageColor = Color.fromHex(0xB121EC)
+	selfData.afterimageColor = duelistColorsScepter[math.random(1, #duelistColorsScepter)]
 	selfData.afterimageBlack = false
 	
 	selfData.frame2 = true 
@@ -550,7 +578,7 @@ objAfterimageScepter:addCallback("step", function(self)
 		outline:set("parent", self.id)
 		outline.alpha = selfData.alpha
 		--outline.blendColor = Color.fromHex(0x0F82DC)
-		outline.blendColor = Color.fromHex(0x6C18DE)
+		outline.blendColor = duelistOutlineColorsScepter[math.random(1, #duelistOutlineColorsScepter)]
 		if selfData.afterimageBlack then 
 			outline.blendColor = Color.BLACK
 			selfData.afterimageColor = Color.BLACK
@@ -655,24 +683,9 @@ survivor:addCallback("useSkill", function(player, skill)
 			playerData.comboChange = false
 			cd = true
 		elseif skill == 4 then 
-			local images = objLastingAfterimage:findAll()
-			for _, img in ipairs(images) do 
-				local parent = img:getData().parent
-				if parent and parent:isValid() and parent == player then 
-					img:getData().specialStart = true
-					img:getData().scepter = playerAc.scepter > 0
-				end
-			end
-			for i = 0, playerAc.sp do
-				for j = 0, 1 do
-					local dir = j * 2 - 1
-					local vfx = objAfterimageSecondarySkill:create(player.x + dir * (6 + 4 * i), player.y)
-					vfx.xscale = dir
-					vfx.depth = player.depth + 1
-					vfx:getData().parent = player
-					vfx:getData().afterimageBlack = i > 0
-				end
-			end
+			player:survivorActivityState(4, player:getAnimation("shoot4"), 0.24, true, true)
+			playerData.duelistBeamTimer = nil
+			playerData.duelistBeamTime = nil
 			cd = true
 		end
 	end
@@ -861,7 +874,26 @@ survivor:addCallback("onSkill", function(player, skill, relevantFrame)
 			end
 		end
 	elseif skill == 4 then 
-	
+		if relevantFrame == 6 then 
+			local images = objLastingAfterimage:findAll()
+			for _, img in ipairs(images) do 
+				local parent = img:getData().parent
+				if parent and parent:isValid() and parent == player then 
+					img:getData().specialStart = true
+					img:getData().scepter = playerAc.scepter > 0
+				end
+			end
+			for i = 0, playerAc.sp do
+				for j = 0, 1 do
+					local dir = j * 2 - 1
+					local vfx = objAfterimageSecondarySkill:create(player.x + dir * (6 + 4 * i), player.y)
+					vfx.xscale = dir
+					vfx.depth = player.depth + 1
+					vfx:getData().parent = player
+					vfx:getData().afterimageBlack = i > 0
+				end
+			end		
+		end
 	end
 end)
 
@@ -876,6 +908,29 @@ callback.register("preHit", function(damager, hit)
 		vfx:getData().afterimageBlack = damager:getData().afterimageBlack
 		if rng == 3 then 
 			vfx.subimage = 4
+		end
+	end
+end)
+
+survivor:addCallback("draw", function(player)
+	local playerAc = player:getAccessor()
+	local playerData = player:getData()
+	
+	if playerAc.activity == 4 then 
+		if player.subimage >= 6 and player.subimage <= 10 then 
+			if not playerData.duelistBeamTimer then 
+				local frame = 60 / (60 * player.spriteSpeed)
+				playerData.duelistBeamTimer = frame * 4
+				playerData.duelistBeamTime = frame * 4
+			end
+			local beam = 1
+			if playerData.duelistBeamTimer / playerData.duelistBeamTime > 5/6 then 
+				beam = beam + 2
+			end
+			graphics.color(Color.fromHex(0xC5E0F2))
+			graphics.alpha(0.8 * (playerData.duelistBeamTimer / playerData.duelistBeamTime))
+			graphics.line(player.x + 3 * player.xscale, player.y, player.x + 3 * player.xscale, player.y - camera.height, beam)
+			playerData.duelistBeamTimer = math.max(0, playerData.duelistBeamTimer - 1)
 		end
 	end
 end)
