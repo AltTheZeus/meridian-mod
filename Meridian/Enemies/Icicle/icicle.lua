@@ -269,6 +269,8 @@ spikeWarnObj:addCallback("create", function(self)
 	self.alpha = 0
 	self.sprite = sprites.spike
 	self.mask = sprites.spikeMask
+	selfData.travel = nil 
+	selfData.spikeExplode = nil
 end)
 spikeWarnObj:addCallback("step", function(self)
 	local selfData = self:getData()
@@ -277,18 +279,58 @@ spikeWarnObj:addCallback("step", function(self)
 	selfData.life = selfData.life - 1 
 	if selfData.life == 40 then 
 		local target = icicleTargetFind(self)
-		if target and target:isValid() and selfData.chasing > 0 then 
-			local dir = math.sign(target.x - self.x) 
+		if ((target and target:isValid()) or selfData.spikeExplode) and selfData.chasing > 0 then 
+			local dir = self.xscale
+			if not selfData.spikeExplode then 
+				dir = math.sign(target.x - self.x) 
+			end
 			local newx = self.x + dir * self.mask.width 
-			local trgx = self.x 
+			local trgx = self.x
 			if self:collidesMap(newx, self.y + 2) and not self:collidesMap(newx, self.y) then 
 				trgx = newx
 			end
-			local spike2 = spikeWarnObj:create(trgx, self.y)
-			spike2:getData().team = selfData.team 
-			spike2:getData().damage = selfData.damage 
-			spike2:getData().chasing = selfData.chasing - 1
+			if not (trgx == self.x and selfData.spikeExplode) then 
+				local spike2 = spikeWarnObj:create(trgx, self.y)
+				spike2:getData().team = selfData.team 
+				spike2:getData().damage = selfData.damage 
+				spike2:getData().chasing = selfData.chasing - 1
+				spike2.xscale = self.xscale
+			end
 		end
+	end
+	if selfData.travel then 
+	for j = 1, 3 do 
+		local target
+		for _, actor in ipairs(pobj.actors:findAllRectangle(self.x - 1, self.y - self.mask.yorigin + self.mask.height, self.x + 1, self.y - self.mask.yorigin + self.mask.height - 3)) do 
+			if actor:get("team") ~= selfData.team then 
+				target = true 
+				break
+			end
+		end
+		if not target and self:collidesMap(self.x + self.xscale, self.y + 2) and not self:collidesMap(self.x + self.xscale, self.y) then 
+			self.x = self.x + self.xscale
+		else
+			selfData.life = 20
+			selfData.travel = false	
+			for i = -1, 1, 2 do 
+				local newx = self.x + i * self.mask.width 
+				local trgx
+				if self:collidesMap(newx, self.y + 2) and not self:collidesMap(newx, self.y) then 
+					trgx = newx
+				end
+				if trgx then 
+					print("spike created")
+					local spike2 = spikeWarnObj:create(trgx, self.y)
+					spike2:getData().team = selfData.team 
+					spike2:getData().damage = selfData.damage 
+					spike2:getData().chasing = 1
+					spike2:getData().spikeExplode = true
+					spike2.xscale = i
+				end				
+			end
+			break
+		end
+	end
 	end
 	if selfData.life <= 0 then 
 		local actualSpike = spikeObj:create(self.x, self.y)
