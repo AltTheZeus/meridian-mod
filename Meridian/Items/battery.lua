@@ -17,7 +17,7 @@ registercallback("onPlayerStep", function(self)
 	local sD = self:getData()
 	if self:countItem(item) >= 1 and self.useItem ~= nil and self:getAlarm(0) == -1 and sD.batteryTracker == "false" then
 --		print("boosting")
-		sD.batteryAddition = 0.005 * self:countItem(item)
+		sD.batteryAddition = 0.03 * self:countItem(item)
 		self:set("hp_regen", self:get("hp_regen") + sD.batteryAddition)
 		sD.batteryTracker = "true"
 	end
@@ -54,7 +54,7 @@ end)
 
 item:setLog{
     group = "common_locked",
-    description = "While your equipment is off cooldown, increase &g&health regen&!& by &g&0.3&!& per second.",
+    description = "While your equipment is off cooldown, increase &g&health regeneration&!& by &g&1.8&!& hp per second.",
     priority = "&w&Standard&!&",
     destination = "Stepped Terraces,\n3rd Colony,\nMars",
     date = "8/12/2056",
@@ -94,4 +94,5 @@ registercallback("onUseItemUse", function(player, item2)
 			end
 		end
 	end
+
 end)
