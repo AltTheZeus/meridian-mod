@@ -2,6 +2,7 @@ local path = "Enemies/"
 --logs
 MonsterLog.new("Beta Construct1")
 MonsterLog.new("Beta Construct2")
+MonsterLog.new("Beta Construct3")
 MonsterLog.new("Dewdrop")
 MonsterLog.new("Stone Giant")
 MonsterLog.new("Icicle")
@@ -14,6 +15,7 @@ MonsterLog.new("Lacertian")
 require(path.."BasaltCrab.basaltCrab")
 require(path.."construct1.con1")
 require(path.."construct2.con2")
+require(path.."construct3.con3")
 require(path.."guardDog.dog")
 require(path.."stoneGiant.giant")
 require(path.."mergers.mergerG")
@@ -32,3 +34,4 @@ registercallback("onStageEntry", function()
 		dD.PLstages = true
 	end
 end)
+
